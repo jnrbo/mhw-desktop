@@ -1,0 +1,472 @@
+﻿using IWshRuntimeLibrary;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MHWVirtualPrinter;
+
+namespace Setup
+{
+	public partial class MainForm : Form
+	{
+		private Log log;
+		private VirtualPrinter virtualPrinter;
+		private Options options;
+		public int returnCode = 0;  // Success.
+		private bool allowClose = true;
+		private MHWPrinter printer;
+
+		public MainForm(Options options)
+		{
+			this.options = options;
+
+			if (options.PrintToFax)
+			{
+				printer = MHWPrinter.PrintToFax;
+			}
+			else
+			{
+				printer = MHWPrinter.PrintToDrive;
+			}
+
+			virtualPrinter = new VirtualPrinter();
+			InitializeComponent();
+		}
+
+		private void MainForm_Shown(object sender, EventArgs e)
+		{
+			allowClose = false;
+			this.UseWaitCursor = true;
+
+			ThreadStart starter = this.RunSetup;
+			starter += SetupDone;
+			Thread t = new Thread(starter) { IsBackground = true };
+			t.Start();
+		}
+
+		private void SetupDone()
+		{
+			// Adjust column width to longest message size.
+			log.AdjustLogWidth(-1);
+
+			if (this.InvokeRequired)
+			{
+				this.Invoke(new MethodInvoker(() => { SetupDone(); }));
+			}
+			else
+			{
+				// Enable the button for user to dismiss.
+				this.buttonExit.Enabled = true;
+				allowClose = true;
+				this.UseWaitCursor = false;
+			}
+		}
+
+		private void RunSetup()
+		{
+			log = new Log(listViewLog, columnHeaderMessage);
+
+			if (options.RanFromApp == false)
+			{
+				// Ran by user from command line so enable system startup.
+				options.RunAtSystemStartup = true;
+			}
+
+			string currentDirectory = Directory.GetCurrentDirectory();
+			string platform;
+
+			// Determine platform we're running on.
+			if (Environment.Is64BitOperatingSystem)
+			{
+				platform = "x64";
+			}
+			else
+			{
+				platform = "x86";
+			}
+
+			if (options.Uninstall)
+			{
+				if (options.RunAtSystemStartup)
+				{
+					log.Info("Turning off option to run at system startup");
+					DisableRunAtSystemStartup();
+					log.Success("Turned off option to run at system startup");
+				}
+
+				if (options.PrintToDrive || options.PrintToFax)
+				{
+					log.Info("Beginning uninstall");
+
+					try
+					{
+						Uninstall(currentDirectory, platform);
+					}
+					catch (Win32Exception ex)
+					{
+						log.Error("Error {0}: {1}", ex.NativeErrorCode, ex.Message);
+						returnCode = -1;
+						virtualPrinter.isError = true;
+					}
+				}
+			}
+			else
+			{
+				if (options.RunAtSystemStartup)
+				{
+					log.Info("Turning on option to run at system startup");
+					EnableRunAtSystemStartup();
+					log.Success("Turned on option to run at system startup");
+				}
+
+				if (options.PrintToDrive || options.PrintToFax)
+				{
+					log.Info("Beginning install");
+
+					try
+					{
+						Install(currentDirectory, platform);
+					}
+					catch (Win32Exception ex)
+					{
+						log.Error("Error {0}: {1}", ex.NativeErrorCode, ex.Message);
+						returnCode = -1;
+						virtualPrinter.isError = true;
+					}
+				}
+			}
+
+			if (virtualPrinter.isError)
+			{
+				log.Warning("Finished with errors.  See above.");
+			}
+			else
+			{
+				log.Success("Finished successfully!");
+
+				if (!options.Uninstall && !options.RanFromApp)
+				{
+					log.Info("Click Okay to start myHEALTHware Desktop");
+				}
+			}
+		}
+
+		private void Install(string currentDirectory, string platform)
+        {
+			log.Info("Platform is {0}.", platform);
+
+			log.Info("OS is {0}.", Environment.OSVersion);
+
+			if (virtualPrinter.IsMonitorAlreadyInstalled(printer.MonitorName))
+			{
+				log.Warning("Monitor {0} already installed.", printer.MonitorName);
+			}
+			else
+			{
+				log.Info("Installing monitor {0}.", printer.MonitorName);
+
+				try
+				{
+					virtualPrinter.AddPrinterMonitor(currentDirectory, platform, printer.MonitorName);
+					log.Success("Monitor {0} successfully installed.", printer.MonitorName);
+				}
+				catch (Exception ex)
+				{
+					log.Error("Install monitor failed: {0}", ex.Message);		
+				}
+			}
+
+			if (virtualPrinter.IsPortAlreadyInstalled(printer.PortName))
+			{
+				log.Warning("Port {0} already installed.", printer.PortName);
+			}
+			else
+			{
+				log.Info("Installing port {0}.", printer.PortName);
+				virtualPrinter.AddPrinterPort(printer.PortName, printer.MonitorName);
+				log.Success("Port {0} successfully installed.", printer.PortName);
+			}
+
+			if (virtualPrinter.IsDriverAlreadyInstalled(printer.DriverName))
+			{
+				log.Warning("Driver {0} already installed.", printer.DriverName);
+			}
+			else
+			{
+				log.Info("Installing driver {0}.", printer.DriverName);
+				virtualPrinter.AddPrinterDriver(currentDirectory, platform, printer.DriverName);
+				log.Success("Driver {0} successfully installed.", printer.DriverName);
+			}
+
+			if (virtualPrinter.IsPrinterAlreadyInstalled(printer.PrinterName))
+			{
+				log.Warning("Printer {0} already installed.", printer.PrinterName);
+			}
+			else
+			{
+				log.Info("Installing printer {0}.", printer.PrinterName);
+				virtualPrinter.AddPrinter(printer.PrinterName, printer.PortName, printer.DriverName);
+				log.Success("Printer {0} successfully installed.", printer.PrinterName);
+			}
+
+			log.Info("Installing PDF engine.");
+			PDFEngine pdfEngine = new PDFEngine(currentDirectory, platform);
+			pdfEngine.Install();
+
+			log.Success("PDF engine installed successfully.");
+
+			log.Info("Configuring port.");
+			virtualPrinter.ConfigureVirtualPort(printer.MonitorName, printer.PortName, pdfEngine);
+			log.Success("Port configured successfully.");
+
+			log.Info("Restarting spool service.  Please wait...");
+			virtualPrinter.RestartSpoolService();
+			log.Success("Restart spool service complete.");
+		}
+
+		private void Uninstall(string currentDirectory, string platform)
+		{
+			if (virtualPrinter.IsPrinterAlreadyInstalled(printer.PrinterName))
+			{
+				log.Info("Removing printer {0}.", printer.PrinterName);
+				virtualPrinter.RemovePrinter(printer.PrinterName, printer.PortName, printer.MonitorName, printer.DriverName);
+				log.Success("Removing printer {0} complete.", printer.PrinterName);
+			}
+			else
+			{
+				log.Warning("Printer {0} not installed.", printer.PrinterName);
+			}
+
+			if (virtualPrinter.IsPortAlreadyInstalled(printer.PortName))
+			{
+				log.Info("Removing port {0}.", printer.PortName);
+				virtualPrinter.RemovePrinterPort(this.Handle, printer.PortName);
+				log.Success("Removing port {0} complete.", printer.PortName);
+			}
+			else
+			{
+				log.Warning("Port {0} not installed.", printer.PortName);
+			}
+
+			if (virtualPrinter.IsDriverAlreadyInstalled(printer.DriverName))
+			{
+				// Check to see if another printer is still using this driver.
+				if (IsDriverBeingUsedByAnotherPrinter())
+				{
+					log.Info("Driver {0} is being used by another printer so not removing.", printer.DriverName);
+				}
+				else
+				{
+					log.Info("Removing driver {0}.", printer.DriverName);
+					virtualPrinter.RemovePrinterDriver(printer.DriverName);
+					log.Success("Removing driver {0} complete.", printer.DriverName);
+				}
+			}
+			else
+			{
+				log.Warning("Driver {0} not installed.", printer.DriverName);
+			}
+
+			if (virtualPrinter.IsMonitorAlreadyInstalled(printer.MonitorName))
+			{
+				log.Info("Removing monitor {0}.", printer.MonitorName);
+				virtualPrinter.RemovePrinterMonitor(currentDirectory, platform, printer.MonitorName);
+				log.Success("Removing monitor {0} complete.", printer.MonitorName);
+			}
+			else
+			{
+				log.Warning("Monitor {0} not installed.", printer.MonitorName);
+			}
+
+			log.Info("Restarting spool service.  Please wait...");
+			virtualPrinter.RestartSpoolService();
+			log.Success("Restart spool service complete.");
+		}
+
+		private bool IsDriverBeingUsedByAnotherPrinter()
+		{
+			string otherPrinterName;
+
+			if (printer == MHWPrinter.PrintToDrive)
+			{
+				otherPrinterName = MHWPrinter.PrintToFax.PrinterName;
+			}
+			else
+			{
+				otherPrinterName = MHWPrinter.PrintToDrive.PrinterName;
+			}
+
+			// Look for other printer.
+			return virtualPrinter.IsPrinterAlreadyInstalled(otherPrinterName);
+		}
+
+		private void EnableRunAtSystemStartup()
+		{
+			RegistryKey regKey = null;
+
+			// Get the registry key with write access.
+			try
+			{
+				regKey = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			}
+			catch (Exception ex)
+			{
+				log.Warning("Could not enable Run at System Startup option: {0}", ex.Message);
+
+				if (regKey != null)
+				{
+					regKey.Close();
+				}
+
+				return;
+			}
+
+			try
+			{
+				string appLocation = Directory.GetCurrentDirectory();
+
+				//string regValue = string.Format("{0} -silent", appLocation);
+
+				regKey.SetValue(MHWPrinter.AppName, appLocation, RegistryValueKind.String);
+			}
+			catch (Exception ex)
+			{
+				log.Warning("Could not enable Run at System Startup option: {0}", ex.Message);
+				return;
+			}
+			finally
+			{
+				if (regKey != null)
+				{
+					regKey.Close();
+				}
+			}
+		}
+
+		private void DisableRunAtSystemStartup()
+		{
+			CreateDesktopShortcut();
+
+			RegistryKey regKey = null;
+
+			// Get the registry key with write access.
+			try
+			{
+				regKey = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			}
+			catch (Exception ex)
+			{
+				log.Warning("Could not disable Run at System Startup option: {0}", ex.Message);
+
+				if (regKey != null)
+				{
+					regKey.Close();
+				}
+
+				return;
+			}
+
+			try
+			{
+				regKey.DeleteValue(MHWPrinter.AppName);
+			}
+			catch (Exception)
+			{
+				// Likely because key doesn't exist.  Ignore.
+			}
+			finally
+			{
+				if (regKey != null)
+				{
+					regKey.Close();
+				}
+			}
+		}
+
+		private void CreateDesktopShortcut()
+		{
+			object shDesktop = (object)"Desktop";
+			WshShell shell = new WshShell();
+			string shortcutAddress = String.Format("{0}\\{1}.lnk", (string)shell.SpecialFolders.Item(ref shDesktop), MHWPrinter.AppName);
+
+			if (System.IO.File.Exists(shortcutAddress) == false)
+			{
+				IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+				shortcut.Description = "A shortcut to myHEALTHware Desktop application";
+				//shortcut.Hotkey = "Ctrl+Shift+M";
+				shortcut.TargetPath = String.Format("{0}\\{1}.exe", Directory.GetCurrentDirectory(), MHWPrinter.AppName);
+				shortcut.Save();
+			}
+		}
+
+		private void KeyDownHandler(object sender, KeyEventArgs e)
+		{
+			if (sender != listViewLog) return;
+
+			if (((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.C)) ||
+				((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.Insert)))
+			{
+				CopyToClipboard();
+			}
+		}
+
+		private void buttonCopy_Click(object sender, EventArgs e)
+		{
+			foreach (ListViewItem item in listViewLog.Items)
+			{
+				item.Selected = true;
+			}
+
+			CopyToClipboard();
+			MessageBox.Show("Log copied to clipboard", "Copy Log");
+		}
+
+		private void CopyToClipboard()
+		{
+			if (listViewLog.SelectedItems.Count > 0)
+			{
+				StringBuilder selectedItems = new StringBuilder();
+
+				foreach (ListViewItem item in listViewLog.SelectedItems)
+				{
+					selectedItems.AppendLine(item.Text);
+				}
+
+				Clipboard.SetText(selectedItems.ToString());
+			}
+
+		}
+
+		private void buttonExit_Click(object sender, EventArgs e)
+		{
+			if (allowClose && !options.RanFromApp && !options.Uninstall)
+			{
+				string currentDirectory = Directory.GetCurrentDirectory();
+
+				// Start the main app.
+				try
+				{
+					System.Diagnostics.Process.Start(String.Format("{0}\\{1}.exe", currentDirectory, MHWPrinter.AppName));
+				}
+				catch (Exception ex)
+				{
+					log.Error("Could not start main app: {0}", ex.Message);
+				}
+			}
+
+			this.Dispose();
+		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			e.Cancel = !allowClose;
+		}
+	}
+}

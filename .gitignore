@@ -1,0 +1,19 @@
+[Oo]bj/
+[Bb]in/
+*.dll
+*.suo
+*.user
+*.vspscc
+*.vssscc
+*.tmp
+*.log
+*.orig
+*.msi
+_ReSharper*
+
+# Nuget
+packages/
+
+# Other
+Setup/Dependencies/
+Installer/myHEALTHware Desktop-cache
