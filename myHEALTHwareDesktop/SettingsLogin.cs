@@ -167,18 +167,14 @@ namespace myHEALTHwareDesktop
 
 			// Load the list of accounts that this account manages files for.
 			List<ApiAccountConnection> connections = sdk.Account.GetConnections(this.myAccount.AccountId, SOAPware.PortalSDK.Constants.Permissions.ManageFiles);
-
+			
 			foreach (ApiAccountConnection connection in connections)
 			{
-				// Get the connection's contact.
-				//var contact = contacts.Find(x => x.AccountId == connection.Yours.AccountId);
-				ApiIndividual contact = sdk.Account.GetIndividualForConnectedAccount(this.myAccount.AccountId, connection.Yours.AccountId);
-
 				item = new ComboboxItem()
 				{
-					name = contact.DisplayName,
+					name = connection.Yours.DisplayName,
 					delegateAccountId = connection.Yours.AccountId,
-					pictureFileId = contact.PictureId
+					pictureFileId = connection.Yours.PictureFileId
 				};
 
 				// Add to list box.
