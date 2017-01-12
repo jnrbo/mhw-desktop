@@ -20,7 +20,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class ControlPrintToFax : UserControl
 	{
-		private SettingsForm parentForm;
+		private MhwDesktopForm parentForm;
 		public MhwSdk sdk;
 		public string selectedMHWAccountId;
 		private VirtualPrinter virtualPrinter = new VirtualPrinter();
@@ -37,7 +37,7 @@ namespace myHEALTHwareDesktop
 			InitializeComponent();
 		}
 
-		public void LoadSettings(SettingsForm parent, MhwSdk sdk, string selectedMHWAccountId)
+		public void LoadSettings(MhwDesktopForm parent, MhwSdk sdk, string selectedMHWAccountId)
 		{
 			parentForm = parent;
 			this.sdk = sdk;
@@ -280,7 +280,7 @@ namespace myHEALTHwareDesktop
 
 		private void LaunchSendFax(string fileId)
 		{
-			sendFax = new SendFax(SettingsForm.appId, SettingsForm.appSecret);
+			sendFax = new SendFax(MhwDesktopForm.appId, MhwDesktopForm.appSecret);
 
 			sendFax.InitBrowser(parentForm.connectionId, parentForm.accessToken, this.selectedMHWAccountId, fileId);
 

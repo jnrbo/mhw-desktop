@@ -19,7 +19,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class ControlPrintToDrive : UserControl
 	{
-		private SettingsForm parentForm;
+		private MhwDesktopForm parentForm;
 		public MhwSdk sdk;
 		public string selectedMHWAccountId;
 		private VirtualPrinter virtualPrinter = new VirtualPrinter();
@@ -38,7 +38,7 @@ namespace myHEALTHwareDesktop
 			InitializeComponent();
 		}
 
-		public void LoadSettings(SettingsForm parent, MhwSdk sdk, string selectedMHWAccountId)
+		public void LoadSettings(MhwDesktopForm parent, MhwSdk sdk, string selectedMHWAccountId)
 		{
 			parentForm = parent;
 			this.sdk = sdk;
@@ -291,7 +291,7 @@ namespace myHEALTHwareDesktop
 
 		private void LaunchDrivePicker(bool isShowFileName, string defaultFileName=null)
 		{
-			drivePicker = new DrivePicker(SettingsForm.appId, SettingsForm.appSecret);
+			drivePicker = new DrivePicker(MhwDesktopForm.appId, MhwDesktopForm.appSecret);
 			drivePicker.EnableFileName(isShowFileName, defaultFileName);
 			drivePicker.InitBrowser(parentForm.connectionId, parentForm.accessToken, this.selectedMHWAccountId);
 

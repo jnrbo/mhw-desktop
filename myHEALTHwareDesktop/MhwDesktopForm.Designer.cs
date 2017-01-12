@@ -2,7 +2,7 @@
 
 namespace myHEALTHwareDesktop
 {
-	partial class SettingsForm
+	partial class MhwDesktopForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -31,7 +31,7 @@ namespace myHEALTHwareDesktop
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MhwDesktopForm));
 			this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -288,7 +288,7 @@ namespace myHEALTHwareDesktop
 			this.pictureBoxActingAs.TabIndex = 32;
 			this.pictureBoxActingAs.TabStop = false;
 			// 
-			// SettingsForm
+			// MhwDesktopForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -304,7 +304,8 @@ namespace myHEALTHwareDesktop
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.Name = "SettingsForm";
+			this.Name = "MhwDesktopForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Desktop Settings";
 			this.Load += new System.EventHandler(this.MHWFormInitialize);
 			this.contextMenuStrip1.ResumeLayout(false);
