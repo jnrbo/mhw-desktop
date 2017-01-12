@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -29,11 +30,12 @@ namespace myHEALTHwareDesktop
 
 		public MhwSdk sdk;
 		private ApiAccount myAccount;
-		public string selectedMHWAccountId;
 		public string connectionId;
 		public string accessToken;
 		private bool isLoggedIn;
 		private LoginForm loginForm;
+
+		private readonly BindingSource accountsBindingSource;
 
 		// Get our initial Exit logic from our project user properties.
 		private bool isTimeToQuit;
@@ -55,26 +57,13 @@ namespace myHEALTHwareDesktop
 			// Load persisted settings values.
 			LoadRunAtStartup();
 
-			// Try the previous credentials.
-			connectionId = Settings.Default.ConnectionId;
-			accessToken = Settings.Default.AccessToken;
-			isLoggedIn = ExecuteLogin();
-
-			if( !isLoggedIn )
-			{
-				isLoggedIn = ChangeLogin();
-			}
-
-			if( !isLoggedIn )
-			{
-				LoggedOut();
-			}
+			accountsBindingSource = new BindingSource();
 		}
 
 		// **** Our Program Entry Point. ****
 		// We added a line Under SettingsForm.Designer.cs to invoke this:
 		// this.Load += new System.EventHandler(this.MHWFormInitialize);
-		private void MHWFormInitialize( object sender, EventArgs e )
+		private async void MHWFormInitialize( object sender, EventArgs e )
 		{
 			// Make sure that standard and standard double clicks are enabled,
 			// if they are not enabled, enable them. This really is OverKill but better to be
@@ -158,6 +147,24 @@ namespace myHEALTHwareDesktop
 			// otherwise if it was before, it will cause logic problems.
 			Resize += FormResize;
 
+			accountsBindingSource.DataSource = new BindingList<MhwAccount>();
+			pictureBoxActingAs.DataBindings.Add( "Image", accountsBindingSource, "ProfilePic", true );
+			accountsComboBox.DataSource = accountsBindingSource;
+
+			// Try the previous credentials.
+			connectionId = Settings.Default.ConnectionId;
+			accessToken = Settings.Default.AccessToken;
+			isLoggedIn = await ExecuteLogin();
+
+			if( !isLoggedIn )
+			{
+				await ChangeLogin();
+			}
+
+			if( !isLoggedIn )
+			{
+				LogOut();
+			}
 			// We now at this point, are completely event driven.
 		}
 
@@ -207,7 +214,7 @@ namespace myHEALTHwareDesktop
 		}
 
 		// Display the settings form.
-		private void MHWDisplaySettings()
+		private async Task MHWDisplaySettings()
 		{
 			Show(); // Equivalent to this.Visible = true.
 			Activate();
@@ -215,9 +222,14 @@ namespace myHEALTHwareDesktop
 			ShowInTaskbar = true;
 			settingsToolStripMenuItem.Enabled = false;
 
-			if( isLoggedIn == false )
+			if( !isLoggedIn )
 			{
-				isLoggedIn = ChangeLogin();
+				await ChangeLogin();
+			}
+
+			if( isLoggedIn )
+			{
+				await RefreshOnBehalfOfAccounts();
 			}
 		}
 
@@ -429,15 +441,15 @@ namespace myHEALTHwareDesktop
 		//	LaunchSite("https://myhealthware.com/#/Fax");
 		//}
 
-		private void menuSettingsClicked( object sender, EventArgs e )
+		private async void menuSettingsClicked( object sender, EventArgs e )
 		{
-			MHWDisplaySettings();
+			await MHWDisplaySettings();
 		}
 
-		private void menuAboutClicked( object sender, EventArgs e )
+		private async void menuAboutClicked( object sender, EventArgs e )
 		{
 			tabs.SelectedTab = tabPageAbout;
-			MHWDisplaySettings();
+			await MHWDisplaySettings();
 		}
 
 		private void menuQuitClicked( object sender, EventArgs e )
@@ -477,14 +489,7 @@ namespace myHEALTHwareDesktop
 
 		public void SetTrayIcon( Icon icon = null, string message = null )
 		{
-			if( icon == null )
-			{
-				trayIcon.Icon = Resources.myHEALTHware;
-			}
-			else
-			{
-				trayIcon.Icon = icon;
-			}
+			trayIcon.Icon = icon ?? Resources.myHEALTHware;
 
 			if( string.IsNullOrWhiteSpace( message ) )
 			{
@@ -502,7 +507,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private string FormatMessage( string format, params object[] list )
+		private static string FormatMessage( string format, params object[] list )
 		{
 			string message;
 			if( list == null || list.Length == 0 )
@@ -555,13 +560,13 @@ namespace myHEALTHwareDesktop
 
 		private bool IsRunAtSystemStartupSet()
 		{
-			const string keyName = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+			const string KEY_NAME = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 			RegistryKey regKey = null;
 
 			// Open the registry key.
 			try
 			{
-				regKey = Registry.LocalMachine.OpenSubKey( keyName );
+				regKey = Registry.LocalMachine.OpenSubKey( KEY_NAME );
 
 				if( regKey != null )
 				{
@@ -656,14 +661,14 @@ namespace myHEALTHwareDesktop
 			e.Cancel = true;
 		}
 
-		private void buttonSwitchUser_Click( object sender, EventArgs e )
+		private async void buttonSwitchUser_Click( object sender, EventArgs e )
 		{
-			isLoggedIn = ChangeLogin();
+			await ChangeLogin();
 		}
 
-		private void pictureBoxUser_Click( object sender, EventArgs e )
+		private async void pictureBoxUser_Click( object sender, EventArgs e )
 		{
-			isLoggedIn = ChangeLogin();
+			await ChangeLogin();
 		}
 
 		private void accountsComboBox_SelectionChangeCommitted( object sender, EventArgs e )
@@ -671,9 +676,9 @@ namespace myHEALTHwareDesktop
 			ChangeActingAs();
 		}
 
-		private void labelDisplayName_Click( object sender, EventArgs e )
+		private async void labelDisplayName_Click( object sender, EventArgs e )
 		{
-			isLoggedIn = ChangeLogin();
+			await ChangeLogin();
 		}
 
 		public void CheckNetworkStatus()
@@ -709,11 +714,8 @@ namespace myHEALTHwareDesktop
 			// Call MHW API to upload file.
 			try
 			{
-				ApiFile driveItem = sdk.Account.UploadFile( selectedMHWAccountId,
-				                                            name,
-				                                            fileType,
-				                                            fileStream,
-				                                            uploadFolderDriveItemId );
+				var selected = GetSelectedAccount();
+				ApiFile driveItem = sdk.Account.UploadFile( selected.AccountId, name, fileType, fileStream, uploadFolderDriveItemId );
 				fileId = driveItem.FileId;
 			}
 			catch( Exception ex )
@@ -776,7 +778,7 @@ namespace myHEALTHwareDesktop
 			SaveSettings( string.Format( "Logged in as {0}", myAccount.DisplayName ) );
 		}
 
-		private bool ExecuteLogin()
+		private async Task<bool> ExecuteLogin()
 		{
 			// Are credentials in valid format?
 			if( ( string.IsNullOrWhiteSpace( connectionId ) ) || ( string.IsNullOrWhiteSpace( accessToken ) ) )
@@ -817,14 +819,16 @@ namespace myHEALTHwareDesktop
 			// Get the account's profile pic.
 			SetPictureBox( myAccount.PictureFileId, pictureBoxUser );
 
-			PopulateOnBehalfOfAccounts();
+			await RefreshOnBehalfOfAccounts();
 
 			accountsComboBox.Enabled = true;
 
+			var selected = GetSelectedAccount();
+
 			// Load all other settings according to the selected delegate.
-			controlFolderToDrive.LoadSettings( this, sdk, selectedMHWAccountId );
-			controlPrintToDrive.LoadSettings( this, sdk, selectedMHWAccountId );
-			controlPrintToFax.LoadSettings( this, sdk, selectedMHWAccountId );
+			controlFolderToDrive.LoadSettings( this, sdk, selected.AccountId );
+			controlPrintToDrive.LoadSettings( this, sdk, selected.AccountId );
+			controlPrintToFax.LoadSettings( this, sdk, selected.AccountId );
 
 			controlPrintToDrive.Enabled = true;
 			controlFolderToDrive.Enabled = true;
@@ -833,9 +837,9 @@ namespace myHEALTHwareDesktop
 			return true;
 		}
 
-		private bool ChangeLogin()
+		private async Task ChangeLogin()
 		{
-			LoggedOut();
+			LogOut();
 
 			loginForm = new LoginForm( appId, appSecret );
 			loginForm.InitBrowser();
@@ -846,20 +850,19 @@ namespace myHEALTHwareDesktop
 			// If cancelled, don't change state.
 			if( !loginForm.isSuccess )
 			{
-				return this.isLoggedIn;
+				return;
 			}
 
 			// Log in.
-			bool isLoggedIn = ExecuteLogin();
+			isLoggedIn = await ExecuteLogin();
 
 			if( !isLoggedIn )
 			{
-				LoggedOut();
-				return false;
+				LogOut();
+				return;
 			}
-			SetTrayIcon();
 
-			return isLoggedIn;
+			SetTrayIcon();
 		}
 
 		// Called when the login dialog Okay button is clicked.
@@ -873,38 +876,50 @@ namespace myHEALTHwareDesktop
 			BeginInvoke( (MethodInvoker) delegate { loginForm.Dispose(); } );
 		}
 
-		private async void PopulateOnBehalfOfAccounts()
+		private async Task<IEnumerable<MhwAccount>> RefreshOnBehalfOfAccounts()
 		{
-			selectedMHWAccountId = null;
+			////// Clear list.
+			////accountsComboBox.Items.Clear();
 
-			// Clear list.
-			accountsComboBox.Items.Clear();
-
-			// Default to selecting personal account.
-			string selectedAccountName = myAccount.DisplayName;
+			////// Default to selecting personal account.
+			////string selectedAccountName = myAccount.DisplayName;
 
 			// Load the list of accounts that this account manages files for.
+
 			var accounts = await GetMhwAccountsAsync();
-			
+			var bindingList = (BindingList<MhwAccount>) accountsBindingSource.DataSource;
+			bindingList.Clear();
+
 			foreach( var item in accounts )
 			{
-				// Add to list box.
-				accountsComboBox.Items.Add( item );
-
-				// Check if this was the previously selected account.
-				if( item.DelegateAccountId == Settings.Default.SelectedAccountId )
-				{
-					selectedAccountName = item.Name;
-					selectedMHWAccountId = Settings.Default.SelectedAccountId;
-				}
+				bindingList.Add( item );
 			}
 
-			// Set the selected account in the list.
-			int index = accountsComboBox.FindString( selectedAccountName );
-			accountsComboBox.SelectedIndex = index;
-			
-			var selected = (MhwAccount) accountsComboBox.SelectedItem;
-			SetPicture( pictureBoxActingAs, selected.ProfilePic );
+			var account = accounts.FirstOrDefault( p => p.AccountId == Settings.Default.SelectedAccountId ) ??
+			              accounts.FirstOrDefault( p => p.AccountId == myAccount.AccountId );
+
+			accountsComboBox.SelectedItem = account;
+
+			return accounts;
+
+			////foreach( var item in accounts )
+			////{
+			////	// Add to list box.
+			////	accountsComboBox.Items.Add( item );
+
+			////	// Check if this was the previously selected account.
+			////	if( item.DelegateAccountId == Settings.Default.SelectedAccountId )
+			////	{
+			////		selectedAccountName = item.Name;
+			////	}
+			////}
+
+			////// Set the selected account in the list.
+			////int index = accountsComboBox.FindString( selectedAccountName );
+			////accountsComboBox.SelectedIndex = index;
+
+			////var selected = (MhwAccount) accountsComboBox.SelectedItem;
+			////SetPicture( pictureBoxActingAs, selected.ProfilePic );
 		}
 
 		private async Task<IEnumerable<MhwAccount>> GetMhwAccountsAsync()
@@ -916,31 +931,33 @@ namespace myHEALTHwareDesktop
 				new MhwAccount
 				{
 					Name = myAccount.DisplayName,
-					DelegateAccountId = myAccount.AccountId,
+					AccountId = myAccount.AccountId,
 					PictureFileId = myAccount.PictureFileId
 				}
 			};
 
-			accounts.AddRange( connections.Select(
-				                   c =>
-					                   new MhwAccount
-					                   {
-						                   Name = c.Yours.DisplayName,
-						                   DelegateAccountId = c.Yours.AccountId,
-						                   PictureFileId = c.Yours.PictureFileId,
-						                   //ProfilePic = new Bitmap( picStream, false )
-					                   } ).OrderBy( p => p.Name ) );
+			accounts.AddRange(
+				connections.Select(
+					c =>
+						new MhwAccount
+						{
+							Name = c.Yours.DisplayName,
+							AccountId = c.Yours.AccountId,
+							PictureFileId = c.Yours.PictureFileId
+						} ).OrderBy( p => p.Name ) );
 
 			Parallel.ForEach( accounts,
 			                  p =>
 			                  {
-				                  if( p.PictureFileId == null )
+				                  if( p.PictureFileId != null )
 				                  {
-					                  return;
+					                  var picStream = sdk.Account.GetFile( p.AccountId, p.PictureFileId );
+					                  p.ProfilePic = new Bitmap( picStream, false );
 				                  }
-
-				                  var picStream = sdk.Account.GetFile( p.DelegateAccountId, p.PictureFileId );
-				                  p.ProfilePic = new Bitmap( picStream, false );
+				                  else
+				                  {
+					                  p.ProfilePic = Resources.DefaultAvatar;
+				                  }
 			                  } );
 
 			return accounts;
@@ -948,22 +965,26 @@ namespace myHEALTHwareDesktop
 
 		private void ChangeActingAs()
 		{
-			MhwAccount item = (MhwAccount) accountsComboBox.SelectedItem;
-			selectedMHWAccountId = item.DelegateAccountId;
+			MhwAccount selected = GetSelectedAccount();
 
-			SetPicture( pictureBoxActingAs, item.ProfilePic );
+			////SetPicture( pictureBoxActingAs, selected.ProfilePic );
 			////SetPictureBox( item.PictureFileId, pictureBoxActingAs );
 
-			Settings.Default.SelectedAccountId = selectedMHWAccountId;
+			Settings.Default.SelectedAccountId = selected.AccountId;
 			SaveSettings( /*string.Format( "Now acting as {0}", item.Name )*/ );
 
 			// Reload all other settings according to the selected delegate.
-			controlFolderToDrive.LoadSettings( this, sdk, selectedMHWAccountId );
-			controlPrintToDrive.LoadSettings( this, sdk, selectedMHWAccountId );
-			controlPrintToFax.LoadSettings( this, sdk, selectedMHWAccountId );
+			controlFolderToDrive.LoadSettings( this, sdk, selected.AccountId );
+			controlPrintToDrive.LoadSettings( this, sdk, selected.AccountId );
+			controlPrintToFax.LoadSettings( this, sdk, selected.AccountId );
 		}
 
-		private static void SetPicture(  PictureBox pictureBox, Image profilePic )
+		private MhwAccount GetSelectedAccount()
+		{
+			return (MhwAccount) accountsComboBox.SelectedItem;
+		}
+
+		private static void SetPicture( PictureBox pictureBox, Image profilePic )
 		{
 			pictureBox.Image = profilePic ?? Resources.DefaultAvatar;
 		}
@@ -982,7 +1003,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void LoggedOut()
+		private void LogOut()
 		{
 			// Set tray icon to indicate not logged in.
 			SetTrayIcon( Resources.LoggedOut, "Please log in" );
@@ -1000,7 +1021,7 @@ namespace myHEALTHwareDesktop
 			////SetPictureBox( null, pictureBoxActingAs );
 
 			// Clear delegates list.
-			accountsComboBox.Items.Clear();
+			////accountsComboBox.Items.Clear();
 			accountsComboBox.Enabled = false;
 
 			// Disable tabs.
@@ -1009,9 +1030,9 @@ namespace myHEALTHwareDesktop
 			controlPrintToFax.Enabled = false;
 
 			// Stop any running monitors.
-			controlPrintToDrive.LoggedOut();
-			controlFolderToDrive.LoggedOut();
-			controlPrintToFax.LoggedOut();
+			controlPrintToDrive.LogOut();
+			controlFolderToDrive.LogOut();
+			controlPrintToFax.LogOut();
 		}
 	}
 }

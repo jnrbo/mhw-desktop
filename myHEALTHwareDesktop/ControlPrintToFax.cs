@@ -319,7 +319,7 @@ namespace myHEALTHwareDesktop
 			this.BeginInvoke((MethodInvoker)delegate { sendFax.Dispose(); });
 		}
 
-		public void LoggedOut()
+		public void LogOut()
 		{
 			isLoggedIn = false;
 		}

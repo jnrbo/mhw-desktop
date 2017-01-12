@@ -477,7 +477,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		public void LoggedOut()
+		public void LogOut()
 		{
 			isLoggedIn = false;
 		}

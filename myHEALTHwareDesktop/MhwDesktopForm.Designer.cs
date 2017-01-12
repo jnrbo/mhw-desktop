@@ -158,7 +158,6 @@ namespace myHEALTHwareDesktop
 			this.accountsComboBox.Location = new System.Drawing.Point(369, 15);
 			this.accountsComboBox.Name = "accountsComboBox";
 			this.accountsComboBox.Size = new System.Drawing.Size(233, 28);
-			this.accountsComboBox.Sorted = true;
 			this.accountsComboBox.TabIndex = 24;
 			this.accountsComboBox.SelectionChangeCommitted += new System.EventHandler(this.accountsComboBox_SelectionChangeCommitted);
 			// 
