@@ -1,62 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using CefSharp;
-using CefSharp.WinForms;
+using myHEALTHwareDesktop.Properties;
 
 namespace myHEALTHwareDesktop
 {
 	public partial class LoginForm : Form
 	{
 		private ChromiumBrowserUsercontrol chromiumBrowser;
-		private string appId;
-		private string appSecret;
-		public string connectionId;
-		public string accessToken;
-		public bool isSuccess;
+		private readonly string appId;
+		private readonly string appSecret;
 
-		public LoginForm(string appId, string appSecret)
+		public string ConnectionId { get; set; }
+		public string AccessToken { get; set; }
+		public bool IsSuccess { get; set; }
+
+		public LoginForm( string appId, string appSecret )
 		{
 			this.appId = appId;
 			this.appSecret = appSecret;
+
 			InitializeComponent();
+
+			InitBrowser();
 		}
 
-		public void InitBrowser()
+		private void InitBrowser()
 		{
-			isSuccess = false;
+			IsSuccess = false;
 
-			if (Cef.IsInitialized == false)
+			if( Cef.IsInitialized == false )
 			{
-				Cef.Initialize(new CefSettings());
+				Cef.Initialize( new CefSettings() );
 			}
 
 			string callbackURL = "https://localhost";
-			string url = string.Format("{0}/Login/Authenticate?callback=\"{1}\"&app_key={2}&app_secret={3}",
-									Properties.Settings.Default.myHEALTHwareDomain,
-									callbackURL, appId, appSecret);
+			string url = string.Format( "{0}/Login/Authenticate?callback=\"{1}\"&app_key={2}&app_secret={3}",
+			                            Settings.Default.myHEALTHwareDomain,
+			                            callbackURL,
+			                            appId,
+			                            appSecret );
 
-			chromiumBrowser = new ChromiumBrowserUsercontrol(url);
-			this.Controls.Add(chromiumBrowser);
+			chromiumBrowser = new ChromiumBrowserUsercontrol( url );
+			Controls.Add( chromiumBrowser );
 			chromiumBrowser.Dock = DockStyle.Fill;
 
-			chromiumBrowser.Browser.AddressChanged += (sender, args) =>
+			chromiumBrowser.Browser.AddressChanged += ( sender, args ) =>
 			{
-				Uri myUri = new Uri(args.Address);
-				connectionId = HttpUtility.ParseQueryString(myUri.Query).Get("connection");
-
-				if (connectionId != null)
+				Uri myUri = new Uri( args.Address );
+				
+				ConnectionId = HttpUtility.ParseQueryString( myUri.Query ).Get( "connection" );
+				if( ConnectionId == null )
 				{
-					accessToken = HttpUtility.ParseQueryString(myUri.Query).Get("token");
-					isSuccess = true;
-					this.OnClick(null);
+					return;
 				}
+
+				AccessToken = HttpUtility.ParseQueryString( myUri.Query ).Get( "token" );
+				IsSuccess = true;
+
+				this.InvokeOnUiThreadIfRequired( () => OnClick( EventArgs.Empty ) );
 			};
 		}
 	}

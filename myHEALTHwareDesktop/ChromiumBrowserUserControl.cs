@@ -7,28 +7,24 @@ using CefSharp.WinForms;
 namespace myHEALTHwareDesktop
 {
 	public partial class ChromiumBrowserUsercontrol : UserControl
-    {
+	{
 		public event EventHandler<PostMessageListenerEventArgs> PostMessageListener;
 
 		public IWinFormsWebBrowser Browser { get; private set; }
 
 		public object BoundScriptObject { get; set; }
 
-		public ChromiumBrowserUsercontrol(string url)
+		public ChromiumBrowserUsercontrol( string url )
 		{
 			InitializeComponent();
 
-			var browser = new ChromiumWebBrowser(url)
-			{
-				Dock = DockStyle.Fill
-			};
+			var browser = new ChromiumWebBrowser( url ) { Dock = DockStyle.Fill };
 
-
-			SetStyle(ControlStyles.ResizeRedraw, true);
+			SetStyle( ControlStyles.ResizeRedraw, true );
 
 			Dock = DockStyle.Fill;
 
-			browserPanel.Controls.Add(browser);
+			browserPanel.Controls.Add( browser );
 
 			Browser = browser;
 
@@ -39,73 +35,65 @@ namespace myHEALTHwareDesktop
 			//browser.MenuHandler = new MenuHandler();
 			//browser.LifeSpanHandler = new LifeSpanHandler();
 
-			browser.LoadingStateChanged += (sender, args) =>
+			browser.LoadingStateChanged += ( sender, args ) =>
 			{
-				if (args.CanReload)
+				if( args.CanReload )
 				{
-					string overridePostMessage = "window.postMessage = function(data, origin){ postMessageListener.received(JSON.stringify(data), origin); }";
-					browser.ExecuteScriptAsync(overridePostMessage);
+					string overridePostMessage =
+						"window.postMessage = function(data, origin){ postMessageListener.received(JSON.stringify(data), origin); }";
+					browser.ExecuteScriptAsync( overridePostMessage );
 				}
 			};
 		}
 
-
-
-		private void OnPostMessageRecieved(object sender, PostMessageListenerEventArgs e)
+		private void OnPostMessageReceived( object sender, PostMessageListenerEventArgs e )
 		{
-			if (PostMessageListener != null)
+			if( PostMessageListener != null )
 			{
-				PostMessageListener(sender, e);
+				PostMessageListener( sender, e );
 			}
 		}
 
-		private void OnBrowserHandleCreated(object sender, EventArgs e)
+		private void OnBrowserHandleCreated( object sender, EventArgs e )
 		{
 			var postMessageListener = new PostMessageListener();
-			postMessageListener.PostMessage += OnPostMessageRecieved;
+			postMessageListener.PostMessage += OnPostMessageReceived;
 
-			Browser.RegisterJsObject("postMessageListener", postMessageListener);
-			Browser.RegisterJsObject("bound", BoundScriptObject);
+			Browser.RegisterJsObject( "postMessageListener", postMessageListener );
+			Browser.RegisterJsObject( "bound", BoundScriptObject );
 		}
 
-		private void BrowserTabUserControlDisposed(object sender, EventArgs e)
+		private void BrowserTabUserControlDisposed( object sender, EventArgs e )
 		{
 			Disposed -= BrowserTabUserControlDisposed;
 
-
-
 			Browser.TitleChanged -= OnBrowserTitleChanged;
-
 
 			Browser.Dispose();
 		}
 
-
-
-
-		private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs args)
+		private void OnBrowserTitleChanged( object sender, TitleChangedEventArgs args )
 		{
-			this.InvokeOnUiThreadIfRequired(() => Parent.Text = args.Title);
+			this.InvokeOnUiThreadIfRequired( () => Parent.Text = args.Title );
 		}
 
-		public void ExecuteScript(string script)
+		public void ExecuteScript( string script )
 		{
-			Browser.ExecuteScriptAsync(script);
+			Browser.ExecuteScriptAsync( script );
 		}
 
-		public object EvaluateScript(string script)
+		public object EvaluateScript( string script )
 		{
-			var task = Browser.EvaluateScriptAsync(script);
+			var task = Browser.EvaluateScriptAsync( script );
 			task.Wait();
 			return task.Result;
 		}
 
-
-		public void LoadUrl(string url)
+		public void LoadUrl( string url )
 		{
-			if (Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
+			if( Uri.IsWellFormedUriString( url, UriKind.RelativeOrAbsolute ) )
 			{
-				Browser.Load(url);
+				Browser.Load( url );
 			}
 		}
 	}
@@ -145,11 +133,11 @@ namespace myHEALTHwareDesktop
 		/// </summary>
 		/// <param name="control">the control for which the update is required</param>
 		/// <param name="action">action to be performed on the control</param>
-		public static void InvokeOnUiThreadIfRequired(this Control control, Action action)
+		public static void InvokeOnUiThreadIfRequired( this Control control, Action action )
 		{
-			if (control.InvokeRequired)
+			if( control.InvokeRequired )
 			{
-				control.BeginInvoke(action);
+				control.BeginInvoke( action );
 			}
 			else
 			{
@@ -170,26 +158,26 @@ namespace myHEALTHwareDesktop
 
 		public event EventHandler<PostMessageListenerEventArgs> PostMessage;
 
-		public void Received(string data, string origin)
+		public void Received( string data, string origin )
 		{
 			try
 			{
 				var serializer = new JavaScriptSerializer();
-				message = serializer.Deserialize<MhwPostMessage>(data);
+				message = serializer.Deserialize<MhwPostMessage>( data );
 			}
-			catch (Exception)
+			catch( Exception )
 			{
 				message = null;
 			}
 
-			OnPostMessageRecieved(message);
+			OnPostMessageRecieved( message );
 		}
 
-		private void OnPostMessageRecieved(MhwPostMessage message)
+		private void OnPostMessageRecieved( MhwPostMessage message )
 		{
-			if (PostMessage != null)
+			if( PostMessage != null )
 			{
-				PostMessage(this, new PostMessageListenerEventArgs { Message = message });
+				PostMessage( this, new PostMessageListenerEventArgs { Message = message } );
 			}
 		}
 	}

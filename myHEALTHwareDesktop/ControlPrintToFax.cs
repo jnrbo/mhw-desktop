@@ -280,9 +280,9 @@ namespace myHEALTHwareDesktop
 
 		private void LaunchSendFax(string fileId)
 		{
-			sendFax = new SendFax(MhwDesktopForm.appId, MhwDesktopForm.appSecret);
+			sendFax = new SendFax(MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET);
 
-			sendFax.InitBrowser(parentForm.connectionId, parentForm.accessToken, this.selectedMHWAccountId, fileId);
+			sendFax.InitBrowser(parentForm.ConnectionId, parentForm.AccessToken, this.selectedMHWAccountId, fileId);
 
 			// Register a method to recieve click event callback.
 			sendFax.Click += new System.EventHandler(this.SendFax_OnClick);

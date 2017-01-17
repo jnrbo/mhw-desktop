@@ -70,6 +70,7 @@ namespace myHEALTHwareDesktop
 			// 
 			// trayIcon
 			// 
+			this.trayIcon.ContextMenuStrip = this.contextMenuStrip1;
 			this.trayIcon.Icon = global::myHEALTHwareDesktop.Properties.Resources.myHEALTHware;
 			this.trayIcon.Text = "myHEALTHware Desktop";
 			// 
@@ -138,7 +139,7 @@ namespace myHEALTHwareDesktop
 			this.runAtSystemStartupCheckBox.TabIndex = 2;
 			this.runAtSystemStartupCheckBox.Text = "Run when Windows starts up (recommended)";
 			this.runAtSystemStartupCheckBox.UseVisualStyleBackColor = true;
-			this.runAtSystemStartupCheckBox.CheckedChanged += new System.EventHandler(this.runAtSystemStartupCheckBox_CheckedChanged);
+			this.runAtSystemStartupCheckBox.CheckedChanged += new System.EventHandler(this.RunAtSystemStartupCheckBoxCheckedChanged);
 			// 
 			// label5
 			// 
@@ -159,17 +160,17 @@ namespace myHEALTHwareDesktop
 			this.accountsComboBox.Name = "accountsComboBox";
 			this.accountsComboBox.Size = new System.Drawing.Size(233, 28);
 			this.accountsComboBox.TabIndex = 24;
-			this.accountsComboBox.SelectionChangeCommitted += new System.EventHandler(this.accountsComboBox_SelectionChangeCommitted);
+			this.accountsComboBox.SelectionChangeCommitted += new System.EventHandler(this.AccountsComboBoxSelectionChangeCommitted);
 			// 
 			// buttonLogin
 			// 
-			this.buttonLogin.Location = new System.Drawing.Point(32, 46);
+			this.buttonLogin.Location = new System.Drawing.Point(41, 49);
 			this.buttonLogin.Name = "buttonLogin";
-			this.buttonLogin.Size = new System.Drawing.Size(94, 31);
+			this.buttonLogin.Size = new System.Drawing.Size(76, 31);
 			this.buttonLogin.TabIndex = 25;
-			this.buttonLogin.Text = "Switch Account";
+			this.buttonLogin.Text = "Log Out";
 			this.buttonLogin.UseVisualStyleBackColor = true;
-			this.buttonLogin.Click += new System.EventHandler(this.buttonSwitchUser_Click);
+			this.buttonLogin.Click += new System.EventHandler(this.ButtonLoginClick);
 			// 
 			// labelDisplayName
 			// 
@@ -180,7 +181,6 @@ namespace myHEALTHwareDesktop
 			this.labelDisplayName.Size = new System.Drawing.Size(98, 20);
 			this.labelDisplayName.TabIndex = 26;
 			this.labelDisplayName.Text = "User\'s name";
-			this.labelDisplayName.Click += new System.EventHandler(this.labelDisplayName_Click);
 			// 
 			// tabs
 			// 
@@ -193,8 +193,8 @@ namespace myHEALTHwareDesktop
 			this.tabs.SelectedIndex = 0;
 			this.tabs.Size = new System.Drawing.Size(636, 237);
 			this.tabs.TabIndex = 31;
-			this.tabs.SelectedIndexChanged += new System.EventHandler(this.tabs_SelectedIndexChanged);
-			this.tabs.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabs_Selecting);
+			this.tabs.SelectedIndexChanged += new System.EventHandler(this.TabsSelectedIndexChanged);
+			this.tabs.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabsSelecting);
 			// 
 			// tabPagePrintToDrive
 			// 
@@ -276,7 +276,6 @@ namespace myHEALTHwareDesktop
 			this.pictureBoxUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.pictureBoxUser.TabIndex = 27;
 			this.pictureBoxUser.TabStop = false;
-			this.pictureBoxUser.Click += new System.EventHandler(this.pictureBoxUser_Click);
 			// 
 			// pictureBoxActingAs
 			// 
@@ -306,7 +305,7 @@ namespace myHEALTHwareDesktop
 			this.Name = "MhwDesktopForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Desktop Settings";
-			this.Load += new System.EventHandler(this.MHWFormInitialize);
+			this.Load += new System.EventHandler(this.MhwFormInitialize);
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.contextMenuStrip2.ResumeLayout(false);
 			this.tabs.ResumeLayout(false);

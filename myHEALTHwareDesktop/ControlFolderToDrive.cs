@@ -195,9 +195,9 @@ namespace myHEALTHwareDesktop
 
 		private void BrowseUploadPath()
 		{
-			drivePicker = new DrivePicker(MhwDesktopForm.appId, MhwDesktopForm.appSecret);
+			drivePicker = new DrivePicker(MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET);
 			drivePicker.EnableFileName(false);
-			drivePicker.InitBrowser(parentForm.connectionId, parentForm.accessToken, this.selectedMHWAccountId);
+			drivePicker.InitBrowser(parentForm.ConnectionId, parentForm.AccessToken, this.selectedMHWAccountId);
 			
 			// Register a method to recieve click event callback.
 			drivePicker.Click += new System.EventHandler(this.drivePicker_OnClick);

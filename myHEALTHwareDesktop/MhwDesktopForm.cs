@@ -6,7 +6,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,27 +23,23 @@ namespace myHEALTHwareDesktop
 {
 	public partial class MhwDesktopForm : Form
 	{
-		public const string appName = "myHEALTHware Desktop";
-		public const string appId = "0CCED62C-808D-4D71-A8B2-AEA20C193263";
-		public const string appSecret = "5B8CCD2F-03D6-4161-A7F2-C112EF79B1A1";
+		public const string APP_NAME = "myHEALTHware Desktop";
+		public const string APP_ID = "0CCED62C-808D-4D71-A8B2-AEA20C193263";
+		public const string APP_SECRET = "5B8CCD2F-03D6-4161-A7F2-C112EF79B1A1";
 
-		public MhwSdk sdk;
+		private MhwSdk sdk;
 		private ApiAccount myAccount;
-		public string connectionId;
-		public string accessToken;
+
 		private bool isLoggedIn;
 		private LoginForm loginForm;
 
 		private readonly BindingSource accountsBindingSource;
 
-		// Get our initial Exit logic from our project user properties.
 		private bool isTimeToQuit;
-
-		// Was our last MouseClick a left or right MouseClick?
 		private bool isLastMouseClickLeft;
 
-		// Did our last MouseClick come from NotifyIcon?
-		//private bool isClickFromNotifyIcon = false;
+		public string ConnectionId { get; set; }
+		public string AccessToken { get; set; }
 
 		public MhwDesktopForm()
 		{
@@ -52,7 +47,7 @@ namespace myHEALTHwareDesktop
 			InitializeComponent();
 
 			// Create our "FormClosing" event handler.
-			FormClosing += MHWCloseRequested;
+			FormClosing += MhwCloseRequested;
 
 			// Load persisted settings values.
 			LoadRunAtStartup();
@@ -60,10 +55,7 @@ namespace myHEALTHwareDesktop
 			accountsBindingSource = new BindingSource();
 		}
 
-		// **** Our Program Entry Point. ****
-		// We added a line Under SettingsForm.Designer.cs to invoke this:
-		// this.Load += new System.EventHandler(this.MHWFormInitialize);
-		private async void MHWFormInitialize( object sender, EventArgs e )
+		private async void MhwFormInitialize( object sender, EventArgs e )
 		{
 			// Make sure that standard and standard double clicks are enabled,
 			// if they are not enabled, enable them. This really is OverKill but better to be
@@ -74,72 +66,22 @@ namespace myHEALTHwareDesktop
 			if( !GetStyle( ControlStyles.StandardDoubleClick ) )
 				SetStyle( ControlStyles.StandardDoubleClick, true );
 
-			// Initialize both ContextMenuStrips for NotifyIcon and SettingsForm.
-			// SettingsForm as being Empty, to avoid any problems later with null values.
+			// Main form event handlers.
+			MouseClick += MhwSingleClick;
+			MouseDoubleClick += MhwDoubleClick;
+			MouseDown += MhwMouseDown;
 
-			// We need to play some games with the SettingsForm assigned ContextMenuStrip. 
-			// We need to assign it on the fly, and make it Empty afterwards because we lose
-			// SettingsForm MouseClick events if we let a ContextMenuStrip stay assigned. Also, 
-			// we can't leave it as a null because we use "if" logic on if it is visible,
-			// which still works if it is Empty, but NOT if it is null and not assigned to
-			// something, so we need to make it Empty 
-			// this.ContextMenuStrip = new ContextMenuStrip(); so that we do not generate a
-			// null exception when we query if it is visible or not in 
-			// MHWSingleClick(); This is a great example showing
-			// what can happen when things are not initialized, and how they can cause you
-			// problems later on in your code under the right conditions, like checking if the
-			// SettingsForm ContextMenuStrip is visible, this would build fine but create a null
-			// exception later.
-			ContextMenuStrip = new ContextMenuStrip();
+			// NotifyIcon event handlers.
+			trayIcon.MouseClick += MhwSingleClick;
+			trayIcon.MouseDoubleClick += MhwDoubleClick;
+			trayIcon.MouseDown += MhwMouseDown;
 
-			// We can share this same this.contextMenuStrip1; on the fly, later with SettingsForm.
-			// See the MHWSingleClick(); and 
-			// _MouseDoubleClick(); event handlers for how and when.
+			aboutToolStripMenuItem.Click += MenuAboutClicked;
+			quitToolStripMenuItem.Click += MenuQuitClicked;
+			settingsToolStripMenuItem.Click += MenuSettingsClicked;
 
-			// Any changes to the ContextMenuStrips can be easily done using the Visual Studio
-			// designer. this.contextMenuStrip1; is the normal shared
-			// contextMenuStrip and contextMenuStrip2; is used as the
-			// different shared ContextMenuStrip and menu items can easily be added or deleted
-			// using the Visual Studio Designer to both of these ContextMenuStrips. 
-			trayIcon.ContextMenuStrip = contextMenuStrip1;
+			MhwMinimizeToTray();
 
-			// All of our Mouse event handlers for SettingsForm and NotifyIcon are shared
-			// to save code and space. It just is not possible to share single and double
-			// click Mouse event handlers, otherwise we would have done that as well.
-
-			// SettingsForm event handlers. Also See the SettingsForm Resize event below which needs to be
-			// set later. Notice how these Mouse Events share the same event handler with
-			// NotifyIcon; below.
-			MouseClick += MHWSingleClick;
-			MouseDoubleClick += MHWDoubleClick;
-			MouseDown += MHWMouseDown;
-
-			// NotifyIcon; event handlers.
-			trayIcon.MouseClick += MHWSingleClick;
-			trayIcon.MouseDoubleClick += MHWDoubleClick;
-			trayIcon.MouseDown += MHWMouseDown;
-
-			// The contextMenuStrip1 item event handlers we need and use. 
-			// See SettingsForm.Designer.cs you can delete any of these ContextMenuStrip menu items
-			// easliy as well.
-
-			// this.contextMenuStrip1.Opening; is used to trap a single
-			// right MouseClick on NotifyIcon; and stop the normal
-			// ContextMenuStrip from being displayed if the Project User Settings are set to
-			// disable single right MouseClicks on NotifyIcon.
-			//this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-			//this.conversationsToolStripMenuItem.Click += new System.EventHandler(this.menuConversationsClicked);
-			//this.faxToolStripMenuItem.Click += new System.EventHandler(this.menuFaxClicked);
-			aboutToolStripMenuItem.Click += menuAboutClicked;
-			quitToolStripMenuItem.Click += menuQuitClicked;
-			settingsToolStripMenuItem.Click += menuSettingsClicked;
-
-			// Our Taskbar and NotifyIcon minimize or normal display startup
-			// logic for SettingsForm.
-			MHWMinimizeToTray();
-
-			// We are single threaded and this is the easiest method for us not to create
-			// any SettingsForm lag problems. Sleazy or not, it works :P
 			Application.DoEvents();
 
 			// SettingsForm Resize event handler. 
@@ -152,9 +94,9 @@ namespace myHEALTHwareDesktop
 			accountsComboBox.DataSource = accountsBindingSource;
 
 			// Try the previous credentials.
-			connectionId = Settings.Default.ConnectionId;
-			accessToken = Settings.Default.AccessToken;
-			isLoggedIn = await ExecuteLogin();
+			ConnectionId = Settings.Default.ConnectionId;
+			AccessToken = Settings.Default.AccessToken;
+			await ExecuteLogin();
 
 			if( !isLoggedIn )
 			{
@@ -165,6 +107,9 @@ namespace myHEALTHwareDesktop
 			{
 				LogOut();
 			}
+
+			UpdateLoginButtonText();
+
 			// We now at this point, are completely event driven.
 		}
 
@@ -175,18 +120,12 @@ namespace myHEALTHwareDesktop
 		{
 			if( WindowState == FormWindowState.Minimized )
 			{
-				MHWMinimizeToTray();
+				MhwMinimizeToTray();
 			}
-
-			// Not needed since invoked when menu is clicked.
-			//else  // Normal or Maximized
-			//{
-			//	MHWDisplaySettings();
-			//}
 		}
 
 		// Minimize the settings form to the system tray.
-		private void MHWMinimizeToTray()
+		private void MhwMinimizeToTray()
 		{
 			trayIcon.Visible = true;
 
@@ -203,7 +142,7 @@ namespace myHEALTHwareDesktop
 			{
 				trayIcon.ShowBalloonTip( 2000,
 				                         // Show for 2 seconds
-				                         appName,
+				                         APP_NAME,
 				                         "myHEALTHware has minimized here, as an icon in the System Tray." +
 				                         " Right-click this icon to see menu of actions.",
 				                         ToolTipIcon.Info );
@@ -214,7 +153,7 @@ namespace myHEALTHwareDesktop
 		}
 
 		// Display the settings form.
-		private async Task MHWDisplaySettings()
+		private async Task MhwDisplaySettings()
 		{
 			Show(); // Equivalent to this.Visible = true.
 			Activate();
@@ -233,228 +172,51 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		// This event handler can disable NotifyIcon single right MouseClicks for NotifyIcon
-		// here, which means the normal ContextMenuStrip will not display when we right single
-		// MouseClick NotifyIcon.
-
-		// This can be also used to disable all MouseClicks on NotifyIcon if all other click
-		// logic is false for NotifyIcon, which can be used for a monitoring program
-		// that you may want the user to know is running, but not allow them to stop, using
-		// the GUI, of course, if they have permission, they can still stop the process
-		// using programs like the TaskManager.
-
-		// Double right MouseClick logic remains active even when a single right MouseClick
-		// is disabled for both NotifyIcon as well as SettingsForm. So you can still select a
-		// right double MouseClick project user setting for NotifyIcon and SettingsForm even when
-		// single right MouseClick have been disabled.
-
-		// We don't want to stop ALL displays of the ContextMenuStrip from say a left 
-		// MouseClick or left/right double MouseClick, which is a selectable project user
-		// setting in this example. We also do not want to limit the ability of SettingsForm to use a
-		// single right MouseClick to display the ContextMenuStrip if or when needed.
-
-		// We use some MouseClick information obtained from MHWMouseDown();
-		// which is fired for both single and double MouseDown events for NotifyIcon and 
-		// is used to help us determine where the MouseClick came from, SettingsForm or the NotifyIcon
-		// as well as which mouse button was clicked, left or right, and was it a single
-		// or a double MouseClick.
-		//private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-		//{
-		//	 Make sure this was a single or double right MouseClick.
-		//	 Was the last MouseClick on NotifyIcon? It could have been on SettingsForm.
-		//	 Are single right MouseClicks disabled?
-		//	 Are single double right MouseClicks for ContextMenuStrips enabled?
-		//	if ((!this.isLastMouseClickLeft)
-		//		 && (this.isClickFromNotifyIcon)
-		//		 //&& (Properties.Settings.Default.NotifyIconMouseSingleRightClickDisabled)
-		//		 && ((!this.isClicksNotifyIconDoubleClicks)
-		//			 || ((this.isClicksNotifyIconDoubleClicks)
-		//			 //&& (!Properties.Settings.Default.NotifyIconMouseDoubleRightClickShowsContextMenuStrip)
-		//			)))
-		//	{
-		//		// Stop the ContextMenuStrip from being visible.
-		//		this.contextMenuStrip1.Visible = false;
-
-		//		// Don't honor this ContextMenuStrip display request.
-		//		e.Cancel = true;
-
-		//		// When using NotifyIcon and dealing with MouseClicks
-		//		// we need to always make sure SettingsForm is in Focus
-		//		// after MouseClicks on NotifyIcon.
-		//		if (this.WindowState == FormWindowState.Normal)
-		//			this.ActivateAndShow();
-		//	}
-		//}
-
-		private void DisplayNotifyIconContextMenu( object sender )
-		{
-			// This is a neat way for displaying a ContextMenuStrip from
-			// NotifyIcon MouseClicks other than single right MouseClicks, it uses
-			// System Reflection. Positioning is automatic as well this way.
-
-			// Cast the event sender back to a NotifyIcon
-			// for the sake of convienience.
-			NotifyIcon eventSource = (NotifyIcon) sender;
-
-			// Get the type instance from the NotifyIcon.
-			Type niHandle = eventSource.GetType();
-
-			// Invoke the private ShowContextMenu method.
-			niHandle.InvokeMember( "ShowContextMenu",
-			                       BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-			                       null,
-			                       eventSource,
-			                       null );
-		}
-
 		// This event handler handles our MouseDown events for both SettingsForm and NotifyIcon.
-		// We use this event handler to help us keep track of where the MouseClick came from,
-		// SettingsForm or NotifyIcon as well as what Mouse Button was pressed, Left or Right,
-		// and was this a double or single MouseDown event, which is only important
-		// if we have single right MouseClicks disabled for NotifyIcon but have double right
-		// MouseClicks enabled for NotifyIcon to display the ContextMenuStrip.
-		private void MHWMouseDown( object sender, MouseEventArgs e )
+		// We use this event handler to help us keep track of where the MouseClick came from.
+		private void MhwMouseDown( object sender, MouseEventArgs e )
 		{
-			// If this event was fired from NotifyIcon then do this.
-			//if (sender == this.NotifyIcon)
-			//{
-			//	// Our Last Mouse Clicks came from NotifyIcon.
-			//	this.isClickFromNotifyIcon = true;
-
-			//	// Was this a single MouseClick or a double MouseClick for ContextMenuStrip
-			//	// display purposes? We come here twice on double MouseClicks once as 
-			//	// Clicks = 1 and once as Clicks = 2. 
-
-			//	// The contextMenuStrip1_Opening(); is also called twice
-			//	// for double right MouseClicks, but always after this event fires, so the
-			//	// second time if Clicks = 2 and double right MouseClicks on NotifyIcon are
-			//	// set to display the contextMenuStrip1; we need to set
-			//	// this before contextMenuStrip1_Opening(); fires to
-			//	// allow double right MouseClicks on NotifyIcon to display the 
-			//	// ContextMenuStrip1; if needed. If you wish to use this
-			//	// Clicks count for other things, you will need to verify the order in
-			//	// which other Mouse events fire, which was also tested in this case.
-			//	if (e.Clicks == 2)
-			//		this.isClicksNotifyIconDoubleClicks = true;
-			//	else
-			//		this.isClicksNotifyIconDoubleClicks = false;
-			//}
-			//else
-			//{
-			//	// This MouseDown did not come from NotifyIcon.
-			//	this.isClickFromNotifyIcon = false;
-			//}
-
 			// Was it a left or right MouseDown?
-			if( e.Button == MouseButtons.Left )
-				isLastMouseClickLeft = true;
-			else
-				isLastMouseClickLeft = false;
+			isLastMouseClickLeft = e.Button == MouseButtons.Left;
 		}
 
-		// This event handler handles single MouseClicks for both SettingsForm and our NotifyIcon.
+		// This event handler handles single MouseClicks for both main form and our NotifyIcon.
 		// Note: This event handler fires twice for double MouseClicks.
-		private void MHWSingleClick( object sender, MouseEventArgs e )
+		private void MhwSingleClick( object sender, MouseEventArgs e )
 		{
-			// Left single click on notify icon.
-			//if ( (sender == this) && (this.isLastMouseClickLeft) )
-			//{
-			//	this.MHWDisplaySettings();
-			//}
-
-			// Right single click on notify icon.
-			// NOTE: These are automatically handled by the NotifyIcon class.
-			//if ( (sender == this.NotifyIcon) &&
-			//	 (this.isLastMouseClickLeft == false)
-			//{
-			//	// Display the ContextMenuStrip for NotifyIcon.
-			//	this.NotifyIcon.ContextMenuStrip = this.contextMenuStrip1;
-			//	this.DisplayNotifyIconContextMenu(sender);
-			//}
-
-			// Right single click on form.
-			if( ( sender == this ) && ( isLastMouseClickLeft == false ) )
-			{
-				if( ContextMenuStrip.Visible == false )
-				{
-					// Display the ContextMenuStrip for SettingsForm.
-					// Replace the empty ContextMenuStrip for SettingsForm with a real one. See 
-					// MHWFormInitialize();
-					// for more details on why we need to do this.
-					ContextMenuStrip = contextMenuStrip2;
-					ContextMenuStrip.Show( MousePosition );
-
-					// This puts an Empty ContextMenuStrip back for SettingsForm after we displayed
-					// a real one. So that we do not lose MouseClick events for SettingsForm.
-					ContextMenuStrip = new ContextMenuStrip();
-				}
-			}
-
 			// When using NotifyIcon and dealing with MouseClicks,
-			// we need to always make sure SettingsForm is in Focus after MouseClicks on NotifyIcon.
-			if( WindowState == FormWindowState.Normal )
+			// we need to always make sure main form is in Focus after MouseClicks on NotifyIcon.
+			if( WindowState == FormWindowState.Normal && Visible && !Focused )
 			{
-				if( Visible && ( !Focused ) )
-				{
-					Activate();
-				}
+				Activate();
 			}
 		}
 
 		// This event handler handles both left and right doubleclicks for both Form
 		// and NotifyIcon.
-		private void MHWDoubleClick( object sender, MouseEventArgs e )
+		private void MhwDoubleClick( object sender, MouseEventArgs e )
 		{
 			// Left double-click on notify icon.
 			if( sender == trayIcon && isLastMouseClickLeft )
 			{
-				menuSettingsClicked( sender, e );
+				MenuSettingsClicked( sender, e );
 			}
 		}
 
-		private void LaunchSite( string url )
+		private async void MenuSettingsClicked( object sender, EventArgs e )
 		{
-			// We could be offline, so we use some try catch logic here and display a
-			// message if needed about possibly being offline.
-			try
-			{
-				Process.Start( url );
-			}
-			catch
-			{
-				MessageBox.Show( "Please check if you are connected to the Internet" );
-			}
+			await MhwDisplaySettings();
 		}
 
-		//private void menuConversationsClicked(object sender, EventArgs e)
-		//{
-		//	LaunchSite("https://myhealthware.com/#/Conversations");
-		//}
-
-		//private void menuContactsClicked(object sender, EventArgs e)
-		//{
-		//	LaunchSite("https://myhealthware.com/#/Contacts");
-		//}
-
-		//private void menuFaxClicked(object sender, EventArgs e)
-		//{
-		//	LaunchSite("https://myhealthware.com/#/Fax");
-		//}
-
-		private async void menuSettingsClicked( object sender, EventArgs e )
-		{
-			await MHWDisplaySettings();
-		}
-
-		private async void menuAboutClicked( object sender, EventArgs e )
+		private async void MenuAboutClicked( object sender, EventArgs e )
 		{
 			tabs.SelectedTab = tabPageAbout;
-			await MHWDisplaySettings();
+			await MhwDisplaySettings();
 		}
 
-		private void menuQuitClicked( object sender, EventArgs e )
+		private void MenuQuitClicked( object sender, EventArgs e )
 		{
-			// It is reallly time to quit.
+			// It is really time to quit.
 			isTimeToQuit = true;
 
 			// Create a Close request.
@@ -462,27 +224,17 @@ namespace myHEALTHwareDesktop
 		}
 
 		// This event handler gets called when we receive any Close(); request.
-		private void MHWCloseRequested( object sender, FormClosingEventArgs e )
+		private void MhwCloseRequested( object sender, FormClosingEventArgs e )
 		{
-			// If we do not honor a Close requests from SettingsForm using the "X" from
-			// the top right of the SettingsForm Window do this. But this could be a system
-			// shutdown request, or a process stop request, so, if this is NOT also a
-			// UserClosing request, close as well, otherwise we could delay things like system
-			// shutdown requests and stop requests.
-			if( ( !isTimeToQuit ) && ( e.CloseReason == CloseReason.UserClosing ) )
+			if( !isTimeToQuit && e.CloseReason == CloseReason.UserClosing )
 			{
 				// Override app "X" click and just minimize without app close.
-				MHWMinimizeToTray();
+				MhwMinimizeToTray();
 				e.Cancel = true;
 			}
 			else
 			{
-				// We are going to honor this Close request.
-				// Turn off our NotifyIcon before we go away. Some programs do not
-				// do this. You can tell this is the case, when a program is gone
-				// yet the NotifyIcon for that program still remains in the System Tray
-				// until you hover your mouse over it and then it goes away. This will
-				// make sure our NotifyIcon goes away when our program goes away.
+				// Make sure try icon is hidden before closing.
 				trayIcon.Visible = false;
 			}
 		}
@@ -493,7 +245,7 @@ namespace myHEALTHwareDesktop
 
 			if( string.IsNullOrWhiteSpace( message ) )
 			{
-				trayIcon.Text = appName;
+				trayIcon.Text = APP_NAME;
 			}
 			else
 			{
@@ -550,12 +302,12 @@ namespace myHEALTHwareDesktop
 		private void LoadRunAtStartup()
 		{
 			// Don't fire event.
-			runAtSystemStartupCheckBox.CheckedChanged -= runAtSystemStartupCheckBox_CheckedChanged;
+			runAtSystemStartupCheckBox.CheckedChanged -= RunAtSystemStartupCheckBoxCheckedChanged;
 
 			runAtSystemStartupCheckBox.Checked = IsRunAtSystemStartupSet();
 
 			// Fire events from now on.
-			runAtSystemStartupCheckBox.CheckedChanged += runAtSystemStartupCheckBox_CheckedChanged;
+			runAtSystemStartupCheckBox.CheckedChanged += RunAtSystemStartupCheckBoxCheckedChanged;
 		}
 
 		private bool IsRunAtSystemStartupSet()
@@ -594,7 +346,7 @@ namespace myHEALTHwareDesktop
 			return false;
 		}
 
-		private void runAtSystemStartupCheckBox_CheckedChanged( object sender, EventArgs e )
+		private void RunAtSystemStartupCheckBoxCheckedChanged( object sender, EventArgs e )
 		{
 			bool isChecked = runAtSystemStartupCheckBox.Checked;
 
@@ -634,9 +386,9 @@ namespace myHEALTHwareDesktop
 			process.WaitForExit();
 		}
 
-		private void tabs_SelectedIndexChanged( object sender, EventArgs e )
+		private void TabsSelectedIndexChanged( object sender, EventArgs e )
 		{
-			switch( ( sender as TabControl ).SelectedIndex )
+			switch( ( (TabControl) sender ).SelectedIndex )
 			{
 				case 0: // Folder to Drive
 					break;
@@ -649,7 +401,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void tabs_Selecting( object sender, TabControlCancelEventArgs e )
+		private void TabsSelecting( object sender, TabControlCancelEventArgs e )
 		{
 			// Are we logged in yet?
 			if( isLoggedIn )
@@ -661,24 +413,14 @@ namespace myHEALTHwareDesktop
 			e.Cancel = true;
 		}
 
-		private async void buttonSwitchUser_Click( object sender, EventArgs e )
+		private async void ButtonLoginClick( object sender, EventArgs e )
 		{
 			await ChangeLogin();
 		}
 
-		private async void pictureBoxUser_Click( object sender, EventArgs e )
-		{
-			await ChangeLogin();
-		}
-
-		private void accountsComboBox_SelectionChangeCommitted( object sender, EventArgs e )
+		private void AccountsComboBoxSelectionChangeCommitted( object sender, EventArgs e )
 		{
 			ChangeActingAs();
-		}
-
-		private async void labelDisplayName_Click( object sender, EventArgs e )
-		{
-			await ChangeLogin();
 		}
 
 		public void CheckNetworkStatus()
@@ -691,7 +433,7 @@ namespace myHEALTHwareDesktop
 
 		public string UploadFile( string fullPath, string name, string uploadFolderDriveItemId, bool isDeleteFileAfterUpload )
 		{
-			FileStream fileStream = null;
+			FileStream fileStream;
 
 			// Open the new file as a stream.
 			try
@@ -743,7 +485,7 @@ namespace myHEALTHwareDesktop
 		private FileStream OpenFile( string filepath )
 		{
 			int retries = 20;
-			const int delay = 100; // Max time spent here = retries*delay milliseconds
+			const int DELAY = 100; // Max time spent here = retries*delay milliseconds
 
 			if( !File.Exists( filepath ) )
 				return null;
@@ -761,15 +503,13 @@ namespace myHEALTHwareDesktop
 				}
 
 				retries--;
-				Thread.Sleep( delay );
+				Thread.Sleep( DELAY );
 			}
 			while( retries > 0 );
 
 			ShowBalloonError( "Could not open file {0}", filepath );
 			return null;
 		}
-
-		//===============================================================================
 
 		private void SaveAccountCredentials( string connectionId, string accessToken )
 		{
@@ -781,9 +521,9 @@ namespace myHEALTHwareDesktop
 		private async Task<bool> ExecuteLogin()
 		{
 			// Are credentials in valid format?
-			if( ( string.IsNullOrWhiteSpace( connectionId ) ) || ( string.IsNullOrWhiteSpace( accessToken ) ) )
+			if( string.IsNullOrWhiteSpace( ConnectionId ) || string.IsNullOrWhiteSpace( AccessToken ) )
 			{
-				return false;
+				return isLoggedIn = false;
 			}
 
 			// SDK expects "/api" to already be on the end of the domain.
@@ -794,10 +534,10 @@ namespace myHEALTHwareDesktop
 			                  // SDK logging has an issue. Keep off.
 			                  Settings.Default.sdkTimeOutSeconds * 1000,
 			                  domainApi,
-			                  appId,
-			                  appSecret,
-			                  connectionId,
-			                  accessToken );
+			                  APP_ID,
+			                  APP_SECRET,
+			                  ConnectionId,
+			                  AccessToken );
 
 			// Get our account ID that this app is installed on.
 			try
@@ -807,11 +547,13 @@ namespace myHEALTHwareDesktop
 			catch( HttpException ex )
 			{
 				ShowBalloonError( "Log in attempt failed: {0}", ex.Message );
-				return false;
+				return isLoggedIn = false;
 			}
 
+			isLoggedIn = true;
+
 			// Save credentials.
-			SaveAccountCredentials( connectionId, accessToken );
+			SaveAccountCredentials( ConnectionId, AccessToken );
 
 			// Set display name.
 			labelDisplayName.Text = myAccount.DisplayName;
@@ -834,27 +576,46 @@ namespace myHEALTHwareDesktop
 			controlFolderToDrive.Enabled = true;
 			controlPrintToFax.Enabled = true;
 
-			return true;
+			UpdateLoginButtonText();
+
+			return isLoggedIn;
 		}
 
 		private async Task ChangeLogin()
 		{
+			bool loginSuccess = false;
+
 			LogOut();
 
-			loginForm = new LoginForm( appId, appSecret );
-			loginForm.InitBrowser();
+			if( loginForm == null )
+			{
+				loginForm = new LoginForm( APP_ID, APP_SECRET );
 
-			loginForm.Click += loginForm_Submitted;
-			loginForm.ShowDialog( this );
+				loginForm.Click += LoginFormSubmitted;
+				loginForm.Closed += ( s, e ) =>
+				{
+					loginSuccess = loginForm.IsSuccess;
+
+					loginForm.Dispose();
+					loginForm = null;
+				};
+
+				loginForm.ShowDialog( this );
+			}
+
+			if( loginForm != null )
+			{
+				loginForm.Activate();
+			}
 
 			// If cancelled, don't change state.
-			if( !loginForm.isSuccess )
+			if( !loginSuccess )
 			{
 				return;
 			}
 
 			// Log in.
-			isLoggedIn = await ExecuteLogin();
+			await ExecuteLogin();
 
 			if( !isLoggedIn )
 			{
@@ -866,27 +627,21 @@ namespace myHEALTHwareDesktop
 		}
 
 		// Called when the login dialog Okay button is clicked.
-		private void loginForm_Submitted( object sender, EventArgs e )
+		private void LoginFormSubmitted( object sender, EventArgs e )
 		{
 			// Retrieve the resulting connection ID and access token from the OAuth dialog.
-			connectionId = loginForm.connectionId;
-			accessToken = loginForm.accessToken;
+			ConnectionId = loginForm.ConnectionId;
+			AccessToken = loginForm.AccessToken;
 
 			// Close the login form.
-			BeginInvoke( (MethodInvoker) delegate { loginForm.Dispose(); } );
+			loginForm.Close();
 		}
 
 		private async Task<IEnumerable<MhwAccount>> RefreshOnBehalfOfAccounts()
 		{
-			////// Clear list.
-			////accountsComboBox.Items.Clear();
-
-			////// Default to selecting personal account.
-			////string selectedAccountName = myAccount.DisplayName;
-
 			// Load the list of accounts that this account manages files for.
-
 			var accounts = await GetMhwAccountsAsync();
+
 			var bindingList = (BindingList<MhwAccount>) accountsBindingSource.DataSource;
 			bindingList.Clear();
 
@@ -901,25 +656,6 @@ namespace myHEALTHwareDesktop
 			accountsComboBox.SelectedItem = account;
 
 			return accounts;
-
-			////foreach( var item in accounts )
-			////{
-			////	// Add to list box.
-			////	accountsComboBox.Items.Add( item );
-
-			////	// Check if this was the previously selected account.
-			////	if( item.DelegateAccountId == Settings.Default.SelectedAccountId )
-			////	{
-			////		selectedAccountName = item.Name;
-			////	}
-			////}
-
-			////// Set the selected account in the list.
-			////int index = accountsComboBox.FindString( selectedAccountName );
-			////accountsComboBox.SelectedIndex = index;
-
-			////var selected = (MhwAccount) accountsComboBox.SelectedItem;
-			////SetPicture( pictureBoxActingAs, selected.ProfilePic );
 		}
 
 		private async Task<IEnumerable<MhwAccount>> GetMhwAccountsAsync()
@@ -967,11 +703,8 @@ namespace myHEALTHwareDesktop
 		{
 			MhwAccount selected = GetSelectedAccount();
 
-			////SetPicture( pictureBoxActingAs, selected.ProfilePic );
-			////SetPictureBox( item.PictureFileId, pictureBoxActingAs );
-
 			Settings.Default.SelectedAccountId = selected.AccountId;
-			SaveSettings( /*string.Format( "Now acting as {0}", item.Name )*/ );
+			SaveSettings();
 
 			// Reload all other settings according to the selected delegate.
 			controlFolderToDrive.LoadSettings( this, sdk, selected.AccountId );
@@ -1008,20 +741,22 @@ namespace myHEALTHwareDesktop
 			// Set tray icon to indicate not logged in.
 			SetTrayIcon( Resources.LoggedOut, "Please log in" );
 
+			Settings.Default.SelectedAccountId = null;
+			Settings.Default.AccessToken = null;
+			Settings.Default.ConnectionId = null;
+			SaveSettings();
+
 			isLoggedIn = false;
-			connectionId = null;
-			accessToken = null;
+			ConnectionId = null;
+			AccessToken = null;
 
 			labelDisplayName.Text = "Not logged in";
 
 			SetPicture( pictureBoxUser, null );
 			SetPicture( pictureBoxActingAs, null );
 
-			////SetPictureBox( null, pictureBoxUser );
-			////SetPictureBox( null, pictureBoxActingAs );
-
 			// Clear delegates list.
-			////accountsComboBox.Items.Clear();
+			accountsBindingSource.Clear();
 			accountsComboBox.Enabled = false;
 
 			// Disable tabs.
@@ -1033,6 +768,13 @@ namespace myHEALTHwareDesktop
 			controlPrintToDrive.LogOut();
 			controlFolderToDrive.LogOut();
 			controlPrintToFax.LogOut();
+
+			UpdateLoginButtonText();
+		}
+
+		private void UpdateLoginButtonText()
+		{
+			buttonLogin.Text = isLoggedIn ? "Log Out" : "Log In";
 		}
 	}
 }

@@ -37,12 +37,10 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-			this.ClientSize = new System.Drawing.Size(470, 297);
+			this.ClientSize = new System.Drawing.Size(474, 236);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(486, 336);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(486, 336);
 			this.Name = "LoginForm";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
