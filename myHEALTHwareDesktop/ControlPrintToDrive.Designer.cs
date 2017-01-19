@@ -37,7 +37,7 @@
 			this.groupBoxPrintToDrive = new System.Windows.Forms.GroupBox();
 			this.errorProviderDriveFolder = new System.Windows.Forms.ErrorProvider(this.components);
 			this.pictureStartedStopped = new System.Windows.Forms.PictureBox();
-			this.label_MonitorStatus = new System.Windows.Forms.Label();
+			this.labelMonitorStatus = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.errorProviderDriveFolder)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureStartedStopped)).BeginInit();
 			this.SuspendLayout();
@@ -50,7 +50,7 @@
 			this.buttonPrintToDriveInstall.TabIndex = 31;
 			this.buttonPrintToDriveInstall.Text = "Install Printer";
 			this.buttonPrintToDriveInstall.UseVisualStyleBackColor = true;
-			this.buttonPrintToDriveInstall.Click += new System.EventHandler(this.buttonPrintToDriveInstall_Click);
+			this.buttonPrintToDriveInstall.Click += new System.EventHandler(this.ButtonPrintToDriveInstallClick);
 			// 
 			// textBoxPrintToDriveFolder
 			// 
@@ -68,7 +68,7 @@
 			this.buttonBrowsePrintToDrivePath.TabIndex = 34;
 			this.buttonBrowsePrintToDrivePath.Text = "Browse";
 			this.buttonBrowsePrintToDrivePath.UseVisualStyleBackColor = true;
-			this.buttonBrowsePrintToDrivePath.Click += new System.EventHandler(this.buttonBrowsePrintToDrivePath_Click);
+			this.buttonBrowsePrintToDrivePath.Click += new System.EventHandler(this.ButtonBrowsePrintToDrivePathClick);
 			// 
 			// radioButtonPrompt
 			// 
@@ -80,7 +80,7 @@
 			this.radioButtonPrompt.TabStop = true;
 			this.radioButtonPrompt.Text = "Prompt for upload location";
 			this.radioButtonPrompt.UseVisualStyleBackColor = true;
-			this.radioButtonPrompt.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
+			this.radioButtonPrompt.CheckedChanged += new System.EventHandler(this.RadioButtonsCheckedChanged);
 			// 
 			// radioButtonUseDefault
 			// 
@@ -92,7 +92,7 @@
 			this.radioButtonUseDefault.TabStop = true;
 			this.radioButtonUseDefault.Text = "Upload to:";
 			this.radioButtonUseDefault.UseVisualStyleBackColor = true;
-			this.radioButtonUseDefault.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
+			this.radioButtonUseDefault.CheckedChanged += new System.EventHandler(this.RadioButtonsCheckedChanged);
 			// 
 			// groupBoxPrintToDrive
 			// 
@@ -119,20 +119,20 @@
 			// 
 			// label_MonitorStatus
 			// 
-			this.label_MonitorStatus.Location = new System.Drawing.Point(201, 151);
-			this.label_MonitorStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.label_MonitorStatus.Name = "label_MonitorStatus";
-			this.label_MonitorStatus.Size = new System.Drawing.Size(172, 13);
-			this.label_MonitorStatus.TabIndex = 38;
-			this.label_MonitorStatus.Text = "Print to Drive printer is not installed.";
-			this.label_MonitorStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelMonitorStatus.Location = new System.Drawing.Point(201, 151);
+			this.labelMonitorStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.labelMonitorStatus.Name = "labelMonitorStatus";
+			this.labelMonitorStatus.Size = new System.Drawing.Size(172, 13);
+			this.labelMonitorStatus.TabIndex = 38;
+			this.labelMonitorStatus.Text = "Print to Drive printer is not installed.";
+			this.labelMonitorStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ControlPrintToDrive
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.pictureStartedStopped);
-			this.Controls.Add(this.label_MonitorStatus);
+			this.Controls.Add(this.labelMonitorStatus);
 			this.Controls.Add(this.radioButtonUseDefault);
 			this.Controls.Add(this.radioButtonPrompt);
 			this.Controls.Add(this.textBoxPrintToDriveFolder);
@@ -158,6 +158,6 @@
 		private System.Windows.Forms.GroupBox groupBoxPrintToDrive;
 		private System.Windows.Forms.ErrorProvider errorProviderDriveFolder;
 		private System.Windows.Forms.PictureBox pictureStartedStopped;
-		public System.Windows.Forms.Label label_MonitorStatus;
+		public System.Windows.Forms.Label labelMonitorStatus;
 	}
 }

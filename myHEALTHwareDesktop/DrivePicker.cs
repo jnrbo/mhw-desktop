@@ -1,47 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using CefSharp;
-using CefSharp.WinForms;
-
+using myHEALTHwareDesktop.Properties;
 
 namespace myHEALTHwareDesktop
 {
 	public partial class DrivePicker : Form
 	{
 		private ChromiumBrowserUsercontrol chromiumBrowser;
-		private string appId;
-		private string appSecret;
+		private readonly string appId;
+		private readonly string appSecret;
 		private string fileName;
 
-		public DrivePicker(string appId, string appSecret)
+		public DrivePicker( string appId, string appSecret )
 		{
 			this.appId = appId;
 			this.appSecret = appSecret;
 			InitializeComponent();
 		}
 
-		public void InitBrowser(string connectionId, string accessToken, string accountId)
+		public void InitBrowser( string connectionId, string accessToken, string accountId )
 		{
-			if (Cef.IsInitialized == false)
+			if( Cef.IsInitialized == false )
 			{
-				Cef.Initialize(new CefSettings());
+				Cef.Initialize( new CefSettings() );
 			}
 
-			string url = string.Format("{0}/UI/Drive/Select?accountId={1}&containersOnly=true&connection_id={2}&access_token={3}&app_key={4}&app_secret={5}", 
-								Properties.Settings.Default.myHEALTHwareDomain, 
-								accountId,
-								connectionId, accessToken,
-								appId, appSecret);
-			chromiumBrowser = new ChromiumBrowserUsercontrol(url);
-			this.Controls.Add(chromiumBrowser);
+			string url =
+				string.Format(
+					"{0}/UI/Drive/Select?accountId={1}&containersOnly=true&connection_id={2}&access_token={3}&app_key={4}&app_secret={5}",
+					Settings.Default.myHEALTHwareDomain,
+					accountId,
+					connectionId,
+					accessToken,
+					appId,
+					appSecret );
+
+			chromiumBrowser = new ChromiumBrowserUsercontrol( url );
+			Controls.Add( chromiumBrowser );
 			chromiumBrowser.Dock = DockStyle.Fill;
 
 			chromiumBrowser.PostMessageListener += ResultMessageHandler;
@@ -49,20 +44,20 @@ namespace myHEALTHwareDesktop
 			//browser.Browser.KeyboardHandler = new MhwSendFaxWindowKeyboardHandler(this);
 		}
 
-		public void EnableFileName(bool isEnabled, string defaultFileName=null)
+		public void EnableFileName( bool isEnabled, string defaultFileName = null )
 		{
-			if (isEnabled)
+			if( isEnabled )
 			{
-				this.panelFileName.Show();
-				this.textBoxFileName.Show();
-				this.labelFileName.Show();
-				this.textBoxFileName.Text = defaultFileName;
+				panelFileName.Show();
+				textBoxFileName.Show();
+				labelFileName.Show();
+				textBoxFileName.Text = defaultFileName;
 			}
 			else
 			{
-				this.panelFileName.Hide();
-				this.textBoxFileName.Hide();
-				this.labelFileName.Hide();
+				panelFileName.Hide();
+				textBoxFileName.Hide();
+				labelFileName.Hide();
 			}
 		}
 
@@ -71,10 +66,10 @@ namespace myHEALTHwareDesktop
 			return fileName;
 		}
 
-		public void ResultMessageHandler(object sender, PostMessageListenerEventArgs args)
+		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )
 		{
 			// Fire event.
-			this.OnClick(args);
+			OnClick( args );
 		}
 	}
 }

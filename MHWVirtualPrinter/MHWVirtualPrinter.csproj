@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MHWPrinter.cs" />
-    <Compile Include="PDFEngine.cs" />
+    <Compile Include="MhwPrinter.cs" />
+    <Compile Include="PdfEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualPrinter.cs" />
     <Compile Include="WinSpool.cs" />

@@ -29,13 +29,13 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.label_MonitorStatus = new System.Windows.Forms.Label();
+			this.labelMonitorStatus = new System.Windows.Forms.Label();
 			this.buttonStartStopWatcher = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textBoxLocalPath = new System.Windows.Forms.TextBox();
 			this.buttonBrowseLocalPath = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBoxMHWFolder = new System.Windows.Forms.TextBox();
+			this.textBoxMhwFolder = new System.Windows.Forms.TextBox();
 			this.deleteFileAfterUploadCheckBox = new System.Windows.Forms.CheckBox();
 			this.buttonBrowseUploadPath = new System.Windows.Forms.Button();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -49,13 +49,13 @@
 			// 
 			// label_MonitorStatus
 			// 
-			this.label_MonitorStatus.Location = new System.Drawing.Point(198, 114);
-			this.label_MonitorStatus.Margin = new System.Windows.Forms.Padding(0);
-			this.label_MonitorStatus.Name = "label_MonitorStatus";
-			this.label_MonitorStatus.Size = new System.Drawing.Size(147, 13);
-			this.label_MonitorStatus.TabIndex = 33;
-			this.label_MonitorStatus.Text = "Uploader is currently stopped.";
-			this.label_MonitorStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelMonitorStatus.Location = new System.Drawing.Point(198, 114);
+			this.labelMonitorStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.labelMonitorStatus.Name = "labelMonitorStatus";
+			this.labelMonitorStatus.Size = new System.Drawing.Size(147, 13);
+			this.labelMonitorStatus.TabIndex = 33;
+			this.labelMonitorStatus.Text = "Uploader is currently stopped.";
+			this.labelMonitorStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// buttonStartStopWatcher
 			// 
@@ -65,7 +65,7 @@
 			this.buttonStartStopWatcher.TabIndex = 32;
 			this.buttonStartStopWatcher.Text = "Start";
 			this.buttonStartStopWatcher.UseVisualStyleBackColor = true;
-			this.buttonStartStopWatcher.Click += new System.EventHandler(this.buttonStartStopMonitor_Click);
+			this.buttonStartStopWatcher.Click += new System.EventHandler(this.ButtonStartStopMonitorClick);
 			// 
 			// label1
 			// 
@@ -82,7 +82,7 @@
 			this.textBoxLocalPath.Name = "textBoxLocalPath";
 			this.textBoxLocalPath.Size = new System.Drawing.Size(332, 20);
 			this.textBoxLocalPath.TabIndex = 25;
-			this.textBoxLocalPath.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxLocalPath_Validating);
+			this.textBoxLocalPath.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxLocalPathValidating);
 			// 
 			// buttonBrowseLocalPath
 			// 
@@ -92,7 +92,7 @@
 			this.buttonBrowseLocalPath.TabIndex = 27;
 			this.buttonBrowseLocalPath.Text = "Browse";
 			this.buttonBrowseLocalPath.UseVisualStyleBackColor = true;
-			this.buttonBrowseLocalPath.Click += new System.EventHandler(this.buttonBrowseLocalPath_Click);
+			this.buttonBrowseLocalPath.Click += new System.EventHandler(this.ButtonBrowseLocalPathClick);
 			// 
 			// label4
 			// 
@@ -105,11 +105,11 @@
 			// 
 			// textBoxMHWFolder
 			// 
-			this.textBoxMHWFolder.Location = new System.Drawing.Point(174, 38);
-			this.textBoxMHWFolder.Name = "textBoxMHWFolder";
-			this.textBoxMHWFolder.ReadOnly = true;
-			this.textBoxMHWFolder.Size = new System.Drawing.Size(332, 20);
-			this.textBoxMHWFolder.TabIndex = 28;
+			this.textBoxMhwFolder.Location = new System.Drawing.Point(174, 38);
+			this.textBoxMhwFolder.Name = "textBoxMhwFolder";
+			this.textBoxMhwFolder.ReadOnly = true;
+			this.textBoxMhwFolder.Size = new System.Drawing.Size(332, 20);
+			this.textBoxMhwFolder.TabIndex = 28;
 			// 
 			// deleteFileAfterUploadCheckBox
 			// 
@@ -120,7 +120,7 @@
 			this.deleteFileAfterUploadCheckBox.TabIndex = 31;
 			this.deleteFileAfterUploadCheckBox.Text = "Delete file after succesfully uploading";
 			this.deleteFileAfterUploadCheckBox.UseVisualStyleBackColor = true;
-			this.deleteFileAfterUploadCheckBox.Click += new System.EventHandler(this.DeleteFileAfterUploadCheckBox_CheckedChanged);
+			this.deleteFileAfterUploadCheckBox.Click += new System.EventHandler(this.DeleteFileAfterUploadCheckBoxCheckedChanged);
 			// 
 			// buttonBrowseUploadPath
 			// 
@@ -130,7 +130,7 @@
 			this.buttonBrowseUploadPath.TabIndex = 30;
 			this.buttonBrowseUploadPath.Text = "Browse";
 			this.buttonBrowseUploadPath.UseVisualStyleBackColor = true;
-			this.buttonBrowseUploadPath.Click += new System.EventHandler(this.buttonBrowseUploadPath_Click);
+			this.buttonBrowseUploadPath.Click += new System.EventHandler(this.ButtonBrowseUploadPathClick);
 			// 
 			// errorProviderLocalFolder
 			// 
@@ -155,13 +155,13 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.pictureStartedStopped);
-			this.Controls.Add(this.label_MonitorStatus);
+			this.Controls.Add(this.labelMonitorStatus);
 			this.Controls.Add(this.buttonStartStopWatcher);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textBoxLocalPath);
 			this.Controls.Add(this.buttonBrowseLocalPath);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.textBoxMHWFolder);
+			this.Controls.Add(this.textBoxMhwFolder);
 			this.Controls.Add(this.deleteFileAfterUploadCheckBox);
 			this.Controls.Add(this.buttonBrowseUploadPath);
 			this.Name = "ControlFolderToDrive";
@@ -176,13 +176,13 @@
 
 		#endregion
 
-		public System.Windows.Forms.Label label_MonitorStatus;
+		public System.Windows.Forms.Label labelMonitorStatus;
 		public System.Windows.Forms.Button buttonStartStopWatcher;
 		private System.Windows.Forms.Label label1;
 		public System.Windows.Forms.TextBox textBoxLocalPath;
 		public System.Windows.Forms.Button buttonBrowseLocalPath;
 		private System.Windows.Forms.Label label4;
-		public System.Windows.Forms.TextBox textBoxMHWFolder;
+		public System.Windows.Forms.TextBox textBoxMhwFolder;
 		public System.Windows.Forms.CheckBox deleteFileAfterUploadCheckBox;
 		public System.Windows.Forms.Button buttonBrowseUploadPath;
 		public System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;

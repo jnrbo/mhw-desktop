@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.Win32;
 
 namespace MHWVirtualPrinter
 {
-	public class PDFEngine
+	public class PdfEngine
 	{
-		public string rootPath;
-		public string binPath;
-		public string libPath;
-		public string exe;
-		public string pathExe { get { return Path.Combine(binPath, exe); } }
-		public string dll;
-		public string pathDll { get { return Path.Combine(binPath, dll); } }
+		private readonly string rootPath;
+		private readonly string binPath;
+		private readonly string libPath;
+		private readonly string dll;
+		private readonly string exe;
 
-		public PDFEngine(string currentDirectory, string platform)
+		public string PathExe
 		{
-			if (platform == "x64")
+			get { return Path.Combine( binPath, exe ); }
+		}
+
+		private string PathDll
+		{
+			get { return Path.Combine( binPath, dll ); }
+		}
+
+		public PdfEngine( string currentDirectory, string platform )
+		{
+			if( platform == "x64" )
 			{
 				exe = "gswin64c.exe";
 				dll = "gsdll64.dll";
@@ -31,47 +34,26 @@ namespace MHWVirtualPrinter
 				dll = "gsdll32.dll";
 			}
 
-			rootPath = Path.Combine(currentDirectory, platform, "GhostScript");
-			binPath = Path.Combine(rootPath, "bin");
-			libPath = Path.Combine(rootPath, "lib");
+			rootPath = Path.Combine( currentDirectory, platform, "GhostScript" );
+			binPath = Path.Combine( rootPath, "bin" );
+			libPath = Path.Combine( rootPath, "lib" );
 		}
 
 		// Configure GhostScript
-		public PDFEngine Install()
+		public PdfEngine Install()
 		{
-			string keyName = "SOFTWARE\\GPL Ghostscript\\9.19";
-			RegistryKey regKey = Registry.LocalMachine.OpenSubKey(keyName, true);
+			var keyName = "SOFTWARE\\GPL Ghostscript\\9.19";
+			RegistryKey regKey = Registry.LocalMachine.OpenSubKey( keyName, true ) ??
+			                     Registry.LocalMachine.CreateSubKey( keyName );
 
-			if (regKey == null)
-			{
-				// Create the registry entries.
-				regKey = Registry.LocalMachine.CreateSubKey(keyName);
-			}
-			else
-			{
-				// Already installed.
-				// TODO:
-			}
-
-			regKey.SetValue("GS_DLL", this.pathDll);
-			regKey.SetValue("GS_LIB", String.Format("{0};{1}", this.binPath, this.libPath));
+			regKey.SetValue( "GS_DLL", PathDll );
+			regKey.SetValue( "GS_LIB", string.Format( "{0};{1}", binPath, libPath ) );
 			regKey.Close();
 
 			keyName = "SOFTWARE\\Artifex\\GPL Ghostscript\\9.19";
-			regKey = Registry.LocalMachine.OpenSubKey(keyName, true);
+			regKey = Registry.LocalMachine.OpenSubKey( keyName, true ) ?? Registry.LocalMachine.CreateSubKey( keyName );
 
-			if (regKey == null)
-			{
-				// Create the registry entry.
-				regKey = Registry.LocalMachine.CreateSubKey(keyName);
-			}
-			else
-			{
-				// Already installed.
-				// TODO:
-			}
-
-			regKey.SetValue("", this.rootPath);
+			regKey.SetValue( "", rootPath );
 			regKey.Close();
 
 			return this;

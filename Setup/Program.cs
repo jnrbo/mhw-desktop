@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CommandLine;
 
 namespace Setup
 {
-	static class Program
+	internal static class Program
 	{
 		/// <summary>
-		/// The main entry point for the application.
+		///     The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static int Main(string[] args)
+		private static int Main( string[] args )
 		{
 			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+			Application.SetCompatibleTextRenderingDefault( false );
 
 			var options = new Options();
 
 			// Parse the command line args.
-			bool isArgs = CommandLine.Parser.Default.ParseArguments(args, options);
+			Parser.Default.ParseArguments( args, options );
 
 			// Create and run the new form passing it the parsed args.
-			MainForm form = new MainForm(options);
-			Application.Run(form);
+			var form = new MainForm( options );
+			Application.Run( form );
 
-			return form.returnCode;
+			return form.ReturnCode;
 		}
 	}
 }

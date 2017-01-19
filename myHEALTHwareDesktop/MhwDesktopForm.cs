@@ -32,6 +32,7 @@ namespace myHEALTHwareDesktop
 
 		private bool isLoggedIn;
 		private LoginForm loginForm;
+		private int faxTabIndex;
 
 		private readonly BindingSource accountsBindingSource;
 
@@ -61,10 +62,16 @@ namespace myHEALTHwareDesktop
 			// if they are not enabled, enable them. This really is OverKill but better to be
 			// safe than sorry.
 			if( !GetStyle( ControlStyles.StandardClick ) )
+			{
 				SetStyle( ControlStyles.StandardClick, true );
+			}
 
 			if( !GetStyle( ControlStyles.StandardDoubleClick ) )
+			{
 				SetStyle( ControlStyles.StandardDoubleClick, true );
+			}
+
+			faxTabIndex = tabs.TabPages.IndexOf( tabPagePrintToFax );
 
 			// Main form event handlers.
 			MouseClick += MhwSingleClick;
@@ -85,7 +92,7 @@ namespace myHEALTHwareDesktop
 			Application.DoEvents();
 
 			// SettingsForm Resize event handler. 
-			// NOTE: Must be after our intital display logic
+			// NOTE: Must be after our initial display logic
 			// otherwise if it was before, it will cause logic problems.
 			Resize += FormResize;
 
@@ -109,12 +116,13 @@ namespace myHEALTHwareDesktop
 			}
 
 			UpdateLoginButtonText();
+			RefreshTabControl();
 
 			// We now at this point, are completely event driven.
 		}
 
 		// This event handler is fired by changes caused in WindowState by the "-" to
-		// minimize on SettingsForm, as well as the display and minimize menu items in the
+		// minimize on the main form, as well as the display and minimize menu items in the
 		// ContextMenuStrips.
 		private void FormResize( object sender, EventArgs e )
 		{
@@ -322,7 +330,7 @@ namespace myHEALTHwareDesktop
 
 				if( regKey != null )
 				{
-					object value = regKey.GetValue( MHWPrinter.AppName );
+					object value = regKey.GetValue( MhwPrinter.APP_NAME );
 
 					if( value != null )
 					{
@@ -626,7 +634,7 @@ namespace myHEALTHwareDesktop
 			SetTrayIcon();
 		}
 
-		// Called when the login dialog Okay button is clicked.
+		// Called when the login dialog OK button is clicked.
 		private void LoginFormSubmitted( object sender, EventArgs e )
 		{
 			// Retrieve the resulting connection ID and access token from the OAuth dialog.
@@ -668,7 +676,8 @@ namespace myHEALTHwareDesktop
 				{
 					Name = myAccount.DisplayName,
 					AccountId = myAccount.AccountId,
-					PictureFileId = myAccount.PictureFileId
+					PictureFileId = myAccount.PictureFileId,
+					IsPersonalAccount = true
 				}
 			};
 
@@ -679,7 +688,8 @@ namespace myHEALTHwareDesktop
 						{
 							Name = c.Yours.DisplayName,
 							AccountId = c.Yours.AccountId,
-							PictureFileId = c.Yours.PictureFileId
+							PictureFileId = c.Yours.PictureFileId,
+							IsPersonalAccount = false
 						} ).OrderBy( p => p.Name ) );
 
 			Parallel.ForEach( accounts,
@@ -710,6 +720,25 @@ namespace myHEALTHwareDesktop
 			controlFolderToDrive.LoadSettings( this, sdk, selected.AccountId );
 			controlPrintToDrive.LoadSettings( this, sdk, selected.AccountId );
 			controlPrintToFax.LoadSettings( this, sdk, selected.AccountId );
+
+			RefreshTabControl();
+		}
+
+		private void RefreshTabControl()
+		{
+			tabs.SuspendLayout();
+
+			MhwAccount selected = GetSelectedAccount();
+			if( selected.IsPersonalAccount && tabs.TabPages.Contains( tabPagePrintToFax ) )
+			{
+				tabs.TabPages.Remove( tabPagePrintToFax );
+			}
+			else if( !selected.IsPersonalAccount && !tabs.TabPages.Contains( tabPagePrintToFax ) )
+			{
+				tabs.TabPages.Insert( faxTabIndex, tabPagePrintToFax );
+			}
+
+			tabs.ResumeLayout();
 		}
 
 		private MhwAccount GetSelectedAccount()

@@ -29,13 +29,13 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.linkLicense = new System.Windows.Forms.LinkLabel();
+			this.linkLabelLicense = new System.Windows.Forms.LinkLabel();
 			this.groupBoxAboutAcknowledgements = new System.Windows.Forms.GroupBox();
 			this.linkLabelRestSharp = new System.Windows.Forms.LinkLabel();
-			this.linkLabelCEFSharp = new System.Windows.Forms.LinkLabel();
-			this.linkCommandLine = new System.Windows.Forms.LinkLabel();
-			this.linkGostScript = new System.Windows.Forms.LinkLabel();
-			this.linkmfilemon = new System.Windows.Forms.LinkLabel();
+			this.linkLabelCefSharp = new System.Windows.Forms.LinkLabel();
+			this.linkLabelCommandLine = new System.Windows.Forms.LinkLabel();
+			this.linkLLabelGhostScript = new System.Windows.Forms.LinkLabel();
+			this.linkLabelMfilemon = new System.Windows.Forms.LinkLabel();
 			this.labelAboutCopyright = new System.Windows.Forms.Label();
 			this.labelAboutVersion = new System.Windows.Forms.Label();
 			this.labelAboutProductName = new System.Windows.Forms.Label();
@@ -50,24 +50,24 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// linkLicense
+			// linkLabelLicense
 			// 
-			this.linkLicense.AutoSize = true;
-			this.linkLicense.Location = new System.Drawing.Point(6, 106);
-			this.linkLicense.Name = "linkLicense";
-			this.linkLicense.Size = new System.Drawing.Size(109, 13);
-			this.linkLicense.TabIndex = 10;
-			this.linkLicense.TabStop = true;
-			this.linkLicense.Text = "Licensed via GPL 2.0";
-			this.linkLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutGNULicense_LinkClicked);
+			this.linkLabelLicense.AutoSize = true;
+			this.linkLabelLicense.Location = new System.Drawing.Point(6, 106);
+			this.linkLabelLicense.Name = "linkLabelLicense";
+			this.linkLabelLicense.Size = new System.Drawing.Size(109, 13);
+			this.linkLabelLicense.TabIndex = 10;
+			this.linkLabelLicense.TabStop = true;
+			this.linkLabelLicense.Text = "Licensed via GPL 2.0";
+			this.linkLabelLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutGnuLicenseLinkClicked);
 			// 
 			// groupBoxAboutAcknowledgements
 			// 
 			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLabelRestSharp);
-			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLabelCEFSharp);
-			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkCommandLine);
-			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkGostScript);
-			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkmfilemon);
+			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLabelCefSharp);
+			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLabelCommandLine);
+			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLLabelGhostScript);
+			this.groupBoxAboutAcknowledgements.Controls.Add(this.linkLabelMfilemon);
 			this.groupBoxAboutAcknowledgements.Location = new System.Drawing.Point(248, 50);
 			this.groupBoxAboutAcknowledgements.Name = "groupBoxAboutAcknowledgements";
 			this.groupBoxAboutAcknowledgements.Size = new System.Drawing.Size(219, 126);
@@ -84,51 +84,51 @@
 			this.linkLabelRestSharp.TabIndex = 6;
 			this.linkLabelRestSharp.TabStop = true;
 			this.linkLabelRestSharp.Text = "RestSharp";
-			this.linkLabelRestSharp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutRestSharp_LinkClicked);
+			this.linkLabelRestSharp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutRestSharpLinkClicked);
 			// 
-			// linkLabelCEFSharp
+			// linkLabelCefSharp
 			// 
-			this.linkLabelCEFSharp.AutoSize = true;
-			this.linkLabelCEFSharp.Location = new System.Drawing.Point(39, 79);
-			this.linkLabelCEFSharp.Name = "linkLabelCEFSharp";
-			this.linkLabelCEFSharp.Size = new System.Drawing.Size(55, 13);
-			this.linkLabelCEFSharp.TabIndex = 5;
-			this.linkLabelCEFSharp.TabStop = true;
-			this.linkLabelCEFSharp.Text = "CEFSharp";
-			this.linkLabelCEFSharp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutCEFSharp_LinkClicked);
+			this.linkLabelCefSharp.AutoSize = true;
+			this.linkLabelCefSharp.Location = new System.Drawing.Point(39, 79);
+			this.linkLabelCefSharp.Name = "linkLabelCefSharp";
+			this.linkLabelCefSharp.Size = new System.Drawing.Size(55, 13);
+			this.linkLabelCefSharp.TabIndex = 5;
+			this.linkLabelCefSharp.TabStop = true;
+			this.linkLabelCefSharp.Text = "CEFSharp";
+			this.linkLabelCefSharp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutCefSharpLinkClicked);
 			// 
-			// linkCommandLine
+			// linkLabelCommandLine
 			// 
-			this.linkCommandLine.AutoSize = true;
-			this.linkCommandLine.Location = new System.Drawing.Point(39, 60);
-			this.linkCommandLine.Name = "linkCommandLine";
-			this.linkCommandLine.Size = new System.Drawing.Size(144, 13);
-			this.linkCommandLine.TabIndex = 4;
-			this.linkCommandLine.TabStop = true;
-			this.linkCommandLine.Text = "Command Line Parser Library";
-			this.linkCommandLine.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutCommandLine_LinkClicked);
+			this.linkLabelCommandLine.AutoSize = true;
+			this.linkLabelCommandLine.Location = new System.Drawing.Point(39, 60);
+			this.linkLabelCommandLine.Name = "linkLabelCommandLine";
+			this.linkLabelCommandLine.Size = new System.Drawing.Size(144, 13);
+			this.linkLabelCommandLine.TabIndex = 4;
+			this.linkLabelCommandLine.TabStop = true;
+			this.linkLabelCommandLine.Text = "Command Line Parser Library";
+			this.linkLabelCommandLine.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutCommandLineLinkClicked);
 			// 
-			// linkGostScript
+			// linkLLabelGhostScript
 			// 
-			this.linkGostScript.AutoSize = true;
-			this.linkGostScript.Location = new System.Drawing.Point(39, 41);
-			this.linkGostScript.Name = "linkGostScript";
-			this.linkGostScript.Size = new System.Drawing.Size(62, 13);
-			this.linkGostScript.TabIndex = 3;
-			this.linkGostScript.TabStop = true;
-			this.linkGostScript.Text = "GhostScript";
-			this.linkGostScript.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutGhostScript_LinkClicked);
+			this.linkLLabelGhostScript.AutoSize = true;
+			this.linkLLabelGhostScript.Location = new System.Drawing.Point(39, 41);
+			this.linkLLabelGhostScript.Name = "linkLLabelGhostScript";
+			this.linkLLabelGhostScript.Size = new System.Drawing.Size(62, 13);
+			this.linkLLabelGhostScript.TabIndex = 3;
+			this.linkLLabelGhostScript.TabStop = true;
+			this.linkLLabelGhostScript.Text = "GhostScript";
+			this.linkLLabelGhostScript.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutGhostScriptLinkClicked);
 			// 
-			// linkmfilemon
+			// linkLabelMfilemon
 			// 
-			this.linkmfilemon.AutoSize = true;
-			this.linkmfilemon.Location = new System.Drawing.Point(39, 22);
-			this.linkmfilemon.Name = "linkmfilemon";
-			this.linkmfilemon.Size = new System.Drawing.Size(108, 13);
-			this.linkmfilemon.TabIndex = 2;
-			this.linkmfilemon.TabStop = true;
-			this.linkmfilemon.Text = "Multi File Port Monitor";
-			this.linkmfilemon.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutMFileMon_LinkClicked);
+			this.linkLabelMfilemon.AutoSize = true;
+			this.linkLabelMfilemon.Location = new System.Drawing.Point(39, 22);
+			this.linkLabelMfilemon.Name = "linkLabelMfilemon";
+			this.linkLabelMfilemon.Size = new System.Drawing.Size(108, 13);
+			this.linkLabelMfilemon.TabIndex = 2;
+			this.linkLabelMfilemon.TabStop = true;
+			this.linkLabelMfilemon.Text = "Multi File Port Monitor";
+			this.linkLabelMfilemon.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutMFilemonLinkClicked);
 			// 
 			// labelAboutCopyright
 			// 
@@ -200,14 +200,14 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.linkLicense);
+			this.Controls.Add(this.linkLabelLicense);
 			this.Controls.Add(this.labelAboutCopyright);
 			this.Controls.Add(this.labelAboutVersion);
 			this.Controls.Add(this.labelAboutProductName);
 			this.Controls.Add(this.groupBoxAboutAcknowledgements);
 			this.Name = "ControlAbout";
 			this.Size = new System.Drawing.Size(492, 183);
-			this.Load += new System.EventHandler(this.ControlAbout_Load);
+			this.Load += new System.EventHandler(this.ControlAboutLoad);
 			this.groupBoxAboutAcknowledgements.ResumeLayout(false);
 			this.groupBoxAboutAcknowledgements.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -218,17 +218,17 @@
 
 		#endregion
 
-		private System.Windows.Forms.LinkLabel linkLicense;
+		private System.Windows.Forms.LinkLabel linkLabelLicense;
 		private System.Windows.Forms.GroupBox groupBoxAboutAcknowledgements;
-		private System.Windows.Forms.LinkLabel linkGostScript;
-		private System.Windows.Forms.LinkLabel linkmfilemon;
+		private System.Windows.Forms.LinkLabel linkLLabelGhostScript;
+		private System.Windows.Forms.LinkLabel linkLabelMfilemon;
 		private System.Windows.Forms.Label labelAboutCopyright;
 		private System.Windows.Forms.Label labelAboutVersion;
 		private System.Windows.Forms.Label labelAboutProductName;
 		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.LinkLabel linkCommandLine;
+		private System.Windows.Forms.LinkLabel linkLabelCommandLine;
 		private System.Windows.Forms.LinkLabel linkLabelRestSharp;
-		private System.Windows.Forms.LinkLabel linkLabelCEFSharp;
+		private System.Windows.Forms.LinkLabel linkLabelCefSharp;
 		private System.Windows.Forms.ToolTip toolTipPortMonitor;
 		private System.Windows.Forms.ToolTip toolTipGhostScript;
 		private System.Windows.Forms.ToolTip toolTipComandLine;

@@ -33,7 +33,7 @@
 			this.pictureStartedStopped = new System.Windows.Forms.PictureBox();
 			this.groupBoxPrintToFax = new System.Windows.Forms.GroupBox();
 			this.pictureBoxMarketplaceFax = new System.Windows.Forms.PictureBox();
-			this.labelFaxLearnMoreLink = new System.Windows.Forms.LinkLabel();
+			this.labelFaxLink = new System.Windows.Forms.LinkLabel();
 			this.radioButtonSaveDraft = new System.Windows.Forms.RadioButton();
 			this.radioButtonPrompt = new System.Windows.Forms.RadioButton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureStartedStopped)).BeginInit();
@@ -49,7 +49,7 @@
 			this.buttonPrintToFaxInstall.TabIndex = 1;
 			this.buttonPrintToFaxInstall.Text = "Install Printer";
 			this.buttonPrintToFaxInstall.UseVisualStyleBackColor = true;
-			this.buttonPrintToFaxInstall.Click += new System.EventHandler(this.buttonPrintToFaxInstall_Click);
+			this.buttonPrintToFaxInstall.Click += new System.EventHandler(this.ButtonPrintToFaxInstallClick);
 			// 
 			// labelStatus
 			// 
@@ -74,7 +74,7 @@
 			// groupBoxPrintToFax
 			// 
 			this.groupBoxPrintToFax.Controls.Add(this.pictureBoxMarketplaceFax);
-			this.groupBoxPrintToFax.Controls.Add(this.labelFaxLearnMoreLink);
+			this.groupBoxPrintToFax.Controls.Add(this.labelFaxLink);
 			this.groupBoxPrintToFax.Location = new System.Drawing.Point(9, 13);
 			this.groupBoxPrintToFax.Name = "groupBoxPrintToFax";
 			this.groupBoxPrintToFax.Size = new System.Drawing.Size(516, 117);
@@ -93,19 +93,19 @@
 			this.pictureBoxMarketplaceFax.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.pictureBoxMarketplaceFax.TabIndex = 45;
 			this.pictureBoxMarketplaceFax.TabStop = false;
-			this.pictureBoxMarketplaceFax.Click += new System.EventHandler(this.pictureBoxMarketplaceFax_Click);
 			// 
-			// labelFaxLearnMoreLink
+			// labelFaxLink
 			// 
-			this.labelFaxLearnMoreLink.AutoSize = true;
-			this.labelFaxLearnMoreLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelFaxLearnMoreLink.Location = new System.Drawing.Point(223, 79);
-			this.labelFaxLearnMoreLink.Name = "labelFaxLearnMoreLink";
-			this.labelFaxLearnMoreLink.Size = new System.Drawing.Size(287, 20);
-			this.labelFaxLearnMoreLink.TabIndex = 44;
-			this.labelFaxLearnMoreLink.TabStop = true;
-			this.labelFaxLearnMoreLink.Text = "Learn more about myHEALTHware Fax";
-			this.labelFaxLearnMoreLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelFaxLearnMoreLink_LinkClicked);
+			this.labelFaxLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelFaxLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelFaxLink.Location = new System.Drawing.Point(186, 79);
+			this.labelFaxLink.Name = "labelFaxLink";
+			this.labelFaxLink.Size = new System.Drawing.Size(324, 20);
+			this.labelFaxLink.TabIndex = 44;
+			this.labelFaxLink.TabStop = true;
+			this.labelFaxLink.Text = "MHW Fax link...";
+			this.labelFaxLink.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelFaxLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LabelFaxLinkClicked);
 			// 
 			// radioButtonSaveDraft
 			// 
@@ -117,7 +117,7 @@
 			this.radioButtonSaveDraft.TabStop = true;
 			this.radioButtonSaveDraft.Text = "Automatically save as draft";
 			this.radioButtonSaveDraft.UseVisualStyleBackColor = true;
-			this.radioButtonSaveDraft.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
+			this.radioButtonSaveDraft.CheckedChanged += new System.EventHandler(this.RadioButtonsCheckedChanged);
 			// 
 			// radioButtonPrompt
 			// 
@@ -129,7 +129,7 @@
 			this.radioButtonPrompt.TabStop = true;
 			this.radioButtonPrompt.Text = "Prompt to send fax";
 			this.radioButtonPrompt.UseVisualStyleBackColor = true;
-			this.radioButtonPrompt.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
+			this.radioButtonPrompt.CheckedChanged += new System.EventHandler(this.RadioButtonsCheckedChanged);
 			// 
 			// ControlPrintToFax
 			// 
@@ -145,7 +145,6 @@
 			this.Size = new System.Drawing.Size(532, 187);
 			((System.ComponentModel.ISupportInitialize)(this.pictureStartedStopped)).EndInit();
 			this.groupBoxPrintToFax.ResumeLayout(false);
-			this.groupBoxPrintToFax.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxMarketplaceFax)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -160,7 +159,7 @@
 		private System.Windows.Forms.GroupBox groupBoxPrintToFax;
 		private System.Windows.Forms.RadioButton radioButtonSaveDraft;
 		private System.Windows.Forms.RadioButton radioButtonPrompt;
-		private System.Windows.Forms.LinkLabel labelFaxLearnMoreLink;
+		private System.Windows.Forms.LinkLabel labelFaxLink;
 		private System.Windows.Forms.PictureBox pictureBoxMarketplaceFax;
 	}
 }

@@ -1,67 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace myHEALTHwareDesktop
 {
 	public partial class ControlAbout : UserControl
 	{
-		private const string urlGPL = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html";
-		private const string urlPortMonitor = "https://sourceforge.net/projects/mfilemon/";
-		private const string urlGhostscript = "http://www.ghostscript.com/";
-		private const string urlCommandLine = "https://commandline.codeplex.com/";
-		private const string urlCEFSharp = "https://cefsharp.github.io/";
-		private const string urlRestSharp = "http://restsharp.org/";
+		private const string URL_GPL = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html";
+		private const string URL_PORT_MONITOR = "https://sourceforge.net/projects/mfilemon/";
+		private const string URL_GHOSTSCRIPT = "http://www.ghostscript.com/";
+		private const string URL_COMMAND_LINE = "https://commandline.codeplex.com/";
+		private const string URL_CEF_SHARP = "https://cefsharp.github.io/";
+		private const string URL_REST_SHARP = "http://restsharp.org/";
 
 		public ControlAbout()
 		{
 			InitializeComponent();
 		}
 
-		private void ControlAbout_Load(object sender, EventArgs e)
+		private void ControlAboutLoad( object sender, EventArgs e )
 		{
-			this.toolTipPortMonitor.SetToolTip(this.linkLicense, urlGPL);
-			this.toolTipPortMonitor.SetToolTip(this.linkmfilemon, urlPortMonitor);
-			this.toolTipPortMonitor.SetToolTip(this.linkGostScript, urlGhostscript);
-			this.toolTipPortMonitor.SetToolTip(this.linkCommandLine, urlCommandLine);
-			this.toolTipPortMonitor.SetToolTip(this.linkLabelCEFSharp, urlCEFSharp);
-			this.toolTipPortMonitor.SetToolTip(this.linkLabelRestSharp, urlRestSharp);
+			toolTipPortMonitor.SetToolTip( linkLabelLicense, URL_GPL );
+			toolTipPortMonitor.SetToolTip( linkLabelMfilemon, URL_PORT_MONITOR );
+			toolTipPortMonitor.SetToolTip( linkLLabelGhostScript, URL_GHOSTSCRIPT );
+			toolTipPortMonitor.SetToolTip( linkLabelCommandLine, URL_COMMAND_LINE );
+			toolTipPortMonitor.SetToolTip( linkLabelCefSharp, URL_CEF_SHARP );
+			toolTipPortMonitor.SetToolTip( linkLabelRestSharp, URL_REST_SHARP );
 		}
 
-		private void aboutGNULicense_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutGnuLicenseLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlGPL);
+			Process.Start( URL_GPL );
 		}
 
-		private void aboutMFileMon_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutMFilemonLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlPortMonitor);
+			Process.Start( URL_PORT_MONITOR );
 		}
 
-		private void aboutGhostScript_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutGhostScriptLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlGhostscript);
+			Process.Start( URL_GHOSTSCRIPT );
 		}
 
-		private void aboutCommandLine_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutCommandLineLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlCommandLine);
+			Process.Start( URL_COMMAND_LINE );
 		}
 
-		private void aboutCEFSharp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutCefSharpLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlCEFSharp);
+			Process.Start( URL_CEF_SHARP );
 		}
 
-		private void aboutRestSharp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void AboutRestSharpLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start(urlRestSharp);
+			Process.Start( URL_REST_SHARP );
 		}
 	}
 }

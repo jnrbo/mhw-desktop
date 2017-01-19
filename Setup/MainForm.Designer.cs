@@ -39,13 +39,13 @@
 			// buttonExit
 			// 
 			this.buttonExit.Enabled = false;
-			this.buttonExit.Location = new System.Drawing.Point(177, 345);
+			this.buttonExit.Location = new System.Drawing.Point(478, 345);
 			this.buttonExit.Name = "buttonExit";
 			this.buttonExit.Size = new System.Drawing.Size(78, 27);
 			this.buttonExit.TabIndex = 1;
-			this.buttonExit.Text = "Okay";
+			this.buttonExit.Text = "OK";
 			this.buttonExit.UseVisualStyleBackColor = true;
-			this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+			this.buttonExit.Click += new System.EventHandler(this.ButtonExitClick);
 			// 
 			// listViewLog
 			// 
@@ -76,13 +76,13 @@
 			// 
 			// buttonCopy
 			// 
-			this.buttonCopy.Location = new System.Drawing.Point(342, 345);
+			this.buttonCopy.Location = new System.Drawing.Point(21, 345);
 			this.buttonCopy.Name = "buttonCopy";
 			this.buttonCopy.Size = new System.Drawing.Size(80, 27);
 			this.buttonCopy.TabIndex = 4;
 			this.buttonCopy.Text = "Copy Log";
 			this.buttonCopy.UseVisualStyleBackColor = true;
-			this.buttonCopy.Click += new System.EventHandler(this.buttonCopy_Click);
+			this.buttonCopy.Click += new System.EventHandler(this.ButtonCopyClick);
 			// 
 			// MainForm
 			// 
@@ -99,9 +99,10 @@
 			this.MinimizeBox = false;
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Printer Setup";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-			this.Shown += new System.EventHandler(this.MainForm_Shown);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+			this.Shown += new System.EventHandler(this.MainFormShown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
