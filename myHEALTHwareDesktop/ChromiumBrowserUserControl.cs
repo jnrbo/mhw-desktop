@@ -6,7 +6,7 @@ using CefSharp.WinForms;
 
 namespace myHEALTHwareDesktop
 {
-	public partial class ChromiumBrowserUsercontrol : UserControl
+	public partial class ChromiumBrowserUserControl : UserControl
 	{
 		public event EventHandler<PostMessageListenerEventArgs> PostMessageListener;
 
@@ -14,7 +14,7 @@ namespace myHEALTHwareDesktop
 
 		public object BoundScriptObject { get; set; }
 
-		public ChromiumBrowserUsercontrol( string url )
+		public ChromiumBrowserUserControl( string url )
 		{
 			InitializeComponent();
 
@@ -170,10 +170,10 @@ namespace myHEALTHwareDesktop
 				message = null;
 			}
 
-			OnPostMessageRecieved( message );
+			OnPostMessageReceived( message );
 		}
 
-		private void OnPostMessageRecieved( MhwPostMessage message )
+		private void OnPostMessageReceived( MhwPostMessage message )
 		{
 			if( PostMessage != null )
 			{

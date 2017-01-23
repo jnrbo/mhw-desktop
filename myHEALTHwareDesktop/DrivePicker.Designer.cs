@@ -56,7 +56,7 @@
 			// 
 			this.panelFileName.Location = new System.Drawing.Point(1, 2);
 			this.panelFileName.Name = "panelFileName";
-			this.panelFileName.Size = new System.Drawing.Size(382, 49);
+			this.panelFileName.Size = new System.Drawing.Size(382, 50);
 			this.panelFileName.TabIndex = 2;
 			// 
 			// DrivePicker
@@ -66,15 +66,13 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-			this.ClientSize = new System.Drawing.Size(384, 541);
+			this.ClientSize = new System.Drawing.Size(384, 501);
 			this.Controls.Add(this.labelFileName);
 			this.Controls.Add(this.textBoxFileName);
 			this.Controls.Add(this.panelFileName);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(400, 580);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(400, 580);
 			this.Name = "DrivePicker";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

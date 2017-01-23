@@ -6,7 +6,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class DrivePicker : Form
 	{
-		private ChromiumBrowserUsercontrol chromiumBrowser;
+		private ChromiumBrowserUserControl chromiumBrowser;
 		private readonly string appId;
 		private readonly string appSecret;
 		private string fileName;
@@ -35,7 +35,7 @@ namespace myHEALTHwareDesktop
 					appId,
 					appSecret );
 
-			chromiumBrowser = new ChromiumBrowserUsercontrol( url );
+			chromiumBrowser = new ChromiumBrowserUserControl( url );
 			Controls.Add( chromiumBrowser );
 			chromiumBrowser.Dock = DockStyle.Fill;
 

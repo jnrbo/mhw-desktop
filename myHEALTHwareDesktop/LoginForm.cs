@@ -8,7 +8,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class LoginForm : Form
 	{
-		private ChromiumBrowserUsercontrol chromiumBrowser;
+		private ChromiumBrowserUserControl chromiumBrowser;
 		private readonly string appId;
 		private readonly string appSecret;
 
@@ -42,7 +42,7 @@ namespace myHEALTHwareDesktop
 			                            appId,
 			                            appSecret );
 
-			chromiumBrowser = new ChromiumBrowserUsercontrol( url );
+			chromiumBrowser = new ChromiumBrowserUserControl( url );
 			Controls.Add( chromiumBrowser );
 			chromiumBrowser.Dock = DockStyle.Fill;
 

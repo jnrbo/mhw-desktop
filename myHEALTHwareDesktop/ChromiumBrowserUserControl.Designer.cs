@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace myHEALTHwareDesktop
 {
-    partial class ChromiumBrowserUsercontrol
+    partial class ChromiumBrowserUserControl
     {
 		/// <summary>
 		/// Required designer variable.
@@ -48,7 +48,7 @@ namespace myHEALTHwareDesktop
 			// ChromiumBrowserUsercontrol
 			// 
 			this.Controls.Add(this.browserPanel);
-			this.Name = "ChromiumBrowserUsercontrol";
+			this.Name = "ChromiumBrowserUserControl";
 			this.Size = new System.Drawing.Size(730, 490);
 			this.ResumeLayout(false);
 
