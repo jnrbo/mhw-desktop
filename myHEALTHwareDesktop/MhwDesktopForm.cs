@@ -726,9 +726,15 @@ namespace myHEALTHwareDesktop
 
 		private void RefreshTabControl()
 		{
-			tabs.SuspendLayout();
 
 			MhwAccount selected = GetSelectedAccount();
+			if( selected == null )
+			{
+				return;
+			}
+
+			tabs.SuspendLayout();
+
 			if( selected.IsPersonalAccount && tabs.TabPages.Contains( tabPagePrintToFax ) )
 			{
 				tabs.TabPages.Remove( tabPagePrintToFax );

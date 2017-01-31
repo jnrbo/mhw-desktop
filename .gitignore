@@ -15,5 +15,5 @@ _ReSharper*
 packages/
 
 # Other
-Setup/Dependencies/
+Dependencies/
 Installer/myHEALTHware Desktop-cache

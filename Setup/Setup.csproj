@@ -96,14 +96,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Dependencies\x32\Driver\myHEALTHwarePS.PPD" />
-    <None Include="Dependencies\x32\Driver\PSCRIPT.HLP" />
-    <None Include="Dependencies\x32\Driver\PSCRIPT.NTF" />
-    <None Include="Dependencies\x32\GhostScript\bin\gsdll32.lib" />
-    <None Include="Dependencies\x64\Driver\myHEALTHwarePS.PPD" />
-    <None Include="Dependencies\x64\Driver\PSCRIPT.HLP" />
-    <None Include="Dependencies\x64\Driver\PSCRIPT.NTF" />
-    <None Include="Dependencies\x64\GhostScript\bin\gsdll64.lib" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -136,25 +128,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Dependencies\x32\Driver\PS5UI.DLL" />
-    <Content Include="Dependencies\x32\Driver\PSCRIPT5.DLL" />
-    <Content Include="Dependencies\x32\GhostScript\bin\gsdll32.dll" />
-    <Content Include="Dependencies\x32\GhostScript\bin\gswin32c.exe" />
-    <Content Include="Dependencies\x32\PortMonitor\mfilemon.dll" />
-    <Content Include="Dependencies\x32\PortMonitor\mfilemonUI.dll" />
-    <Content Include="Dependencies\x32\PortMonitor\_mfilemonUI.dll" />
-    <Content Include="Dependencies\x64\Driver\PS5UI.DLL" />
-    <Content Include="Dependencies\x64\Driver\PSCRIPT5.DLL" />
-    <Content Include="Dependencies\x64\GhostScript\bin\gsdll64.dll" />
-    <Content Include="Dependencies\x64\GhostScript\bin\gswin64c.exe" />
-    <Content Include="Dependencies\x64\PortMonitor\mfilemon.dll" />
-    <Content Include="Dependencies\x64\PortMonitor\mfilemonUI.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dependencies\x32\GhostScript\lib\" />
-    <Folder Include="Dependencies\x64\GhostScript\lib\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MHWVirtualPrinter\MHWVirtualPrinter.csproj">
       <Project>{8cb31ace-6732-489d-b060-78bc1904712e}</Project>
