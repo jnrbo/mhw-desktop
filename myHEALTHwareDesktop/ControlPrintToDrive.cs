@@ -275,11 +275,11 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void LaunchDrivePicker( bool isShowFileName, string defaultFileName = null )
+		private void LaunchDrivePicker( bool isShowFileName, string fileName = null )
 		{
 			drivePicker = new DrivePicker( MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET );
-			drivePicker.EnableFileName( isShowFileName, defaultFileName );
-			drivePicker.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId );
+			drivePicker.EnableFileName( isShowFileName, fileName );
+			drivePicker.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId, fileName );
 
 			// Register a method to receive click event callback.
 			drivePicker.Click += DrivePickerOnClick;
@@ -293,10 +293,10 @@ namespace myHEALTHwareDesktop
 			// Valid. Clear any previous error.
 			errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
 
-			if( isShowFileName )
-			{
-				drivePickerFileName = drivePicker.GetFileName();
-			}
+			////if( isShowFileName )
+			////{
+			////	drivePickerFileName = drivePicker.GetFileName();
+			////}
 
 			// Display folder in dialog box.
 			SetUploadPath( drivePickerResult );
@@ -339,12 +339,13 @@ namespace myHEALTHwareDesktop
 			if( args.Message.eventType == "mhw.drive.select.success" )
 			{
 				drivePickerResult = args.Message.data.driveItemId;
+				drivePickerFileName = args.Message.data.itemName;
 				isDrivePickerSuccess = true;
 			}
 			else if( args.Message.eventType == "mhw.drive.select.cancelled" )
 			{
 				isDrivePickerSuccess = false;
-				parentForm.ShowBalloonWarning( "Print to Drive upload was cancelled." );
+				////parentForm.ShowBalloonWarning( "Print to Drive upload was cancelled." );
 			}
 			else
 			{
@@ -441,6 +442,7 @@ namespace myHEALTHwareDesktop
 
 			string driveItemId = Settings.Default.PrintToDriveDefaultDestinationId;
 			string fileName = name;
+			string extension = Path.GetExtension( fileName );
 
 			if( Settings.Default.PrintToDrivePrompt )
 			{
@@ -448,7 +450,7 @@ namespace myHEALTHwareDesktop
 
 				if( isDrivePickerSuccess )
 				{
-					driveItemId = drivePickerResult;
+					driveItemId = drivePickerResult ?? selectedMhwAccountId;
 					fileName = drivePickerFileName;
 				}
 				else
@@ -458,7 +460,12 @@ namespace myHEALTHwareDesktop
 				}
 			}
 
-			if( parentForm.UploadFile( fullPath, fileName, driveItemId, true ) == null )
+			// Make sure the extension didn't get removed
+			fileName = Path.ChangeExtension( fileName, extension );
+
+			// NOTE: If the drive-select-dialog returns a null folder selection then that needs to be interpreted as the root drive folder.
+			// To upload to the root folder the account ID needs to be sent as the folder ID instead of null.
+			if( parentForm.UploadFile( fullPath, fileName, driveItemId ?? selectedMhwAccountId, true ) == null )
 			{
 				parentForm.ShowBalloonError( "Print to Drive upload failed: {0}", name );
 			}

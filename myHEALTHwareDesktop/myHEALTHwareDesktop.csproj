@@ -343,7 +343,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>echo.
-echo *** Copying dependencies to output in post-build event ***
+echo *** Copying dependencies to output [post-build event] ***
 xcopy /S /Y /Q $(SolutionDir)Dependencies\* $(TargetDir)
 echo *** Finished copying dependencies ***
 echo.</PostBuildEvent>

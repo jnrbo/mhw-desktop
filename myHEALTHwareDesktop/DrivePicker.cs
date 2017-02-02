@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using CefSharp;
 using myHEALTHwareDesktop.Properties;
 
@@ -18,7 +19,7 @@ namespace myHEALTHwareDesktop
 			InitializeComponent();
 		}
 
-		public void InitBrowser( string connectionId, string accessToken, string accountId )
+		public void InitBrowser( string connectionId, string accessToken, string accountId, string itemName = null )
 		{
 			if( Cef.IsInitialized == false )
 			{
@@ -27,9 +28,10 @@ namespace myHEALTHwareDesktop
 
 			string url =
 				string.Format(
-					"{0}/UI/Drive/Select?accountId={1}&containersOnly=true&connection_id={2}&access_token={3}&app_key={4}&app_secret={5}",
+					"{0}/UI/Drive/Select?accountId={1}&containersOnly=true&itemName={2}&connection_id={3}&access_token={4}&app_key={5}&app_secret={6}",
 					Settings.Default.myHEALTHwareDomain,
 					accountId,
+					itemName,
 					connectionId,
 					accessToken,
 					appId,
@@ -46,30 +48,39 @@ namespace myHEALTHwareDesktop
 
 		public void EnableFileName( bool isEnabled, string defaultFileName = null )
 		{
-			if( isEnabled )
-			{
-				panelFileName.Show();
-				textBoxFileName.Show();
-				labelFileName.Show();
-				textBoxFileName.Text = defaultFileName;
-			}
-			else
-			{
-				panelFileName.Hide();
-				textBoxFileName.Hide();
-				labelFileName.Hide();
-			}
+			////if( isEnabled )
+			////{
+			////	panelFileName.Show();
+			////	textBoxFileName.Show();
+			////	labelFileName.Show();
+			////	textBoxFileName.Text = defaultFileName;
+			////}
+			////else
+			////{
+
+			panelFileName.Hide();
+			textBoxFileName.Hide();
+			labelFileName.Hide();
+
+			////}
 		}
 
 		public string GetFileName()
 		{
-			return fileName;
+			return null;
+
+			////return fileName;
 		}
 
 		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )
 		{
 			// Fire event.
 			OnClick( args );
+		}
+
+		private void DrivePickerShown( object sender, EventArgs e )
+		{
+			Activate();
 		}
 	}
 }

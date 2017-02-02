@@ -192,5 +192,6 @@ namespace myHEALTHwareDesktop
 	{
 		public string message { get; set; }
 		public string driveItemId { get; set; }
+		public string itemName { get; set; }
 	}
 }

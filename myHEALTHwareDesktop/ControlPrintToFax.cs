@@ -233,7 +233,7 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			// Upload the printed PDF file to Drive.
+			// Upload the printed PDF file.
 			string fileId = parentForm.UploadFile( fullPath, name, null, true );
 
 			if( fileId == null )

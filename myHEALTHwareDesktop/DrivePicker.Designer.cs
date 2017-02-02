@@ -70,7 +70,6 @@
 			this.Controls.Add(this.labelFileName);
 			this.Controls.Add(this.textBoxFileName);
 			this.Controls.Add(this.panelFileName);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "DrivePicker";
@@ -79,6 +78,7 @@
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Drive";
+			this.Shown += new System.EventHandler(this.DrivePickerShown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
