@@ -177,7 +177,6 @@ namespace myHEALTHwareDesktop
 		private void BrowseUploadPath()
 		{
 			drivePicker = new DrivePicker( MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET );
-			drivePicker.EnableFileName( false );
 			drivePicker.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId );
 
 			// Register a method to recieve click event callback.
@@ -191,7 +190,7 @@ namespace myHEALTHwareDesktop
 				errorProviderDriveFolder.SetError( textBoxMhwFolder, "" );
 
 				// Display folder in dialog box.
-				string path = LoadDriveLocation( uploadDriveItemId );
+				LoadDriveLocation( uploadDriveItemId );
 
 				// Save Drive item ID.
 				Settings.Default.FolderToDriveDestinationId = uploadDriveItemId;

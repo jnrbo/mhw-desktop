@@ -13,8 +13,6 @@
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			fileName = this.textBoxFileName.Text;
-
 			if (disposing && (components != null))
 			{
 				components.Dispose();
@@ -72,6 +70,7 @@
 			this.Controls.Add(this.panelFileName);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(325, 350);
 			this.Name = "DrivePicker";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

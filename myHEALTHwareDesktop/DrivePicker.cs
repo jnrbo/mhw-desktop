@@ -10,7 +10,6 @@ namespace myHEALTHwareDesktop
 		private ChromiumBrowserUserControl chromiumBrowser;
 		private readonly string appId;
 		private readonly string appSecret;
-		private string fileName;
 
 		public DrivePicker( string appId, string appSecret )
 		{
@@ -44,32 +43,6 @@ namespace myHEALTHwareDesktop
 			chromiumBrowser.PostMessageListener += ResultMessageHandler;
 
 			//browser.Browser.KeyboardHandler = new MhwSendFaxWindowKeyboardHandler(this);
-		}
-
-		public void EnableFileName( bool isEnabled, string defaultFileName = null )
-		{
-			////if( isEnabled )
-			////{
-			////	panelFileName.Show();
-			////	textBoxFileName.Show();
-			////	labelFileName.Show();
-			////	textBoxFileName.Text = defaultFileName;
-			////}
-			////else
-			////{
-
-			panelFileName.Hide();
-			textBoxFileName.Hide();
-			labelFileName.Hide();
-
-			////}
-		}
-
-		public string GetFileName()
-		{
-			return null;
-
-			////return fileName;
 		}
 
 		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )

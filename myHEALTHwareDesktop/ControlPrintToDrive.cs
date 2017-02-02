@@ -119,14 +119,14 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private string LoadDefaultDriveLocation()
+		private void LoadDefaultDriveLocation()
 		{
 			if( string.IsNullOrWhiteSpace( Settings.Default.PrintToDriveDefaultDestinationId ) )
 			{
 				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "Please select a Drive folder to upload files to." );
 
 				isDefaultUploadPathSet = false;
-				return null;
+				return;
 			}
 
 			ApiDriveItem item;
@@ -144,13 +144,12 @@ namespace myHEALTHwareDesktop
 				string message = string.Format( "Error setting Drive path: {0}", ex.Message.Substring( 0, 60 ) );
 				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, message );
 
-				return null;
+				return;
 			}
 
 			string path = string.Format( "{0}/{1}", item.Path, item.Name );
 			SetUploadPathText( path );
 			isDefaultUploadPathSet = true;
-			return path;
 		}
 
 		private void RadioButtonsCheckedChanged( object sender, EventArgs e )
@@ -267,7 +266,7 @@ namespace myHEALTHwareDesktop
 
 		private void ButtonBrowsePrintToDrivePathClick( object sender, EventArgs e )
 		{
-			LaunchDrivePicker( false );
+			LaunchDrivePicker();
 
 			if( isDrivePickerSuccess )
 			{
@@ -275,10 +274,9 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void LaunchDrivePicker( bool isShowFileName, string fileName = null )
+		private void LaunchDrivePicker( string fileName = null )
 		{
 			drivePicker = new DrivePicker( MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET );
-			drivePicker.EnableFileName( isShowFileName, fileName );
 			drivePicker.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId, fileName );
 
 			// Register a method to receive click event callback.
@@ -292,11 +290,6 @@ namespace myHEALTHwareDesktop
 
 			// Valid. Clear any previous error.
 			errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
-
-			////if( isShowFileName )
-			////{
-			////	drivePickerFileName = drivePicker.GetFileName();
-			////}
 
 			// Display folder in dialog box.
 			SetUploadPath( drivePickerResult );
@@ -446,7 +439,7 @@ namespace myHEALTHwareDesktop
 
 			if( Settings.Default.PrintToDrivePrompt )
 			{
-				LaunchDrivePicker( true, name );
+				LaunchDrivePicker( name );
 
 				if( isDrivePickerSuccess )
 				{
