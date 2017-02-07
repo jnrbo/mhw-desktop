@@ -28,7 +28,16 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.loadingControl = new myHEALTHwareDesktop.LoadingControl();
 			this.SuspendLayout();
+			// 
+			// loadingControl1
+			// 
+			this.loadingControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.loadingControl.Location = new System.Drawing.Point(0, 0);
+			this.loadingControl.Name = "loadingControl";
+			this.loadingControl.Size = new System.Drawing.Size(474, 236);
+			this.loadingControl.TabIndex = 0;
 			// 
 			// LoginForm
 			// 
@@ -38,6 +47,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
 			this.ClientSize = new System.Drawing.Size(474, 236);
+			this.Controls.Add(this.loadingControl);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -52,6 +62,9 @@
 		}
 
 		#endregion
+
+		private LoadingControl loadingControl;
+
 
 	}
 }

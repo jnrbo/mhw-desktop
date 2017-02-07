@@ -93,6 +93,36 @@ namespace myHEALTHwareDesktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mhw_logo_224 {
+            get {
+                object obj = ResourceManager.GetObject("mhw_logo_224", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mhw_logo_bg_72 {
+            get {
+                object obj = ResourceManager.GetObject("mhw_logo_bg_72", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mhw_logo_bw_224 {
+            get {
+                object obj = ResourceManager.GetObject("mhw_logo_bw_224", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MHWIcon_2Color {
             get {
                 object obj = ResourceManager.GetObject("MHWIcon_2Color", resourceCulture);

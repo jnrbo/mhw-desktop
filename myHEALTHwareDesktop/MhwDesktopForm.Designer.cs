@@ -33,14 +33,11 @@ namespace myHEALTHwareDesktop
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MhwDesktopForm));
 			this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.closeThisMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.differentContextMenuExampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.closeThisMenuToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.runAtSystemStartupCheckBox = new System.Windows.Forms.CheckBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.accountsComboBox = new System.Windows.Forms.ComboBox();
@@ -57,8 +54,7 @@ namespace myHEALTHwareDesktop
 			this.controlAbout = new myHEALTHwareDesktop.ControlAbout();
 			this.pictureBoxUser = new System.Windows.Forms.PictureBox();
 			this.pictureBoxActingAs = new System.Windows.Forms.PictureBox();
-			this.contextMenuStrip1.SuspendLayout();
-			this.contextMenuStrip2.SuspendLayout();
+			this.contextMenuStrip.SuspendLayout();
 			this.tabs.SuspendLayout();
 			this.tabPagePrintToDrive.SuspendLayout();
 			this.tabPageFoldertoDrive.SuspendLayout();
@@ -70,18 +66,18 @@ namespace myHEALTHwareDesktop
 			// 
 			// trayIcon
 			// 
-			this.trayIcon.ContextMenuStrip = this.contextMenuStrip1;
+			this.trayIcon.ContextMenuStrip = this.contextMenuStrip;
 			this.trayIcon.Icon = global::myHEALTHwareDesktop.Properties.Resources.myHEALTHware;
 			this.trayIcon.Text = "myHEALTHware Desktop";
 			// 
-			// contextMenuStrip1
+			// contextMenuStrip
 			// 
-			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.quitToolStripMenuItem});
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(117, 70);
+			this.contextMenuStrip.Name = "contextMenuStrip1";
+			this.contextMenuStrip.Size = new System.Drawing.Size(117, 70);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -107,26 +103,6 @@ namespace myHEALTHwareDesktop
 			this.closeThisMenuToolStripMenuItem.Name = "closeThisMenuToolStripMenuItem";
 			this.closeThisMenuToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
 			this.closeThisMenuToolStripMenuItem.Text = "Close This Menu";
-			// 
-			// contextMenuStrip2
-			// 
-			this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.differentContextMenuExampleToolStripMenuItem,
-            this.closeThisMenuToolStripMenuItem1});
-			this.contextMenuStrip2.Name = "contextMenuStrip2";
-			this.contextMenuStrip2.Size = new System.Drawing.Size(246, 48);
-			// 
-			// differentContextMenuExampleToolStripMenuItem
-			// 
-			this.differentContextMenuExampleToolStripMenuItem.Name = "differentContextMenuExampleToolStripMenuItem";
-			this.differentContextMenuExampleToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-			this.differentContextMenuExampleToolStripMenuItem.Text = "Different Context Menu Example";
-			// 
-			// closeThisMenuToolStripMenuItem1
-			// 
-			this.closeThisMenuToolStripMenuItem1.Name = "closeThisMenuToolStripMenuItem1";
-			this.closeThisMenuToolStripMenuItem1.Size = new System.Drawing.Size(245, 22);
-			this.closeThisMenuToolStripMenuItem1.Text = "Close This Menu";
 			// 
 			// runAtSystemStartupCheckBox
 			// 
@@ -211,8 +187,10 @@ namespace myHEALTHwareDesktop
 			// 
 			this.controlPrintToDrive.Location = new System.Drawing.Point(25, 18);
 			this.controlPrintToDrive.Name = "controlPrintToDrive";
+			this.controlPrintToDrive.NotificationService = null;
 			this.controlPrintToDrive.Size = new System.Drawing.Size(574, 173);
 			this.controlPrintToDrive.TabIndex = 0;
+			this.controlPrintToDrive.UploadService = null;
 			// 
 			// tabPageFoldertoDrive
 			// 
@@ -229,8 +207,10 @@ namespace myHEALTHwareDesktop
 			// 
 			this.controlFolderToDrive.Location = new System.Drawing.Point(25, 36);
 			this.controlFolderToDrive.Name = "controlFolderToDrive";
+			this.controlFolderToDrive.NotificationService = null;
 			this.controlFolderToDrive.Size = new System.Drawing.Size(578, 138);
 			this.controlFolderToDrive.TabIndex = 0;
+			this.controlFolderToDrive.UploadService = null;
 			// 
 			// tabPagePrintToFax
 			// 
@@ -245,10 +225,13 @@ namespace myHEALTHwareDesktop
 			// 
 			// controlPrintToFax
 			// 
+			this.controlPrintToFax.IsMhwFaxInstalled = false;
 			this.controlPrintToFax.Location = new System.Drawing.Point(25, 18);
 			this.controlPrintToFax.Name = "controlPrintToFax";
+			this.controlPrintToFax.NotificationService = null;
 			this.controlPrintToFax.Size = new System.Drawing.Size(576, 173);
 			this.controlPrintToFax.TabIndex = 0;
+			this.controlPrintToFax.UploadService = null;
 			// 
 			// tabPageAbout
 			// 
@@ -306,8 +289,7 @@ namespace myHEALTHwareDesktop
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Desktop Settings";
 			this.Load += new System.EventHandler(this.MhwFormInitialize);
-			this.contextMenuStrip1.ResumeLayout(false);
-			this.contextMenuStrip2.ResumeLayout(false);
+			this.contextMenuStrip.ResumeLayout(false);
 			this.tabs.ResumeLayout(false);
 			this.tabPagePrintToDrive.ResumeLayout(false);
 			this.tabPageFoldertoDrive.ResumeLayout(false);
@@ -323,13 +305,10 @@ namespace myHEALTHwareDesktop
 		#endregion
 
 		private System.Windows.Forms.NotifyIcon trayIcon;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem closeThisMenuToolStripMenuItem;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
-		private System.Windows.Forms.ToolStripMenuItem differentContextMenuExampleToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem closeThisMenuToolStripMenuItem1;
 		private System.Windows.Forms.CheckBox runAtSystemStartupCheckBox;
 		//private System.Windows.Forms.NotifyIcon notLoggedInIcon;
 		//private System.Windows.Forms.NotifyIcon uploadingIcon;

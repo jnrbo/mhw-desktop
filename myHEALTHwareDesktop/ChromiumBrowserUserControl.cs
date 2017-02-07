@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
+using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using CefSharp;
@@ -9,49 +13,51 @@ namespace myHEALTHwareDesktop
 	public partial class ChromiumBrowserUserControl : UserControl
 	{
 		public event EventHandler<PostMessageListenerEventArgs> PostMessageListener;
+		public event EventHandler BrowserVisible;
 
 		public IWinFormsWebBrowser Browser { get; private set; }
 
 		public object BoundScriptObject { get; set; }
 
-		public ChromiumBrowserUserControl( string url )
+		public Action<int> OnResponseHandler { get; set; }
+
+		public ChromiumBrowserUserControl( string url, Action<int> responseHandler = null )
 		{
 			InitializeComponent();
 
-			var browser = new ChromiumWebBrowser( url ) { Dock = DockStyle.Fill };
-
 			SetStyle( ControlStyles.ResizeRedraw, true );
-
 			Dock = DockStyle.Fill;
 
-			browserPanel.Controls.Add( browser );
+			OnResponseHandler = responseHandler;
 
-			Browser = browser;
-
+			var browser = new ChromiumWebBrowser( url ) { Dock = DockStyle.Fill };
 			browser.TitleChanged += OnBrowserTitleChanged;
 			browser.HandleCreated += OnBrowserHandleCreated;
+			browser.LoadingStateChanged += BrowserLoadingStateChanged;
+			browser.RequestHandler = new RequestHandler( () => OnResponseHandler, SynchronizationContext.Current );
+
 			Disposed += BrowserTabUserControlDisposed;
 
-			//browser.MenuHandler = new MenuHandler();
-			//browser.LifeSpanHandler = new LifeSpanHandler();
+			Browser = browser;
+			browserPanel.Controls.Add( browser );
 
-			browser.LoadingStateChanged += ( sender, args ) =>
-			{
-				if( args.CanReload )
-				{
-					string overridePostMessage =
-						"window.postMessage = function(data, origin){ postMessageListener.received(JSON.stringify(data), origin); }";
-					browser.ExecuteScriptAsync( overridePostMessage );
-				}
-			};
+			HideBrowserControl();
 		}
 
-		private void OnPostMessageReceived( object sender, PostMessageListenerEventArgs e )
+		private void BrowserLoadingStateChanged( object sender, LoadingStateChangedEventArgs e )
 		{
-			if( PostMessageListener != null )
+			if( !e.Browser.IsLoading )
 			{
-				PostMessageListener( sender, e );
+				this.InvokeOnUiThreadIfRequired( ShowBrowserControl );
 			}
+			if( !e.CanReload )
+			{
+				return;
+			}
+
+			var overridePostMessage =
+				"window.postMessage = function(data, origin){ postMessageListener.received(JSON.stringify(data), origin); }";
+			Browser.ExecuteScriptAsync( overridePostMessage );
 		}
 
 		private void OnBrowserHandleCreated( object sender, EventArgs e )
@@ -84,7 +90,7 @@ namespace myHEALTHwareDesktop
 
 		public object EvaluateScript( string script )
 		{
-			var task = Browser.EvaluateScriptAsync( script );
+			Task<JavascriptResponse> task = Browser.EvaluateScriptAsync( script );
 			task.Wait();
 			return task.Result;
 		}
@@ -94,6 +100,38 @@ namespace myHEALTHwareDesktop
 			if( Uri.IsWellFormedUriString( url, UriKind.RelativeOrAbsolute ) )
 			{
 				Browser.Load( url );
+			}
+		}
+
+		public void HideBrowserControl()
+		{
+			Size = Size.Empty;
+			Dock = DockStyle.None;
+		}
+
+		public void ShowBrowserControl()
+		{
+			BringToFront();
+			Dock = DockStyle.Fill;
+
+			OnBrowserVisible();
+		}
+
+		protected virtual void OnPostMessageReceived( object sender, PostMessageListenerEventArgs e )
+		{
+			EventHandler<PostMessageListenerEventArgs> handler = PostMessageListener;
+			if( handler != null )
+			{
+				handler( sender, e );
+			}
+		}
+
+		protected virtual void OnBrowserVisible()
+		{
+			EventHandler handler = BrowserVisible;
+			if( handler != null )
+			{
+				handler( this, EventArgs.Empty );
 			}
 		}
 	}
@@ -126,23 +164,146 @@ namespace myHEALTHwareDesktop
 	//	}
 	//}
 
-	public static class ControlExtensions
+	internal class RequestHandler : IRequestHandler
 	{
-		/// <summary>
-		/// Executes the Action asynchronously on the UI thread, does not block execution on the calling thread.
-		/// </summary>
-		/// <param name="control">the control for which the update is required</param>
-		/// <param name="action">action to be performed on the control</param>
-		public static void InvokeOnUiThreadIfRequired( this Control control, Action action )
+		private readonly Func<Action<int>> responseHandlerProvider;
+		private readonly SynchronizationContext synchronizationContext;
+
+		public RequestHandler( Func<Action<int>> responseHandlerProvider, SynchronizationContext synchronizationContext )
 		{
-			if( control.InvokeRequired )
+			if( responseHandlerProvider == null )
 			{
-				control.BeginInvoke( action );
+				throw new ArgumentNullException( "responseHandlerProvider" );
 			}
-			else
-			{
-				action.Invoke();
-			}
+			Contract.EndContractBlock();
+
+			this.responseHandlerProvider = responseHandlerProvider;
+			this.synchronizationContext = synchronizationContext;
+		}
+
+		public bool OnResourceResponse( IWebBrowser browserControl,
+		                                IBrowser browser,
+		                                IFrame frame,
+		                                IRequest request,
+		                                IResponse response )
+		{
+			Action<int> responseHandler = responseHandlerProvider() ?? delegate { };
+			synchronizationContext.Send( _ => responseHandler( response.StatusCode ), null );
+
+			return false;
+		}
+
+		public bool OnBeforeBrowse( IWebBrowser browserControl,
+		                            IBrowser browser,
+		                            IFrame frame,
+		                            IRequest request,
+		                            bool isRedirect )
+		{
+			return false;
+		}
+
+		public bool OnOpenUrlFromTab( IWebBrowser browserControl,
+		                              IBrowser browser,
+		                              IFrame frame,
+		                              string targetUrl,
+		                              WindowOpenDisposition targetDisposition,
+		                              bool userGesture )
+		{
+			return false;
+		}
+
+		public bool OnCertificateError( IWebBrowser browserControl,
+		                                IBrowser browser,
+		                                CefErrorCode errorCode,
+		                                string requestUrl,
+		                                ISslInfo sslInfo,
+		                                IRequestCallback callback )
+		{
+			callback.Dispose();
+			return false;
+		}
+
+		public void OnPluginCrashed( IWebBrowser browserControl, IBrowser browser, string pluginPath )
+		{
+			// NOTE: Not implemented
+		}
+
+		public CefReturnValue OnBeforeResourceLoad( IWebBrowser browserControl,
+		                                            IBrowser browser,
+		                                            IFrame frame,
+		                                            IRequest request,
+		                                            IRequestCallback callback )
+		{
+			callback.Dispose();
+			return CefReturnValue.Continue;
+		}
+
+		public bool GetAuthCredentials( IWebBrowser browserControl,
+		                                IBrowser browser,
+		                                IFrame frame,
+		                                bool isProxy,
+		                                string host,
+		                                int port,
+		                                string realm,
+		                                string scheme,
+		                                IAuthCallback callback )
+		{
+			callback.Dispose();
+			return false;
+		}
+
+		public void OnRenderProcessTerminated( IWebBrowser browserControl, IBrowser browser, CefTerminationStatus status )
+		{
+			// NOTE: Not implemented
+		}
+
+		public bool OnQuotaRequest( IWebBrowser browserControl,
+		                            IBrowser browser,
+		                            string originUrl,
+		                            long newSize,
+		                            IRequestCallback callback )
+		{
+			callback.Dispose();
+			return false;
+		}
+
+		public void OnResourceRedirect( IWebBrowser browserControl,
+		                                IBrowser browser,
+		                                IFrame frame,
+		                                IRequest request,
+		                                ref string newUrl )
+		{
+			// NOTE: Not implemented
+		}
+
+		public bool OnProtocolExecution( IWebBrowser browserControl, IBrowser browser, string url )
+		{
+			return false;
+		}
+
+		public void OnRenderViewReady( IWebBrowser browserControl, IBrowser browser )
+		{
+			// NOTE: Not implemented
+		}
+
+		public IResponseFilter GetResourceResponseFilter( IWebBrowser browserControl,
+		                                                  IBrowser browser,
+		                                                  IFrame frame,
+		                                                  IRequest request,
+		                                                  IResponse response )
+		{
+			return null;
+		}
+
+		public void OnResourceLoadComplete( IWebBrowser browserControl,
+		                                    IBrowser browser,
+		                                    IFrame frame,
+		                                    IRequest request,
+		                                    IResponse response,
+		                                    UrlRequestStatus status,
+		                                    long receivedContentLength )
+		{
+			// NOTE: Not implemented
 		}
 	}
 

@@ -1,48 +1,54 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using CefSharp;
-using myHEALTHwareDesktop.Properties;
 
 namespace myHEALTHwareDesktop
 {
 	public partial class SendFax : Form
 	{
 		private ChromiumBrowserUserControl chromiumBrowser;
-		private readonly string appId;
-		private readonly string appSecret;
+		private readonly ActiveUserSession userSession;
+		private readonly string fileId;
 
-		public SendFax( string appId, string appSecret )
+		public SendFax( ActiveUserSession userSession, string fileId )
 		{
-			this.appId = appId;
-			this.appSecret = appSecret;
-
 			InitializeComponent();
+
+			this.userSession = userSession;
+			this.fileId = fileId;
 		}
 
-		public void InitBrowser( string connectionId, string accessToken, string accountId, string fileId )
+		public void InitBrowser()
 		{
 			if( Cef.IsInitialized == false )
 			{
 				Cef.Initialize( new CefSettings() );
 			}
 
+			MhwAccount account = userSession.ActingAsAccount;
+			Credentials creds = userSession.Credentials;
+
 			string url =
 				string.Format(
 					"{0}/UI/Fax/Send?accountId={1}&fileId={2}&connection_id={3}&access_token={4}&app_key={5}&app_secret={6}",
-					Settings.Default.myHEALTHwareDomain,
-					accountId,
+					userSession.Settings.myHEALTHwareDomain,
+					account.AccountId,
 					fileId,
-					connectionId,
-					accessToken,
-					appId,
-					appSecret );
+					creds.ConnectionId,
+					creds.AccessToken,
+					creds.AppId,
+					creds.AppSecret );
 
 			chromiumBrowser = new ChromiumBrowserUserControl( url );
-			Controls.Add( chromiumBrowser );
-			chromiumBrowser.Dock = DockStyle.Fill;
-
 			chromiumBrowser.PostMessageListener += ResultMessageHandler;
+			chromiumBrowser.BrowserVisible += ChromiumBrowserVisible;
 
-			//browser.Browser.KeyboardHandler = new MhwSendFaxWindowKeyboardHandler(this);
+			Controls.Add( chromiumBrowser );
+		}
+
+		private void ChromiumBrowserVisible( object sender, EventArgs e )
+		{
+			loadingControl.OnLoadingFinished();
 		}
 
 		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )

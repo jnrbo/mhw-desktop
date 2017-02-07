@@ -157,6 +157,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveUserSession.cs" />
     <Compile Include="ChromiumBrowserUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,6 +170,7 @@
     <Compile Include="ControlAbout.Designer.cs">
       <DependentUpon>ControlAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControlExtensions.cs" />
     <Compile Include="ControlFolderToDrive.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -187,7 +189,22 @@
     <Compile Include="ControlPrintToFax.Designer.cs">
       <DependentUpon>ControlPrintToFax.cs</DependentUpon>
     </Compile>
+    <Compile Include="Credentials.cs" />
+    <Compile Include="IUploadService.cs" />
+    <Compile Include="LoadingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LoadingControl.Designer.cs">
+      <DependentUpon>LoadingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MhwAccount.cs" />
+    <Compile Include="MhwMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MhwMessageForm.Designer.cs">
+      <DependentUpon>MhwMessageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationService.cs" />
     <Compile Include="SendFax.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +242,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPrintToFax.resx">
       <DependentUpon>ControlPrintToFax.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadingControl.resx">
+      <DependentUpon>LoadingControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MhwMessageForm.resx">
+      <DependentUpon>MhwMessageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SendFax.resx">
       <DependentUpon>SendFax.cs</DependentUpon>
@@ -272,6 +295,9 @@
     <None Include="Resources\LoggedOut.ico" />
     <None Include="Resources\mhwFax.bmp" />
     <None Include="Resources\marketplace_fax.png" />
+    <None Include="Resources\mhw-logo-224.png" />
+    <None Include="Resources\mhw-logo-bw-224.png" />
+    <None Include="Resources\mhw-logo-bg-72.png" />
     <Content Include="Resources\MHWIcon_2Color.png" />
     <Content Include="Resources\myHEALTHware.ico" />
     <Content Include="Resources\started.png" />

@@ -15,31 +15,34 @@ namespace myHEALTHwareDesktop
 		private const string FAX_APP_ID = "FAC5FAC5-45E9-434A-AF34-C9E070729299";
 		private readonly VirtualPrinter virtualPrinter = new VirtualPrinter();
 
-		private MhwDesktopForm parentForm;
-		private MhwSdk sdk;
-		private string selectedMhwAccountId;
 		private bool isPrinterInstalled;
 		private FileSystemWatcher localPathWatcher;
 		private bool isWatcherRunning;
 		private SendFax sendFax;
 		private bool isSendFaxSuccess;
-		private bool isLoggedIn;
-
-		public bool IsMhwFaxInstalled { get; set; }
+		private readonly ActiveUserSession userSession;
 
 		public ControlPrintToFax()
 		{
 			InitializeComponent();
+
+			userSession = ActiveUserSession.GetInstance();
+			userSession.ActingAsChanged += SelectedUserChanged;
 		}
 
-		public void LoadSettings( MhwDesktopForm parent, MhwSdk sdk, string selectedMhwAccountId )
+		private MhwSdk Sdk
 		{
-			parentForm = parent;
-			this.sdk = sdk;
-			this.selectedMhwAccountId = selectedMhwAccountId;
+			get { return userSession.Sdk; }
+		}
 
+		public bool IsMhwFaxInstalled { get; set; }
+
+		public INotificationService NotificationService { get; set; }
+		public IUploadService UploadService { get; set; }
+
+		public void SelectedUserChanged(object sender, EventArgs e)
+		{
 			LoadPrintToFaxState();
-			isLoggedIn = true;
 		}
 
 		private void LoadPrintToFaxState()
@@ -47,14 +50,14 @@ namespace myHEALTHwareDesktop
 			// Is MHW Fax installed on MHW account?
 			try
 			{
-				sdk.Application.GetConnection( selectedMhwAccountId, FAX_APP_ID );
+				Sdk.Application.GetConnection( userSession.ActingAsAccount.AccountId, FAX_APP_ID );
 				IsMhwFaxInstalled = true;
 				buttonPrintToFaxInstall.Enabled = true;
 			}
 			catch( Exception )
 			{
 				// Check network connection status.
-				parentForm.CheckNetworkStatus();
+				NotificationService.NotifyIfNetworkUnavailable();
 
 				IsMhwFaxInstalled = false;
 				labelStatus.Text = "myHEALTHware Fax is not installed on selected account.";
@@ -84,8 +87,8 @@ namespace myHEALTHwareDesktop
 			}
 
 			// Set the initial state of the radio buttons.
-			radioButtonPrompt.Checked = Settings.Default.PrintToFaxPrompt;
-			radioButtonSaveDraft.Checked = !Settings.Default.PrintToFaxPrompt;
+			radioButtonPrompt.Checked = userSession.Settings.PrintToFaxPrompt;
+			radioButtonSaveDraft.Checked = !userSession.Settings.PrintToFaxPrompt;
 
 			radioButtonPrompt.Enabled = isPrinterInstalled;
 			radioButtonSaveDraft.Enabled = isPrinterInstalled;
@@ -99,20 +102,21 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			var message = "";
+			////var message = "";
 
 			if( radioButton == radioButtonSaveDraft )
 			{
-				Settings.Default.PrintToFaxPrompt = false;
+				userSession.Settings.PrintToFaxPrompt = false;
 				//message = "Print to Fax will automatically save as draft fax";
 			}
 			else
 			{
-				Settings.Default.PrintToFaxPrompt = true;
+				userSession.Settings.PrintToFaxPrompt = true;
 				//message = "Print to Fax will prompt you to send fax with each print";
 			}
 
-			parentForm.SaveSettings( message );
+			userSession.Settings.Save();
+			////NotificationService.ShowBalloonInfo( message );
 		}
 
 		private void ButtonPrintToFaxInstallClick( object sender, EventArgs e )
@@ -186,7 +190,7 @@ namespace myHEALTHwareDesktop
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
 				isWatcherRunning = false;
-				parentForm.ShowBalloonError( "Start Print to Fax monitor failed: {0}", ex.Message );
+				NotificationService.ShowBalloonError( "Start Print to Fax monitor failed: {0}", ex.Message );
 				return;
 			}
 
@@ -210,7 +214,7 @@ namespace myHEALTHwareDesktop
 			}
 			catch( ArgumentException ex )
 			{
-				parentForm.ShowBalloonError( "Stop Print to Fax monitor error: {0}", ex.Message );
+				NotificationService.ShowBalloonError( "Stop Print to Fax monitor error: {0}", ex.Message );
 			}
 
 			isWatcherRunning = false;
@@ -225,47 +229,47 @@ namespace myHEALTHwareDesktop
 		// The Watcher calls this method when a new file shows up in the watched folder.
 		private void ProcessNewPrintFile( string fullPath, string name )
 		{
-			if( isLoggedIn == false )
+			if( !userSession.IsLoggedIn )
 			{
 				StopMonitoring();
-				parentForm.ShowBalloonError( "Please log in and try again. Print job deleted." );
+				NotificationService.ShowBalloonError( "Please log in and try again. Print job deleted." );
 				File.Delete( fullPath );
 				return;
 			}
 
 			// Upload the printed PDF file.
-			string fileId = parentForm.UploadFile( fullPath, name, null, true );
+			string fileId = UploadService.UploadFile( fullPath, name, null, true );
 
 			if( fileId == null )
 			{
-				parentForm.ShowBalloonError( "Print to Fax failed: Upload {0} failed", fullPath );
+				NotificationService.ShowBalloonError( "Print to Fax failed: Upload {0} failed", fullPath );
 				return;
 			}
 
-			if( Settings.Default.PrintToFaxPrompt )
+			if( userSession.Settings.PrintToFaxPrompt )
 			{
 				LaunchSendFax( fileId );
 			}
 			else
 			{
 				// Create draft fax.
-				ApiFax draftFax = new ApiFax { AccountId = selectedMhwAccountId, FileId = fileId, To = new List<ApiFaxRecipient>() };
+				ApiFax draftFax = new ApiFax { AccountId = userSession.ActingAsAccount.AccountId, FileId = fileId, To = new List<ApiFaxRecipient>() };
 
 				try
 				{
-					sdk.Fax.Create( draftFax, true, false, null, null );
+					Sdk.Fax.Create( draftFax, true, false, null, null );
 				}
 				catch( Exception ex )
 				{
-					parentForm.ShowBalloonError( "Print to Fax create draft failed: {0}", ex.Message );
+					NotificationService.ShowBalloonError( "Print to Fax create draft failed: {0}", ex.Message );
 				}
 			}
 		}
 
 		private void LaunchSendFax( string fileId )
 		{
-			sendFax = new SendFax( MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET );
-			sendFax.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId, fileId );
+			sendFax = new SendFax( userSession, fileId );
+			sendFax.InitBrowser();
 
 			// Register a method to recieve click event callback.
 			sendFax.Click += SendFaxOnClick;
@@ -290,28 +294,24 @@ namespace myHEALTHwareDesktop
 			{
 				// Cancelled.
 				isSendFaxSuccess = false;
-				parentForm.ShowBalloonWarning( "Print to Fax was cancelled." );
+				NotificationService.ShowBalloonWarning( "Print to Fax was cancelled." );
 			}
 			else
 			{
 				isSendFaxSuccess = false;
-				parentForm.ShowBalloonInfo( "Send Fax Error: {0}", args.Message.data.message );
+				NotificationService.ShowBalloonInfo( "Send Fax Error: {0}", args.Message.data.message );
 			}
 
 			// Close the Drive picker form in a cross thread acceptable way.
 			BeginInvoke( (MethodInvoker) ( () => sendFax.Dispose() ) );
 		}
 
-		public void LogOut()
-		{
-			isLoggedIn = false;
-		}
-
 		private void LabelFaxLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
+			string accountId = userSession.ActingAsAccount.AccountId;
 			string mhwLink = IsMhwFaxInstalled
-				? string.Format( "{0}/#/Fax?accountId={1}", Settings.Default.myHEALTHwareDomain, selectedMhwAccountId )
-				: string.Format( "{0}/#/Marketplace?accountId={1}", Settings.Default.myHEALTHwareDomain, selectedMhwAccountId );
+				? string.Format( "{0}/#/Fax?accountId={1}", userSession.Settings.myHEALTHwareDomain, accountId )
+				: string.Format( "{0}/#/Marketplace?accountId={1}", userSession.Settings.myHEALTHwareDomain, accountId );
 
 			Process.Start( mhwLink );
 		}

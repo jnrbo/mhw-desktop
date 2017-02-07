@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="13.4" version="13.4" Modules="simple" RootPath="." Language="en" Id="{76A86849-2863-4672-B903-250A0D685A14}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPNOREPAIR" Value="1"/>
+    <ROW Property="ARPPRODUCTICON" Value="myHEALTHware.exe" Type="8"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://myhealthware.com"/>
+    <ROW Property="AiSkipExitDlg" Value="1"/>
+    <ROW Property="CTRLS" Value="2"/>
+    <ROW Property="Manufacturer" Value="SOAPware, Inc."/>
+    <ROW Property="ProductCode" Value="1033:{DD013DDA-F60C-4A1C-81F5-74AAB3F5EE10} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="myHEALTHware Desktop"/>
+    <ROW Property="ProductVersion" Value="1.0.0" Type="32"/>
+    <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{4221E1F1-5A06-4D38-AC8C-EF4E35C8050B}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="Driver_1_Dir" Directory_Parent="x32_Dir" DefaultDir="Driver"/>
+    <ROW Directory="Driver_Dir" Directory_Parent="x64_Dir" DefaultDir="Driver"/>
+    <ROW Directory="GhostScript_1_Dir" Directory_Parent="x32_Dir" DefaultDir="GHOSTS~1|GhostScript"/>
+    <ROW Directory="GhostScript_Dir" Directory_Parent="x64_Dir" DefaultDir="GHOSTS~1|GhostScript"/>
+    <ROW Directory="PortMonitor_1_Dir" Directory_Parent="x32_Dir" DefaultDir="PORTMO~1|PortMonitor"/>
+    <ROW Directory="PortMonitor_Dir" Directory_Parent="x64_Dir" DefaultDir="PORTMO~1|PortMonitor"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="bin_1_Dir" Directory_Parent="GhostScript_1_Dir" DefaultDir="bin"/>
+    <ROW Directory="bin_Dir" Directory_Parent="GhostScript_Dir" DefaultDir="bin"/>
+    <ROW Directory="lib_1_Dir" Directory_Parent="GhostScript_1_Dir" DefaultDir="lib"/>
+    <ROW Directory="lib_Dir" Directory_Parent="GhostScript_Dir" DefaultDir="lib"/>
+    <ROW Directory="locales_Dir" Directory_Parent="APPDIR" DefaultDir="locales"/>
+    <ROW Directory="x32_Dir" Directory_Parent="APPDIR" DefaultDir="x32"/>
+    <ROW Directory="x64_Dir" Directory_Parent="APPDIR" DefaultDir="x64"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="CefSharp.BrowserSubprocess.Core.dll" ComponentId="{3F9D6C89-FA42-41F4-832B-DAEFD4D891AF}" Directory_="APPDIR" Attributes="0" KeyPath="CefSharp.BrowserSubprocess.Core.dll"/>
+    <ROW Component="CefSharp.BrowserSubprocess.exe" ComponentId="{B9A7485D-5308-496E-A44B-EFDB294669E5}" Directory_="APPDIR" Attributes="0" KeyPath="CefSharp.BrowserSubprocess.exe"/>
+    <ROW Component="CefSharp.Core.dll" ComponentId="{6B2D335E-5A0B-48B6-8BA4-CB0FEC45A474}" Directory_="APPDIR" Attributes="0" KeyPath="CefSharp.Core.dll"/>
+    <ROW Component="CefSharp.WinForms.dll" ComponentId="{BFC8796D-B002-430C-B65D-5E35BA1CA765}" Directory_="APPDIR" Attributes="0" KeyPath="CefSharp.WinForms.dll"/>
+    <ROW Component="CefSharp.dll" ComponentId="{9F30652F-506E-4879-8038-4265FE04FED4}" Directory_="APPDIR" Attributes="0" KeyPath="CefSharp.dll"/>
+    <ROW Component="CommandLine.dll" ComponentId="{3D79B165-680C-4FD4-9376-656C4A4FBEBF}" Directory_="APPDIR" Attributes="0" KeyPath="CommandLine.dll"/>
+    <ROW Component="MHWVirtualPrinter.dll" ComponentId="{AFC9DF64-6E3E-458A-B87B-A1F4A187AC06}" Directory_="APPDIR" Attributes="0" KeyPath="MHWVirtualPrinter.dll"/>
+    <ROW Component="Microsoft.Threading.Tasks.Extensions.Des" ComponentId="{8C1390B5-53D4-4166-922A-514E87D17619}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Threading.Tasks.Extensions.Desktop.dll"/>
+    <ROW Component="Microsoft.Threading.Tasks.Extensions.dll" ComponentId="{7081938A-E478-441C-9075-3B2B30D5C4D8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Threading.Tasks.Extensions.dll"/>
+    <ROW Component="Microsoft.Threading.Tasks.dll" ComponentId="{D6ACCC63-2BE2-4B22-B4CB-A0E3D792E911}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Threading.Tasks.dll"/>
+    <ROW Component="PS5UI.DLL" ComponentId="{01F95831-72BB-42C6-B717-1F9EE17EBA11}" Directory_="Driver_Dir" Attributes="256" KeyPath="PS5UI.DLL"/>
+    <ROW Component="PS5UI.DLL_1" ComponentId="{9A75B9D0-6C63-4759-9A8F-99CD2DB3C99D}" Directory_="Driver_1_Dir" Attributes="0" KeyPath="PS5UI.DLL_1"/>
+    <ROW Component="PSCRIPT.HLP" ComponentId="{45C51C45-F218-4BD6-929B-AB4529E8B9E3}" Directory_="Driver_Dir" Attributes="0" KeyPath="PSCRIPT.HLP" Type="2"/>
+    <ROW Component="PSCRIPT.HLP_1" ComponentId="{8B4B2F41-A21A-4AE0-BE23-444916D3FDEC}" Directory_="Driver_1_Dir" Attributes="0" KeyPath="PSCRIPT.HLP_1" Type="2"/>
+    <ROW Component="PSCRIPT5.DLL" ComponentId="{2C77A1F0-40F3-484D-88E5-38D5E28D1E48}" Directory_="Driver_Dir" Attributes="256" KeyPath="PSCRIPT5.DLL"/>
+    <ROW Component="PSCRIPT5.DLL_1" ComponentId="{3DED374A-6D3F-4213-8969-651E961ED6FB}" Directory_="Driver_1_Dir" Attributes="0" KeyPath="PSCRIPT5.DLL_1"/>
+    <ROW Component="ProductInformation" ComponentId="{53C25F84-9B7D-4112-8870-D6FF27B2BE25}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="RabbitMQ.Client.dll" ComponentId="{696C0BE5-D76F-43D3-A1FA-3E09B741B59D}" Directory_="APPDIR" Attributes="0" KeyPath="RabbitMQ.Client.dll"/>
+    <ROW Component="RestSharp.dll" ComponentId="{DCEF42E5-D056-4212-BA8E-5B7D17F84526}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.dll"/>
+    <ROW Component="SOAPware.PortalApi.Model.dll" ComponentId="{E7109FCA-1EA5-4AA4-94DF-DD9567A21BD7}" Directory_="APPDIR" Attributes="0" KeyPath="SOAPware.PortalApi.Model.dll"/>
+    <ROW Component="SOAPware.PortalSDK.dll" ComponentId="{4D0BB542-72D3-4E6B-83B8-AC9C158DD666}" Directory_="APPDIR" Attributes="0" KeyPath="SOAPware.PortalSDK.dll"/>
+    <ROW Component="Setup.exe" ComponentId="{C39D706B-C8B0-443E-8693-64BAF056DDE4}" Directory_="APPDIR" Attributes="0" KeyPath="Setup.exe"/>
+    <ROW Component="_mfilemonUI.dll" ComponentId="{284AC2EF-4DC6-43F0-8E46-3719245C5814}" Directory_="PortMonitor_Dir" Attributes="256" KeyPath="_mfilemonUI.dll"/>
+    <ROW Component="_mfilemonUI.dll_1" ComponentId="{995447C2-49C1-4633-BFEF-500E5C078410}" Directory_="PortMonitor_1_Dir" Attributes="0" KeyPath="_mfilemonUI.dll_1"/>
+    <ROW Component="acctest.ps" ComponentId="{4ABE91AC-0A94-4BC1-B715-8A58756EDC28}" Directory_="lib_Dir" Attributes="0" KeyPath="acctest.ps" Type="0"/>
+    <ROW Component="acctest.ps_1" ComponentId="{0FDD37B3-C602-43F1-8FB2-5E03E5A4F9E2}" Directory_="lib_1_Dir" Attributes="0" KeyPath="acctest.ps_1" Type="0"/>
+    <ROW Component="am.pak" ComponentId="{424C88F2-F7C9-4221-80A8-A313BB1C06AD}" Directory_="locales_Dir" Attributes="0" KeyPath="am.pak" Type="0"/>
+    <ROW Component="cef.pak" ComponentId="{879ABED1-BC62-4ABD-9636-09A6995ACCB1}" Directory_="APPDIR" Attributes="0" KeyPath="cef.pak" Type="0"/>
+    <ROW Component="d3dcompiler_43.dll" ComponentId="{9E990B72-A910-4712-AD9F-2CC3152DA4E1}" Directory_="APPDIR" Attributes="0" KeyPath="d3dcompiler_43.dll"/>
+    <ROW Component="d3dcompiler_47.dll" ComponentId="{C2C261CC-A768-4BFE-B23F-E4397D0EC8AA}" Directory_="APPDIR" Attributes="0" KeyPath="d3dcompiler_47.dll"/>
+    <ROW Component="gsdll32.dll" ComponentId="{2F24F387-C1E8-4F47-A108-CFF60A4B8592}" Directory_="bin_1_Dir" Attributes="0" KeyPath="gsdll32.dll"/>
+    <ROW Component="gsdll32.lib" ComponentId="{E33C7B8F-08E0-4C75-8D67-71BF00047076}" Directory_="bin_1_Dir" Attributes="0" KeyPath="gsdll32.lib" Type="0"/>
+    <ROW Component="gsdll64.dll" ComponentId="{3604D543-360D-4397-962D-9E8DA934B05E}" Directory_="bin_Dir" Attributes="256" KeyPath="gsdll64.dll"/>
+    <ROW Component="gsdll64.lib" ComponentId="{BE40EB5C-4D05-4D51-88A2-4651EB6B605F}" Directory_="bin_Dir" Attributes="0" KeyPath="gsdll64.lib" Type="0"/>
+    <ROW Component="gswin32c.exe" ComponentId="{82B285A9-4351-4D2E-A6B7-F2CA7696E1B3}" Directory_="bin_1_Dir" Attributes="0" KeyPath="gswin32c.exe"/>
+    <ROW Component="gswin64c.exe" ComponentId="{743A63F2-0884-43C5-8360-932AD6D1AA72}" Directory_="bin_Dir" Attributes="256" KeyPath="gswin64c.exe"/>
+    <ROW Component="libEGL.dll" ComponentId="{1500D429-ED32-45BC-B1CE-AF00E90FE317}" Directory_="APPDIR" Attributes="0" KeyPath="libEGL.dll"/>
+    <ROW Component="libGLESv2.dll" ComponentId="{BB83E985-D9E4-4D53-A571-B13E127CDA09}" Directory_="APPDIR" Attributes="0" KeyPath="libGLESv2.dll"/>
+    <ROW Component="libcef.dll" ComponentId="{61E10A4D-7C9D-420D-907E-DB5355479904}" Directory_="APPDIR" Attributes="0" KeyPath="libcef.dll"/>
+    <ROW Component="mfilemon.dll" ComponentId="{718AD691-8A93-4435-9797-EB38E65C5ED9}" Directory_="PortMonitor_Dir" Attributes="256" KeyPath="mfilemon.dll"/>
+    <ROW Component="mfilemon.dll_1" ComponentId="{A3CCB595-FF07-4ED1-A2A1-D77F3D24F55E}" Directory_="PortMonitor_1_Dir" Attributes="0" KeyPath="mfilemon.dll_1"/>
+    <ROW Component="mfilemonUI.dll" ComponentId="{6980F142-5AAD-400F-887F-1195DC11C829}" Directory_="PortMonitor_Dir" Attributes="256" KeyPath="mfilemonUI.dll"/>
+    <ROW Component="mfilemonUI.dll_1" ComponentId="{AFBABA23-1BE1-4B87-8A14-81B25437B6C0}" Directory_="PortMonitor_1_Dir" Attributes="0" KeyPath="mfilemonUI.dll_1"/>
+    <ROW Component="myHEALTHwareDesktop.exe" ComponentId="{DEB9C2C1-B77F-4BDD-BF85-DEE482FCB611}" Directory_="APPDIR" Attributes="0" KeyPath="myHEALTHwareDesktop.exe"/>
+    <ROW Component="myHEALTHwareDesktop.vshost.exe" ComponentId="{28AFDB05-6437-46E3-9799-5486573894B4}" Directory_="APPDIR" Attributes="0" KeyPath="myHEALTHwareDesktop.vshost.exe"/>
+    <ROW Component="myHEALTHwarePS.PPD" ComponentId="{812B534A-4DE5-43E7-B30B-5FC2F01D7AD3}" Directory_="Driver_Dir" Attributes="0" KeyPath="myHEALTHwarePS.PPD" Type="0"/>
+    <ROW Component="myHEALTHwarePS.PPD_1" ComponentId="{0C388565-6C46-4A1F-B8A6-5196CE07AB5E}" Directory_="Driver_1_Dir" Attributes="0" KeyPath="myHEALTHwarePS.PPD_1" Type="0"/>
+    <ROW Component="widevinecdmadapter.dll" ComponentId="{308DFAA9-E914-463F-B5C4-CCF5310A825D}" Directory_="APPDIR" Attributes="0" KeyPath="widevinecdmadapter.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="CefSharp.BrowserSubprocess.Core.dll CefSharp.BrowserSubprocess.exe CefSharp.Core.dll CefSharp.WinForms.dll CefSharp.dll CommandLine.dll MHWVirtualPrinter.dll Microsoft.Threading.Tasks.Extensions.Des Microsoft.Threading.Tasks.Extensions.dll Microsoft.Threading.Tasks.dll PS5UI.DLL PS5UI.DLL_1 PSCRIPT.HLP PSCRIPT.HLP_1 PSCRIPT5.DLL PSCRIPT5.DLL_1 ProductInformation RabbitMQ.Client.dll RestSharp.dll SOAPware.PortalApi.Model.dll SOAPware.PortalSDK.dll Setup.exe _mfilemonUI.dll _mfilemonUI.dll_1 acctest.ps acctest.ps_1 am.pak cef.pak d3dcompiler_43.dll d3dcompiler_47.dll gsdll32.dll gsdll32.lib gsdll64.dll gsdll64.lib gswin32c.exe gswin64c.exe libEGL.dll libGLESv2.dll libcef.dll mfilemon.dll mfilemon.dll_1 mfilemonUI.dll mfilemonUI.dll_1 myHEALTHwareDesktop.exe myHEALTHwareDesktop.vshost.exe myHEALTHwarePS.PPD myHEALTHwarePS.PPD_1 widevinecdmadapter.dll"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="CefSharp.BrowserSubprocess.Core.dll" Component_="CefSharp.BrowserSubprocess.Core.dll" FileName="CEFSHA~1.DLL|CefSharp.BrowserSubprocess.Core.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.BrowserSubprocess.Core.dll" SelfReg="false" NextFile="CefSharp.BrowserSubprocess.exe"/>
+    <ROW File="CefSharp.BrowserSubprocess.exe" Component_="CefSharp.BrowserSubprocess.exe" FileName="CEFSHA~1.EXE|CefSharp.BrowserSubprocess.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.BrowserSubprocess.exe" SelfReg="false" NextFile="CefSharp.Core.dll" DigSign="true"/>
+    <ROW File="CefSharp.Core.dll" Component_="CefSharp.Core.dll" FileName="CEFSHA~2.DLL|CefSharp.Core.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.Core.dll" SelfReg="false" NextFile="CefSharp.Core.xml"/>
+    <ROW File="CefSharp.Core.xml" Component_="cef.pak" FileName="CEFSHA~1.XML|CefSharp.Core.xml" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.Core.xml" SelfReg="false" NextFile="CefSharp.dll"/>
+    <ROW File="CefSharp.WinForms.dll" Component_="CefSharp.WinForms.dll" FileName="CEFSHA~3.DLL|CefSharp.WinForms.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.WinForms.dll" SelfReg="false" NextFile="CefSharp.WinForms.xml"/>
+    <ROW File="CefSharp.WinForms.xml" Component_="cef.pak" FileName="CEFSHA~2.XML|CefSharp.WinForms.xml" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.WinForms.xml" SelfReg="false" NextFile="CefSharp.xml"/>
+    <ROW File="CefSharp.dll" Component_="CefSharp.dll" FileName="CefSharp.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.dll" SelfReg="false" NextFile="CefSharp.WinForms.dll"/>
+    <ROW File="CefSharp.xml" Component_="cef.pak" FileName="CefSharp.xml" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CefSharp.xml" SelfReg="false" NextFile="CommandLine.dll"/>
+    <ROW File="CommandLine.dll" Component_="CommandLine.dll" FileName="COMMAN~1.DLL|CommandLine.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CommandLine.dll" SelfReg="false" NextFile="CommandLine.xml"/>
+    <ROW File="CommandLine.xml" Component_="cef.pak" FileName="COMMAN~1.XML|CommandLine.xml" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\CommandLine.xml" SelfReg="false" NextFile="d3dcompiler_43.dll"/>
+    <ROW File="EndOfTask.ps" Component_="acctest.ps" FileName="ENDOFT~1.PS|EndOfTask.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\EndOfTask.ps" SelfReg="false" NextFile="eps2eps"/>
+    <ROW File="EndOfTask.ps_1" Component_="acctest.ps_1" FileName="ENDOFT~1.PS|EndOfTask.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\EndOfTask.ps" SelfReg="false" NextFile="eps2eps_1"/>
+    <ROW File="FAPIconfigFCO" Component_="acctest.ps" FileName="FAPICO~1|FAPIconfig-FCO" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\FAPIconfig-FCO" SelfReg="false" NextFile="FCOfontmapPCLPS3"/>
+    <ROW File="FAPIconfigFCO_1" Component_="acctest.ps_1" FileName="FAPICO~1|FAPIconfig-FCO" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\FAPIconfig-FCO" SelfReg="false" NextFile="FCOfontmapPCLPS3_1"/>
+    <ROW File="FCOfontmapPCLPS3" Component_="acctest.ps" FileName="FCOFON~1|FCOfontmap-PCLPS3" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\FCOfontmap-PCLPS3" SelfReg="false" NextFile="FCOfontmapPS3"/>
+    <ROW File="FCOfontmapPCLPS3_1" Component_="acctest.ps_1" FileName="FCOFON~1|FCOfontmap-PCLPS3" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\FCOfontmap-PCLPS3" SelfReg="false" NextFile="FCOfontmapPS3_1"/>
+    <ROW File="FCOfontmapPS3" Component_="acctest.ps" FileName="FCOFON~2|FCOfontmap-PS3" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\FCOfontmap-PS3" SelfReg="false" NextFile="font2c"/>
+    <ROW File="FCOfontmapPS3_1" Component_="acctest.ps_1" FileName="FCOFON~2|FCOfontmap-PS3" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\FCOfontmap-PS3" SelfReg="false" NextFile="font2c_1"/>
+    <ROW File="Fontmap.ATB" Component_="acctest.ps" FileName="Fontmap.ATB" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.ATB" SelfReg="false" NextFile="Fontmap.ATM"/>
+    <ROW File="Fontmap.ATB_1" Component_="acctest.ps_1" FileName="Fontmap.ATB" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.ATB" SelfReg="false" NextFile="Fontmap.ATM_1"/>
+    <ROW File="Fontmap.ATM" Component_="acctest.ps" FileName="Fontmap.ATM" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.ATM" SelfReg="false" NextFile="Fontmap.OS2"/>
+    <ROW File="Fontmap.ATM_1" Component_="acctest.ps_1" FileName="Fontmap.ATM" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.ATM" SelfReg="false" NextFile="Fontmap.OS2_1"/>
+    <ROW File="Fontmap.OS2" Component_="acctest.ps" FileName="Fontmap.OS2" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.OS2" SelfReg="false" NextFile="Fontmap.OSF"/>
+    <ROW File="Fontmap.OS2_1" Component_="acctest.ps_1" FileName="Fontmap.OS2" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.OS2" SelfReg="false" NextFile="Fontmap.OSF_1"/>
+    <ROW File="Fontmap.OSF" Component_="acctest.ps" FileName="Fontmap.OSF" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.OSF" SelfReg="false" NextFile="Fontmap.SGI"/>
+    <ROW File="Fontmap.OSF_1" Component_="acctest.ps_1" FileName="Fontmap.OSF" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.OSF" SelfReg="false" NextFile="Fontmap.SGI_1"/>
+    <ROW File="Fontmap.SGI" Component_="acctest.ps" FileName="Fontmap.SGI" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.SGI" SelfReg="false" NextFile="Fontmap.Sol"/>
+    <ROW File="Fontmap.SGI_1" Component_="acctest.ps_1" FileName="Fontmap.SGI" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.SGI" SelfReg="false" NextFile="Fontmap.Sol_1"/>
+    <ROW File="Fontmap.Sol" Component_="acctest.ps" FileName="Fontmap.Sol" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.Sol" SelfReg="false" NextFile="Fontmap.Ult"/>
+    <ROW File="Fontmap.Sol_1" Component_="acctest.ps_1" FileName="Fontmap.Sol" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.Sol" SelfReg="false" NextFile="Fontmap.Ult_1"/>
+    <ROW File="Fontmap.URW136.T1" Component_="acctest.ps" FileName="FONTMA~1.T1|Fontmap.URW-136.T1" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.URW-136.T1" SelfReg="false" NextFile="Fontmap.URW136.TT"/>
+    <ROW File="Fontmap.URW136.T1_1" Component_="acctest.ps_1" FileName="FONTMA~1.T1|Fontmap.URW-136.T1" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.URW-136.T1" SelfReg="false" NextFile="Fontmap.URW136.TT_1"/>
+    <ROW File="Fontmap.URW136.TT" Component_="acctest.ps" FileName="FONTMA~1.TT|Fontmap.URW-136.TT" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.URW-136.TT" SelfReg="false" NextFile="Fontmap.VMS"/>
+    <ROW File="Fontmap.URW136.TT_1" Component_="acctest.ps_1" FileName="FONTMA~1.TT|Fontmap.URW-136.TT" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.URW-136.TT" SelfReg="false" NextFile="Fontmap.VMS_1"/>
+    <ROW File="Fontmap.URW136.cs" Component_="acctest.ps_1" FileName="FONTMA~1.CS|Fontmap.URW-136.cs" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.URW-136.cs" SelfReg="false" NextFile="Fontmap.URW136.T1_1"/>
+    <ROW File="Fontmap.Ult" Component_="acctest.ps" FileName="Fontmap.Ult" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.Ult" SelfReg="false" NextFile="Fontmap.URW136.T1"/>
+    <ROW File="Fontmap.Ult_1" Component_="acctest.ps_1" FileName="Fontmap.Ult" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.Ult" SelfReg="false" NextFile="Fontmap.URW136.cs"/>
+    <ROW File="Fontmap.VMS" Component_="acctest.ps" FileName="Fontmap.VMS" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Fontmap.VMS" SelfReg="false" NextFile="ghostpdf.cat"/>
+    <ROW File="Fontmap.VMS_1" Component_="acctest.ps_1" FileName="Fontmap.VMS" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Fontmap.VMS" SelfReg="false" NextFile="ghostpdf.cat_1"/>
+    <ROW File="Infomacos.plist" Component_="acctest.ps" FileName="INFO-M~1.PLI|Info-macos.plist" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\Info-macos.plist" SelfReg="false" NextFile="jispaper.ps"/>
+    <ROW File="Infomacos.plist_1" Component_="acctest.ps_1" FileName="INFO-M~1.PLI|Info-macos.plist" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\Info-macos.plist" SelfReg="false" NextFile="jispaper.ps_1"/>
+    <ROW File="MHWVirtualPrinter.dll" Component_="MHWVirtualPrinter.dll" FileName="MHWVIR~1.DLL|MHWVirtualPrinter.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\MHWVirtualPrinter.dll" SelfReg="false" NextFile="MHWVirtualPrinter.pdb"/>
+    <ROW File="MHWVirtualPrinter.pdb" Component_="MHWVirtualPrinter.dll" FileName="MHWVIR~1.PDB|MHWVirtualPrinter.pdb" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\MHWVirtualPrinter.pdb" SelfReg="false" NextFile="Microsoft.Threading.Tasks.dll"/>
+    <ROW File="Microsoft.Threading.Tasks.Extensions.Desktop.dll" Component_="Microsoft.Threading.Tasks.Extensions.Des" FileName="MICROS~2.DLL|Microsoft.Threading.Tasks.Extensions.Desktop.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\Microsoft.Threading.Tasks.Extensions.Desktop.dll" SelfReg="false" NextFile="Microsoft.Threading.Tasks.Extensions.dll"/>
+    <ROW File="Microsoft.Threading.Tasks.Extensions.dll" Component_="Microsoft.Threading.Tasks.Extensions.dll" FileName="MICROS~3.DLL|Microsoft.Threading.Tasks.Extensions.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\Microsoft.Threading.Tasks.Extensions.dll" SelfReg="false" NextFile="myHEALTHwareDesktop.exe"/>
+    <ROW File="Microsoft.Threading.Tasks.dll" Component_="Microsoft.Threading.Tasks.dll" FileName="MICROS~1.DLL|Microsoft.Threading.Tasks.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\Microsoft.Threading.Tasks.dll" SelfReg="false" NextFile="Microsoft.Threading.Tasks.Extensions.Desktop.dll"/>
+    <ROW File="PDFA_def.ps" Component_="acctest.ps" FileName="PDFA_def.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\PDFA_def.ps" SelfReg="false" NextFile="pdfwrite.ps"/>
+    <ROW File="PDFA_def.ps_1" Component_="acctest.ps_1" FileName="PDFA_def.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\PDFA_def.ps" SelfReg="false" NextFile="pdfwrite.ps_1"/>
+    <ROW File="PDFX_def.ps" Component_="acctest.ps" FileName="PDFX_def.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\PDFX_def.ps" SelfReg="false" NextFile="pf2afm"/>
+    <ROW File="PDFX_def.ps_1" Component_="acctest.ps_1" FileName="PDFX_def.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\PDFX_def.ps" SelfReg="false" NextFile="pf2afm_1"/>
+    <ROW File="PS5UI.DLL" Component_="PS5UI.DLL" FileName="PS5UI.DLL" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\Driver\PS5UI.DLL" SelfReg="false" NextFile="PSCRIPT.HLP"/>
+    <ROW File="PS5UI.DLL_1" Component_="PS5UI.DLL_1" FileName="PS5UI.DLL" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\Driver\PS5UI.DLL" SelfReg="false" NextFile="PSCRIPT.HLP_1"/>
+    <ROW File="PSCRIPT.HLP" Component_="PSCRIPT.HLP" FileName="PSCRIPT.HLP" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\Driver\PSCRIPT.HLP" SelfReg="false" NextFile="PSCRIPT.NTF"/>
+    <ROW File="PSCRIPT.HLP_1" Component_="PSCRIPT.HLP_1" FileName="PSCRIPT.HLP" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\Driver\PSCRIPT.HLP" SelfReg="false" NextFile="PSCRIPT.NTF_1"/>
+    <ROW File="PSCRIPT.NTF" Component_="myHEALTHwarePS.PPD" FileName="PSCRIPT.NTF" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\Driver\PSCRIPT.NTF" SelfReg="false" NextFile="PSCRIPT5.DLL"/>
+    <ROW File="PSCRIPT.NTF_1" Component_="myHEALTHwarePS.PPD_1" FileName="PSCRIPT.NTF" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\Driver\PSCRIPT.NTF" SelfReg="false" NextFile="PSCRIPT5.DLL_1"/>
+    <ROW File="PSCRIPT5.DLL" Component_="PSCRIPT5.DLL" FileName="PSCRIPT5.DLL" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\Driver\PSCRIPT5.DLL" SelfReg="false" NextFile="gsdll64.dll"/>
+    <ROW File="PSCRIPT5.DLL_1" Component_="PSCRIPT5.DLL_1" FileName="PSCRIPT5.DLL" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\Driver\PSCRIPT5.DLL" SelfReg="false" NextFile="gsdll32.dll"/>
+    <ROW File="RabbitMQ.Client.dll" Component_="RabbitMQ.Client.dll" FileName="RABBIT~1.DLL|RabbitMQ.Client.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\RabbitMQ.Client.dll" SelfReg="false" NextFile="RestSharp.dll"/>
+    <ROW File="RestSharp.dll" Component_="RestSharp.dll" FileName="RESTSH~1.DLL|RestSharp.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\RestSharp.dll" SelfReg="false" NextFile="Setup.exe"/>
+    <ROW File="SOAPware.PortalApi.Model.dll" Component_="SOAPware.PortalApi.Model.dll" FileName="SOAPWA~1.DLL|SOAPware.PortalApi.Model.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\SOAPware.PortalApi.Model.dll" SelfReg="false" NextFile="SOAPware.PortalSDK.dll"/>
+    <ROW File="SOAPware.PortalSDK.dll" Component_="SOAPware.PortalSDK.dll" FileName="SOAPWA~2.DLL|SOAPware.PortalSDK.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\SOAPware.PortalSDK.dll" SelfReg="false" NextFile="widevinecdmadapter.dll"/>
+    <ROW File="Setup.exe" Component_="Setup.exe" FileName="Setup.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\Setup.exe" SelfReg="false" NextFile="Setup.pdb" DigSign="true"/>
+    <ROW File="Setup.pdb" Component_="Setup.exe" FileName="Setup.pdb" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\Setup.pdb" SelfReg="false" NextFile="snapshot_blob.bin"/>
+    <ROW File="_mfilemonUI.dll" Component_="_mfilemonUI.dll" FileName="_MFILE~1.DLL|_mfilemonUI.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\PortMonitor\_mfilemonUI.dll" SelfReg="false" NextFile="myHEALTHwarePS.PPD_1"/>
+    <ROW File="_mfilemonUI.dll_1" Component_="_mfilemonUI.dll_1" FileName="_MFILE~1.DLL|_mfilemonUI.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\PortMonitor\_mfilemonUI.dll" SelfReg="false" NextFile="am.pak"/>
+    <ROW File="acctest.ps" Component_="acctest.ps" FileName="acctest.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\acctest.ps" SelfReg="false" NextFile="addxchar.ps"/>
+    <ROW File="acctest.ps_1" Component_="acctest.ps_1" FileName="acctest.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\acctest.ps" SelfReg="false" NextFile="addxchar.ps_1"/>
+    <ROW File="addxchar.ps" Component_="acctest.ps" FileName="addxchar.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\addxchar.ps" SelfReg="false" NextFile="afmdiff.awk"/>
+    <ROW File="addxchar.ps_1" Component_="acctest.ps_1" FileName="addxchar.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\addxchar.ps" SelfReg="false" NextFile="afmdiff.awk_1"/>
+    <ROW File="afmdiff.awk" Component_="acctest.ps" FileName="afmdiff.awk" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\afmdiff.awk" SelfReg="false" NextFile="align.ps"/>
+    <ROW File="afmdiff.awk_1" Component_="acctest.ps_1" FileName="afmdiff.awk" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\afmdiff.awk" SelfReg="false" NextFile="align.ps_1"/>
+    <ROW File="align.ps" Component_="acctest.ps" FileName="align.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\align.ps" SelfReg="false" NextFile="bj8.rpd"/>
+    <ROW File="align.ps_1" Component_="acctest.ps_1" FileName="align.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\align.ps" SelfReg="false" NextFile="bj8.rpd_1"/>
+    <ROW File="am.pak" Component_="am.pak" FileName="am.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\am.pak" SelfReg="false" NextFile="ar.pak"/>
+    <ROW File="ar.pak" Component_="am.pak" FileName="ar.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ar.pak" SelfReg="false" NextFile="bg.pak"/>
+    <ROW File="bg.pak" Component_="am.pak" FileName="bg.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\bg.pak" SelfReg="false" NextFile="bn.pak"/>
+    <ROW File="bj8.rpd" Component_="acctest.ps" FileName="bj8.rpd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8.rpd" SelfReg="false" NextFile="bj8gc12f.upp"/>
+    <ROW File="bj8.rpd_1" Component_="acctest.ps_1" FileName="bj8.rpd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8.rpd" SelfReg="false" NextFile="bj8gc12f.upp_1"/>
+    <ROW File="bj8gc12f.upp" Component_="acctest.ps" FileName="bj8gc12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8gc12f.upp" SelfReg="false" NextFile="bj8hg12f.upp"/>
+    <ROW File="bj8gc12f.upp_1" Component_="acctest.ps_1" FileName="bj8gc12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8gc12f.upp" SelfReg="false" NextFile="bj8hg12f.upp_1"/>
+    <ROW File="bj8hg12f.upp" Component_="acctest.ps" FileName="bj8hg12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8hg12f.upp" SelfReg="false" NextFile="bj8oh06n.upp"/>
+    <ROW File="bj8hg12f.upp_1" Component_="acctest.ps_1" FileName="bj8hg12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8hg12f.upp" SelfReg="false" NextFile="bj8oh06n.upp_1"/>
+    <ROW File="bj8oh06n.upp" Component_="acctest.ps" FileName="bj8oh06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8oh06n.upp" SelfReg="false" NextFile="bj8pa06n.upp"/>
+    <ROW File="bj8oh06n.upp_1" Component_="acctest.ps_1" FileName="bj8oh06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8oh06n.upp" SelfReg="false" NextFile="bj8pa06n.upp_1"/>
+    <ROW File="bj8pa06n.upp" Component_="acctest.ps" FileName="bj8pa06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8pa06n.upp" SelfReg="false" NextFile="bj8pp12f.upp"/>
+    <ROW File="bj8pa06n.upp_1" Component_="acctest.ps_1" FileName="bj8pa06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8pa06n.upp" SelfReg="false" NextFile="bj8pp12f.upp_1"/>
+    <ROW File="bj8pp12f.upp" Component_="acctest.ps" FileName="bj8pp12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8pp12f.upp" SelfReg="false" NextFile="bj8ts06n.upp"/>
+    <ROW File="bj8pp12f.upp_1" Component_="acctest.ps_1" FileName="bj8pp12f.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8pp12f.upp" SelfReg="false" NextFile="bj8ts06n.upp_1"/>
+    <ROW File="bj8ts06n.upp" Component_="acctest.ps" FileName="bj8ts06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bj8ts06n.upp" SelfReg="false" NextFile="bjc610a0.upp"/>
+    <ROW File="bj8ts06n.upp_1" Component_="acctest.ps_1" FileName="bj8ts06n.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bj8ts06n.upp" SelfReg="false" NextFile="bjc610a0.upp_1"/>
+    <ROW File="bjc610a0.upp" Component_="acctest.ps" FileName="bjc610a0.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a0.upp" SelfReg="false" NextFile="bjc610a1.upp"/>
+    <ROW File="bjc610a0.upp_1" Component_="acctest.ps_1" FileName="bjc610a0.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a0.upp" SelfReg="false" NextFile="bjc610a1.upp_1"/>
+    <ROW File="bjc610a1.upp" Component_="acctest.ps" FileName="bjc610a1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a1.upp" SelfReg="false" NextFile="bjc610a2.upp"/>
+    <ROW File="bjc610a1.upp_1" Component_="acctest.ps_1" FileName="bjc610a1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a1.upp" SelfReg="false" NextFile="bjc610a2.upp_1"/>
+    <ROW File="bjc610a2.upp" Component_="acctest.ps" FileName="bjc610a2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a2.upp" SelfReg="false" NextFile="bjc610a3.upp"/>
+    <ROW File="bjc610a2.upp_1" Component_="acctest.ps_1" FileName="bjc610a2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a2.upp" SelfReg="false" NextFile="bjc610a3.upp_1"/>
+    <ROW File="bjc610a3.upp" Component_="acctest.ps" FileName="bjc610a3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a3.upp" SelfReg="false" NextFile="bjc610a4.upp"/>
+    <ROW File="bjc610a3.upp_1" Component_="acctest.ps_1" FileName="bjc610a3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a3.upp" SelfReg="false" NextFile="bjc610a4.upp_1"/>
+    <ROW File="bjc610a4.upp" Component_="acctest.ps" FileName="bjc610a4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a4.upp" SelfReg="false" NextFile="bjc610a5.upp"/>
+    <ROW File="bjc610a4.upp_1" Component_="acctest.ps_1" FileName="bjc610a4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a4.upp" SelfReg="false" NextFile="bjc610a5.upp_1"/>
+    <ROW File="bjc610a5.upp" Component_="acctest.ps" FileName="bjc610a5.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a5.upp" SelfReg="false" NextFile="bjc610a6.upp"/>
+    <ROW File="bjc610a5.upp_1" Component_="acctest.ps_1" FileName="bjc610a5.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a5.upp" SelfReg="false" NextFile="bjc610a6.upp_1"/>
+    <ROW File="bjc610a6.upp" Component_="acctest.ps" FileName="bjc610a6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a6.upp" SelfReg="false" NextFile="bjc610a7.upp"/>
+    <ROW File="bjc610a6.upp_1" Component_="acctest.ps_1" FileName="bjc610a6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a6.upp" SelfReg="false" NextFile="bjc610a7.upp_1"/>
+    <ROW File="bjc610a7.upp" Component_="acctest.ps" FileName="bjc610a7.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a7.upp" SelfReg="false" NextFile="bjc610a8.upp"/>
+    <ROW File="bjc610a7.upp_1" Component_="acctest.ps_1" FileName="bjc610a7.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a7.upp" SelfReg="false" NextFile="bjc610a8.upp_1"/>
+    <ROW File="bjc610a8.upp" Component_="acctest.ps" FileName="bjc610a8.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610a8.upp" SelfReg="false" NextFile="bjc610b1.upp"/>
+    <ROW File="bjc610a8.upp_1" Component_="acctest.ps_1" FileName="bjc610a8.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610a8.upp" SelfReg="false" NextFile="bjc610b1.upp_1"/>
+    <ROW File="bjc610b1.upp" Component_="acctest.ps" FileName="bjc610b1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b1.upp" SelfReg="false" NextFile="bjc610b2.upp"/>
+    <ROW File="bjc610b1.upp_1" Component_="acctest.ps_1" FileName="bjc610b1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b1.upp" SelfReg="false" NextFile="bjc610b2.upp_1"/>
+    <ROW File="bjc610b2.upp" Component_="acctest.ps" FileName="bjc610b2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b2.upp" SelfReg="false" NextFile="bjc610b3.upp"/>
+    <ROW File="bjc610b2.upp_1" Component_="acctest.ps_1" FileName="bjc610b2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b2.upp" SelfReg="false" NextFile="bjc610b3.upp_1"/>
+    <ROW File="bjc610b3.upp" Component_="acctest.ps" FileName="bjc610b3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b3.upp" SelfReg="false" NextFile="bjc610b4.upp"/>
+    <ROW File="bjc610b3.upp_1" Component_="acctest.ps_1" FileName="bjc610b3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b3.upp" SelfReg="false" NextFile="bjc610b4.upp_1"/>
+    <ROW File="bjc610b4.upp" Component_="acctest.ps" FileName="bjc610b4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b4.upp" SelfReg="false" NextFile="bjc610b6.upp"/>
+    <ROW File="bjc610b4.upp_1" Component_="acctest.ps_1" FileName="bjc610b4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b4.upp" SelfReg="false" NextFile="bjc610b6.upp_1"/>
+    <ROW File="bjc610b6.upp" Component_="acctest.ps" FileName="bjc610b6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b6.upp" SelfReg="false" NextFile="bjc610b7.upp"/>
+    <ROW File="bjc610b6.upp_1" Component_="acctest.ps_1" FileName="bjc610b6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b6.upp" SelfReg="false" NextFile="bjc610b7.upp_1"/>
+    <ROW File="bjc610b7.upp" Component_="acctest.ps" FileName="bjc610b7.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b7.upp" SelfReg="false" NextFile="bjc610b8.upp"/>
+    <ROW File="bjc610b7.upp_1" Component_="acctest.ps_1" FileName="bjc610b7.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b7.upp" SelfReg="false" NextFile="bjc610b8.upp_1"/>
+    <ROW File="bjc610b8.upp" Component_="acctest.ps" FileName="bjc610b8.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\bjc610b8.upp" SelfReg="false" NextFile="caption.ps"/>
+    <ROW File="bjc610b8.upp_1" Component_="acctest.ps_1" FileName="bjc610b8.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\bjc610b8.upp" SelfReg="false" NextFile="caption.ps_1"/>
+    <ROW File="bn.pak" Component_="am.pak" FileName="bn.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\bn.pak" SelfReg="false" NextFile="ca.pak"/>
+    <ROW File="ca.pak" Component_="am.pak" FileName="ca.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ca.pak" SelfReg="false" NextFile="cs.pak"/>
+    <ROW File="caption.ps" Component_="acctest.ps" FileName="caption.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\caption.ps" SelfReg="false" NextFile="cat.ps"/>
+    <ROW File="caption.ps_1" Component_="acctest.ps_1" FileName="caption.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\caption.ps" SelfReg="false" NextFile="cat.ps_1"/>
+    <ROW File="cat.ps" Component_="acctest.ps" FileName="cat.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cat.ps" SelfReg="false" NextFile="cbjc600.ppd"/>
+    <ROW File="cat.ps_1" Component_="acctest.ps_1" FileName="cat.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cat.ps" SelfReg="false" NextFile="cbjc600.ppd_1"/>
+    <ROW File="cbjc600.ppd" Component_="acctest.ps" FileName="cbjc600.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cbjc600.ppd" SelfReg="false" NextFile="cbjc800.ppd"/>
+    <ROW File="cbjc600.ppd_1" Component_="acctest.ps_1" FileName="cbjc600.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cbjc600.ppd" SelfReg="false" NextFile="cbjc800.ppd_1"/>
+    <ROW File="cbjc800.ppd" Component_="acctest.ps" FileName="cbjc800.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cbjc800.ppd" SelfReg="false" NextFile="cdj550.upp"/>
+    <ROW File="cbjc800.ppd_1" Component_="acctest.ps_1" FileName="cbjc800.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cbjc800.ppd" SelfReg="false" NextFile="cdj550.upp_1"/>
+    <ROW File="cdj550.upp" Component_="acctest.ps" FileName="cdj550.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cdj550.upp" SelfReg="false" NextFile="cdj690.upp"/>
+    <ROW File="cdj550.upp_1" Component_="acctest.ps_1" FileName="cdj550.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cdj550.upp" SelfReg="false" NextFile="cdj690.upp_1"/>
+    <ROW File="cdj690.upp" Component_="acctest.ps" FileName="cdj690.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cdj690.upp" SelfReg="false" NextFile="cdj690ec.upp"/>
+    <ROW File="cdj690.upp_1" Component_="acctest.ps_1" FileName="cdj690.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cdj690.upp" SelfReg="false" NextFile="cdj690ec.upp_1"/>
+    <ROW File="cdj690ec.upp" Component_="acctest.ps" FileName="cdj690ec.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cdj690ec.upp" SelfReg="false" NextFile="cid2code.ps"/>
+    <ROW File="cdj690ec.upp_1" Component_="acctest.ps_1" FileName="cdj690ec.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cdj690ec.upp" SelfReg="false" NextFile="cid2code.ps_1"/>
+    <ROW File="cef.pak" Component_="cef.pak" FileName="cef.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\cef.pak" SelfReg="false" NextFile="cef_100_percent.pak"/>
+    <ROW File="cef_100_percent.pak" Component_="cef.pak" FileName="CEF_10~1.PAK|cef_100_percent.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\cef_100_percent.pak" SelfReg="false" NextFile="cef_200_percent.pak"/>
+    <ROW File="cef_200_percent.pak" Component_="cef.pak" FileName="CEF_20~1.PAK|cef_200_percent.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\cef_200_percent.pak" SelfReg="false" NextFile="cef_extensions.pak"/>
+    <ROW File="cef_extensions.pak" Component_="cef.pak" FileName="CEF_EX~1.PAK|cef_extensions.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\cef_extensions.pak" SelfReg="false" NextFile="CefSharp.BrowserSubprocess.Core.dll"/>
+    <ROW File="cid2code.ps" Component_="acctest.ps" FileName="cid2code.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cid2code.ps" SelfReg="false" NextFile="cidfmap"/>
+    <ROW File="cid2code.ps_1" Component_="acctest.ps_1" FileName="cid2code.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\cid2code.ps" SelfReg="false" NextFile="decrypt.ps_1"/>
+    <ROW File="cidfmap" Component_="acctest.ps" FileName="cidfmap" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\cidfmap" SelfReg="false" NextFile="decrypt.ps"/>
+    <ROW File="cs.pak" Component_="am.pak" FileName="cs.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\cs.pak" SelfReg="false" NextFile="da.pak"/>
+    <ROW File="d3dcompiler_43.dll" Component_="d3dcompiler_43.dll" FileName="D3DCOM~1.DLL|d3dcompiler_43.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\d3dcompiler_43.dll" SelfReg="false" NextFile="d3dcompiler_47.dll"/>
+    <ROW File="d3dcompiler_47.dll" Component_="d3dcompiler_47.dll" FileName="D3DCOM~2.DLL|d3dcompiler_47.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\d3dcompiler_47.dll" SelfReg="false" NextFile="devtools_resources.pak"/>
+    <ROW File="da.pak" Component_="am.pak" FileName="da.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\da.pak" SelfReg="false" NextFile="de.pak"/>
+    <ROW File="de.pak" Component_="am.pak" FileName="de.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\de.pak" SelfReg="false" NextFile="el.pak"/>
+    <ROW File="decrypt.ps" Component_="acctest.ps" FileName="decrypt.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\decrypt.ps" SelfReg="false" NextFile="dnj750c.upp"/>
+    <ROW File="decrypt.ps_1" Component_="acctest.ps_1" FileName="decrypt.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\decrypt.ps" SelfReg="false" NextFile="dnj750c.upp_1"/>
+    <ROW File="devtools_resources.pak" Component_="cef.pak" FileName="DEVTOO~1.PAK|devtools_resources.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\devtools_resources.pak" SelfReg="false" NextFile="icudtl.dat"/>
+    <ROW File="dnj750c.upp" Component_="acctest.ps" FileName="dnj750c.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\dnj750c.upp" SelfReg="false" NextFile="dnj750m.upp"/>
+    <ROW File="dnj750c.upp_1" Component_="acctest.ps_1" FileName="dnj750c.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\dnj750c.upp" SelfReg="false" NextFile="dnj750m.upp_1"/>
+    <ROW File="dnj750m.upp" Component_="acctest.ps" FileName="dnj750m.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\dnj750m.upp" SelfReg="false" NextFile="docie.ps"/>
+    <ROW File="dnj750m.upp_1" Component_="acctest.ps_1" FileName="dnj750m.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\dnj750m.upp" SelfReg="false" NextFile="docie.ps_1"/>
+    <ROW File="docie.ps" Component_="acctest.ps" FileName="docie.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\docie.ps" SelfReg="false" NextFile="dvipdf"/>
+    <ROW File="docie.ps_1" Component_="acctest.ps_1" FileName="docie.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\docie.ps" SelfReg="false" NextFile="dvipdf_1"/>
+    <ROW File="dvipdf" Component_="acctest.ps" FileName="dvipdf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\dvipdf" SelfReg="false" NextFile="EndOfTask.ps"/>
+    <ROW File="dvipdf_1" Component_="acctest.ps_1" FileName="dvipdf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\dvipdf" SelfReg="false" NextFile="EndOfTask.ps_1"/>
+    <ROW File="el.pak" Component_="am.pak" FileName="el.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\el.pak" SelfReg="false" NextFile="enGB.pak"/>
+    <ROW File="enGB.pak" Component_="am.pak" FileName="en-GB.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\en-GB.pak" SelfReg="false" NextFile="enUS.pak"/>
+    <ROW File="enUS.pak" Component_="am.pak" FileName="en-US.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\en-US.pak" SelfReg="false" NextFile="es419.pak"/>
+    <ROW File="eps2eps" Component_="acctest.ps" FileName="eps2eps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\eps2eps" SelfReg="false" NextFile="eps2eps.bat"/>
+    <ROW File="eps2eps.bat" Component_="acctest.ps" FileName="eps2eps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\eps2eps.bat" SelfReg="false" NextFile="eps2eps.cmd"/>
+    <ROW File="eps2eps.bat_1" Component_="acctest.ps_1" FileName="eps2eps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\eps2eps.bat" SelfReg="false" NextFile="eps2eps.cmd_1"/>
+    <ROW File="eps2eps.cmd" Component_="acctest.ps" FileName="eps2eps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\eps2eps.cmd" SelfReg="false" NextFile="FAPIconfigFCO"/>
+    <ROW File="eps2eps.cmd_1" Component_="acctest.ps_1" FileName="eps2eps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\eps2eps.cmd" SelfReg="false" NextFile="FAPIconfigFCO_1"/>
+    <ROW File="eps2eps_1" Component_="acctest.ps_1" FileName="eps2eps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\eps2eps" SelfReg="false" NextFile="eps2eps.bat_1"/>
+    <ROW File="es.pak" Component_="am.pak" FileName="es.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\es.pak" SelfReg="false" NextFile="et.pak"/>
+    <ROW File="es419.pak" Component_="am.pak" FileName="es-419.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\es-419.pak" SelfReg="false" NextFile="es.pak"/>
+    <ROW File="et.pak" Component_="am.pak" FileName="et.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\et.pak" SelfReg="false" NextFile="fa.pak"/>
+    <ROW File="fa.pak" Component_="am.pak" FileName="fa.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\fa.pak" SelfReg="false" NextFile="fi.pak"/>
+    <ROW File="fi.pak" Component_="am.pak" FileName="fi.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\fi.pak" SelfReg="false" NextFile="fil.pak"/>
+    <ROW File="fil.pak" Component_="am.pak" FileName="fil.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\fil.pak" SelfReg="false" NextFile="fr.pak"/>
+    <ROW File="font2c" Component_="acctest.ps" FileName="font2c" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\font2c" SelfReg="false" NextFile="font2c.bat"/>
+    <ROW File="font2c.bat" Component_="acctest.ps" FileName="font2c.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\font2c.bat" SelfReg="false" NextFile="font2c.cmd"/>
+    <ROW File="font2c.bat_1" Component_="acctest.ps_1" FileName="font2c.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\font2c.bat" SelfReg="false" NextFile="font2c.cmd_1"/>
+    <ROW File="font2c.cmd" Component_="acctest.ps" FileName="font2c.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\font2c.cmd" SelfReg="false" NextFile="font2c.ps"/>
+    <ROW File="font2c.cmd_1" Component_="acctest.ps_1" FileName="font2c.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\font2c.cmd" SelfReg="false" NextFile="font2c.ps_1"/>
+    <ROW File="font2c.ps" Component_="acctest.ps" FileName="font2c.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\font2c.ps" SelfReg="false" NextFile="font2pcl.ps"/>
+    <ROW File="font2c.ps_1" Component_="acctest.ps_1" FileName="font2c.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\font2c.ps" SelfReg="false" NextFile="font2pcl.ps_1"/>
+    <ROW File="font2c_1" Component_="acctest.ps_1" FileName="font2c" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\font2c" SelfReg="false" NextFile="font2c.bat_1"/>
+    <ROW File="font2pcl.ps" Component_="acctest.ps" FileName="font2pcl.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\font2pcl.ps" SelfReg="false" NextFile="Fontmap.ATB"/>
+    <ROW File="font2pcl.ps_1" Component_="acctest.ps_1" FileName="font2pcl.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\font2pcl.ps" SelfReg="false" NextFile="Fontmap.ATB_1"/>
+    <ROW File="fr.pak" Component_="am.pak" FileName="fr.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\fr.pak" SelfReg="false" NextFile="gu.pak"/>
+    <ROW File="ghostpdf.README" Component_="acctest.ps" FileName="GHOSTP~1.REA|ghostpdf.README" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ghostpdf.README" SelfReg="false" NextFile="gsbj"/>
+    <ROW File="ghostpdf.README_1" Component_="acctest.ps_1" FileName="GHOSTP~1.REA|ghostpdf.README" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ghostpdf.README" SelfReg="false" NextFile="gsbj_1"/>
+    <ROW File="ghostpdf.cat" Component_="acctest.ps" FileName="ghostpdf.cat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ghostpdf.cat" SelfReg="false" NextFile="ghostpdf.inf"/>
+    <ROW File="ghostpdf.cat_1" Component_="acctest.ps_1" FileName="ghostpdf.cat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ghostpdf.cat" SelfReg="false" NextFile="ghostpdf.inf_1"/>
+    <ROW File="ghostpdf.inf" Component_="acctest.ps" FileName="ghostpdf.inf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ghostpdf.inf" SelfReg="false" NextFile="ghostpdf.ppd"/>
+    <ROW File="ghostpdf.inf_1" Component_="acctest.ps_1" FileName="ghostpdf.inf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ghostpdf.inf" SelfReg="false" NextFile="ghostpdf.ppd_1"/>
+    <ROW File="ghostpdf.ppd" Component_="acctest.ps" FileName="ghostpdf.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ghostpdf.ppd" SelfReg="false" NextFile="ghostpdf.README"/>
+    <ROW File="ghostpdf.ppd_1" Component_="acctest.ps_1" FileName="ghostpdf.ppd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ghostpdf.ppd" SelfReg="false" NextFile="ghostpdf.README_1"/>
+    <ROW File="gs_ce_e.ps" Component_="acctest.ps" FileName="gs_ce_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_ce_e.ps" SelfReg="false" NextFile="gs_cmdl.ps"/>
+    <ROW File="gs_ce_e.ps_1" Component_="acctest.ps_1" FileName="gs_ce_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_ce_e.ps" SelfReg="false" NextFile="gs_cmdl.ps_1"/>
+    <ROW File="gs_cmdl.ps" Component_="acctest.ps" FileName="gs_cmdl.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_cmdl.ps" SelfReg="false" NextFile="gs_il2_e.ps"/>
+    <ROW File="gs_cmdl.ps_1" Component_="acctest.ps_1" FileName="gs_cmdl.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_cmdl.ps" SelfReg="false" NextFile="gs_il2_e.ps_1"/>
+    <ROW File="gs_il2_e.ps" Component_="acctest.ps" FileName="gs_il2_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_il2_e.ps" SelfReg="false" NextFile="gs_kanji.ps"/>
+    <ROW File="gs_il2_e.ps_1" Component_="acctest.ps_1" FileName="gs_il2_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_il2_e.ps" SelfReg="false" NextFile="gs_kanji.ps_1"/>
+    <ROW File="gs_kanji.ps" Component_="acctest.ps" FileName="gs_kanji.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_kanji.ps" SelfReg="false" NextFile="gs_ksb_e.ps"/>
+    <ROW File="gs_kanji.ps_1" Component_="acctest.ps_1" FileName="gs_kanji.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_kanji.ps" SelfReg="false" NextFile="gs_ksb_e.ps_1"/>
+    <ROW File="gs_ksb_e.ps" Component_="acctest.ps" FileName="gs_ksb_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_ksb_e.ps" SelfReg="false" NextFile="gs_l.xbm"/>
+    <ROW File="gs_ksb_e.ps_1" Component_="acctest.ps_1" FileName="gs_ksb_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_ksb_e.ps" SelfReg="false" NextFile="gs_l.xbm_1"/>
+    <ROW File="gs_l.xbm" Component_="acctest.ps" FileName="gs_l.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_l.xbm" SelfReg="false" NextFile="gs_l.xpm"/>
+    <ROW File="gs_l.xbm_1" Component_="acctest.ps_1" FileName="gs_l.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_l.xbm" SelfReg="false" NextFile="gs_l.xpm_1"/>
+    <ROW File="gs_l.xpm" Component_="acctest.ps" FileName="gs_l.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_l.xpm" SelfReg="false" NextFile="gs_lgo_e.ps"/>
+    <ROW File="gs_l.xpm_1" Component_="acctest.ps_1" FileName="gs_l.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_l.xpm" SelfReg="false" NextFile="gs_lgo_e.ps_1"/>
+    <ROW File="gs_l_m.xbm" Component_="acctest.ps" FileName="gs_l_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_l_m.xbm" SelfReg="false" NextFile="gs_m.xbm"/>
+    <ROW File="gs_l_m.xbm_1" Component_="acctest.ps_1" FileName="gs_l_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_l_m.xbm" SelfReg="false" NextFile="gs_m.xbm_1"/>
+    <ROW File="gs_lgo_e.ps" Component_="acctest.ps" FileName="gs_lgo_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_lgo_e.ps" SelfReg="false" NextFile="gs_lgx_e.ps"/>
+    <ROW File="gs_lgo_e.ps_1" Component_="acctest.ps_1" FileName="gs_lgo_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_lgo_e.ps" SelfReg="false" NextFile="gs_lgx_e.ps_1"/>
+    <ROW File="gs_lgx_e.ps" Component_="acctest.ps" FileName="gs_lgx_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_lgx_e.ps" SelfReg="false" NextFile="gs_l_m.xbm"/>
+    <ROW File="gs_lgx_e.ps_1" Component_="acctest.ps_1" FileName="gs_lgx_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_lgx_e.ps" SelfReg="false" NextFile="gs_l_m.xbm_1"/>
+    <ROW File="gs_m.xbm" Component_="acctest.ps" FileName="gs_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_m.xbm" SelfReg="false" NextFile="gs_m.xpm"/>
+    <ROW File="gs_m.xbm_1" Component_="acctest.ps_1" FileName="gs_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_m.xbm" SelfReg="false" NextFile="gs_m.xpm_1"/>
+    <ROW File="gs_m.xpm" Component_="acctest.ps" FileName="gs_m.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_m.xpm" SelfReg="false" NextFile="gs_m_m.xbm"/>
+    <ROW File="gs_m.xpm_1" Component_="acctest.ps_1" FileName="gs_m.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_m.xpm" SelfReg="false" NextFile="gs_m_m.xbm_1"/>
+    <ROW File="gs_m_m.xbm" Component_="acctest.ps" FileName="gs_m_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_m_m.xbm" SelfReg="false" NextFile="gs_pfile.ps"/>
+    <ROW File="gs_m_m.xbm_1" Component_="acctest.ps_1" FileName="gs_m_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_m_m.xbm" SelfReg="false" NextFile="gs_pfile.ps_1"/>
+    <ROW File="gs_pfile.ps" Component_="acctest.ps" FileName="gs_pfile.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_pfile.ps" SelfReg="false" NextFile="gs_rdlin.ps"/>
+    <ROW File="gs_pfile.ps_1" Component_="acctest.ps_1" FileName="gs_pfile.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_pfile.ps" SelfReg="false" NextFile="gs_rdlin.ps_1"/>
+    <ROW File="gs_rdlin.ps" Component_="acctest.ps" FileName="gs_rdlin.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_rdlin.ps" SelfReg="false" NextFile="gs_s.xbm"/>
+    <ROW File="gs_rdlin.ps_1" Component_="acctest.ps_1" FileName="gs_rdlin.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_rdlin.ps" SelfReg="false" NextFile="gs_s.xbm_1"/>
+    <ROW File="gs_s.xbm" Component_="acctest.ps" FileName="gs_s.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_s.xbm" SelfReg="false" NextFile="gs_s.xpm"/>
+    <ROW File="gs_s.xbm_1" Component_="acctest.ps_1" FileName="gs_s.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_s.xbm" SelfReg="false" NextFile="gs_s.xpm_1"/>
+    <ROW File="gs_s.xpm" Component_="acctest.ps" FileName="gs_s.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_s.xpm" SelfReg="false" NextFile="gs_s_m.xbm"/>
+    <ROW File="gs_s.xpm_1" Component_="acctest.ps_1" FileName="gs_s.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_s.xpm" SelfReg="false" NextFile="gs_s_m.xbm_1"/>
+    <ROW File="gs_s_m.xbm" Component_="acctest.ps" FileName="gs_s_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_s_m.xbm" SelfReg="false" NextFile="gs_t.xbm"/>
+    <ROW File="gs_s_m.xbm_1" Component_="acctest.ps_1" FileName="gs_s_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_s_m.xbm" SelfReg="false" NextFile="gs_t.xbm_1"/>
+    <ROW File="gs_t.xbm" Component_="acctest.ps" FileName="gs_t.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_t.xbm" SelfReg="false" NextFile="gs_t.xpm"/>
+    <ROW File="gs_t.xbm_1" Component_="acctest.ps_1" FileName="gs_t.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_t.xbm" SelfReg="false" NextFile="gs_t.xpm_1"/>
+    <ROW File="gs_t.xpm" Component_="acctest.ps" FileName="gs_t.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_t.xpm" SelfReg="false" NextFile="gs_t_m.xbm"/>
+    <ROW File="gs_t.xpm_1" Component_="acctest.ps_1" FileName="gs_t.xpm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_t.xpm" SelfReg="false" NextFile="gs_t_m.xbm_1"/>
+    <ROW File="gs_t_m.xbm" Component_="acctest.ps" FileName="gs_t_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_t_m.xbm" SelfReg="false" NextFile="gs_wl1_e.ps"/>
+    <ROW File="gs_t_m.xbm_1" Component_="acctest.ps_1" FileName="gs_t_m.xbm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_t_m.xbm" SelfReg="false" NextFile="gs_wl1_e.ps_1"/>
+    <ROW File="gs_wl1_e.ps" Component_="acctest.ps" FileName="gs_wl1_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_wl1_e.ps" SelfReg="false" NextFile="gs_wl2_e.ps"/>
+    <ROW File="gs_wl1_e.ps_1" Component_="acctest.ps_1" FileName="gs_wl1_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_wl1_e.ps" SelfReg="false" NextFile="gs_wl2_e.ps_1"/>
+    <ROW File="gs_wl2_e.ps" Component_="acctest.ps" FileName="gs_wl2_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_wl2_e.ps" SelfReg="false" NextFile="gs_wl5_e.ps"/>
+    <ROW File="gs_wl2_e.ps_1" Component_="acctest.ps_1" FileName="gs_wl2_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_wl2_e.ps" SelfReg="false" NextFile="gs_wl5_e.ps_1"/>
+    <ROW File="gs_wl5_e.ps" Component_="acctest.ps" FileName="gs_wl5_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gs_wl5_e.ps" SelfReg="false" NextFile="ht_ccsto.ps"/>
+    <ROW File="gs_wl5_e.ps_1" Component_="acctest.ps_1" FileName="gs_wl5_e.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gs_wl5_e.ps" SelfReg="false" NextFile="ht_ccsto.ps_1"/>
+    <ROW File="gsbj" Component_="acctest.ps" FileName="gsbj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsbj" SelfReg="false" NextFile="gsbj.bat"/>
+    <ROW File="gsbj.bat" Component_="acctest.ps" FileName="gsbj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsbj.bat" SelfReg="false" NextFile="gsdj"/>
+    <ROW File="gsbj.bat_1" Component_="acctest.ps_1" FileName="gsbj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsbj.bat" SelfReg="false" NextFile="gsdj_1"/>
+    <ROW File="gsbj_1" Component_="acctest.ps_1" FileName="gsbj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsbj" SelfReg="false" NextFile="gsbj.bat_1"/>
+    <ROW File="gsdj" Component_="acctest.ps" FileName="gsdj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsdj" SelfReg="false" NextFile="gsdj.bat"/>
+    <ROW File="gsdj.bat" Component_="acctest.ps" FileName="gsdj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsdj.bat" SelfReg="false" NextFile="gsdj500"/>
+    <ROW File="gsdj.bat_1" Component_="acctest.ps_1" FileName="gsdj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsdj.bat" SelfReg="false" NextFile="gsdj500_1"/>
+    <ROW File="gsdj500" Component_="acctest.ps" FileName="gsdj500" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsdj500" SelfReg="false" NextFile="gsdj500.bat"/>
+    <ROW File="gsdj500.bat" Component_="acctest.ps" FileName="gsdj500.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsdj500.bat" SelfReg="false" NextFile="gslj"/>
+    <ROW File="gsdj500.bat_1" Component_="acctest.ps_1" FileName="gsdj500.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsdj500.bat" SelfReg="false" NextFile="gslj_1"/>
+    <ROW File="gsdj500_1" Component_="acctest.ps_1" FileName="gsdj500" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsdj500" SelfReg="false" NextFile="gsdj500.bat_1"/>
+    <ROW File="gsdj_1" Component_="acctest.ps_1" FileName="gsdj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsdj" SelfReg="false" NextFile="gsdj.bat_1"/>
+    <ROW File="gsdll32.dll" Component_="gsdll32.dll" FileName="gsdll32.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\bin\gsdll32.dll" SelfReg="false" NextFile="gsdll32.lib"/>
+    <ROW File="gsdll32.lib" Component_="gsdll32.lib" FileName="gsdll32.lib" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\bin\gsdll32.lib" SelfReg="false" NextFile="gswin32c.exe"/>
+    <ROW File="gsdll64.dll" Component_="gsdll64.dll" FileName="gsdll64.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\bin\gsdll64.dll" SelfReg="false" NextFile="gsdll64.lib"/>
+    <ROW File="gsdll64.lib" Component_="gsdll64.lib" FileName="gsdll64.lib" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\bin\gsdll64.lib" SelfReg="false" NextFile="gswin64c.exe"/>
+    <ROW File="gslj" Component_="acctest.ps" FileName="gslj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gslj" SelfReg="false" NextFile="gslj.bat"/>
+    <ROW File="gslj.bat" Component_="acctest.ps" FileName="gslj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gslj.bat" SelfReg="false" NextFile="gslp"/>
+    <ROW File="gslj.bat_1" Component_="acctest.ps_1" FileName="gslj.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gslj.bat" SelfReg="false" NextFile="gslp_1"/>
+    <ROW File="gslj_1" Component_="acctest.ps_1" FileName="gslj" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gslj" SelfReg="false" NextFile="gslj.bat_1"/>
+    <ROW File="gslp" Component_="acctest.ps" FileName="gslp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gslp" SelfReg="false" NextFile="gslp.bat"/>
+    <ROW File="gslp.bat" Component_="acctest.ps" FileName="gslp.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gslp.bat" SelfReg="false" NextFile="gslp.ps"/>
+    <ROW File="gslp.bat_1" Component_="acctest.ps_1" FileName="gslp.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gslp.bat" SelfReg="false" NextFile="gslp.ps_1"/>
+    <ROW File="gslp.ps" Component_="acctest.ps" FileName="gslp.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gslp.ps" SelfReg="false" NextFile="gsnd"/>
+    <ROW File="gslp.ps_1" Component_="acctest.ps_1" FileName="gslp.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gslp.ps" SelfReg="false" NextFile="gsnd_1"/>
+    <ROW File="gslp_1" Component_="acctest.ps_1" FileName="gslp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gslp" SelfReg="false" NextFile="gslp.bat_1"/>
+    <ROW File="gsnd" Component_="acctest.ps" FileName="gsnd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsnd" SelfReg="false" NextFile="gsnd.bat"/>
+    <ROW File="gsnd.bat" Component_="acctest.ps" FileName="gsnd.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsnd.bat" SelfReg="false" NextFile="gsndt.bat"/>
+    <ROW File="gsnd.bat_1" Component_="acctest.ps_1" FileName="gsnd.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsnd.bat" SelfReg="false" NextFile="gsndt.bat_1"/>
+    <ROW File="gsnd_1" Component_="acctest.ps_1" FileName="gsnd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsnd" SelfReg="false" NextFile="gsnd.bat_1"/>
+    <ROW File="gsndt.bat" Component_="acctest.ps" FileName="gsndt.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsndt.bat" SelfReg="false" NextFile="gsnup.ps"/>
+    <ROW File="gsndt.bat_1" Component_="acctest.ps_1" FileName="gsndt.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsndt.bat" SelfReg="false" NextFile="gsnup.ps_1"/>
+    <ROW File="gsnup.ps" Component_="acctest.ps" FileName="gsnup.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gsnup.ps" SelfReg="false" NextFile="gssetgs.bat"/>
+    <ROW File="gsnup.ps_1" Component_="acctest.ps_1" FileName="gsnup.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gsnup.ps" SelfReg="false" NextFile="gssetgs.bat_1"/>
+    <ROW File="gssetgs.bat" Component_="acctest.ps" FileName="gssetgs.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gssetgs.bat" SelfReg="false" NextFile="gssetgs32.bat"/>
+    <ROW File="gssetgs.bat_1" Component_="acctest.ps_1" FileName="gssetgs.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gssetgs.bat" SelfReg="false" NextFile="gssetgs32.bat_1"/>
+    <ROW File="gssetgs32.bat" Component_="acctest.ps" FileName="GSSETG~1.BAT|gssetgs32.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gssetgs32.bat" SelfReg="false" NextFile="gssetgs64.bat"/>
+    <ROW File="gssetgs32.bat_1" Component_="acctest.ps_1" FileName="GSSETG~1.BAT|gssetgs32.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gssetgs32.bat" SelfReg="false" NextFile="gssetgs64.bat_1"/>
+    <ROW File="gssetgs64.bat" Component_="acctest.ps" FileName="GSSETG~2.BAT|gssetgs64.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gssetgs64.bat" SelfReg="false" NextFile="gst.bat"/>
+    <ROW File="gssetgs64.bat_1" Component_="acctest.ps_1" FileName="GSSETG~2.BAT|gssetgs64.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gssetgs64.bat" SelfReg="false" NextFile="gst.bat_1"/>
+    <ROW File="gst.bat" Component_="acctest.ps" FileName="gst.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gst.bat" SelfReg="false" NextFile="gstt.bat"/>
+    <ROW File="gst.bat_1" Component_="acctest.ps_1" FileName="gst.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gst.bat" SelfReg="false" NextFile="gstt.bat_1"/>
+    <ROW File="gstt.bat" Component_="acctest.ps" FileName="gstt.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\gstt.bat" SelfReg="false" NextFile="gs_ce_e.ps"/>
+    <ROW File="gstt.bat_1" Component_="acctest.ps_1" FileName="gstt.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\gstt.bat" SelfReg="false" NextFile="gs_ce_e.ps_1"/>
+    <ROW File="gswin32c.exe" Component_="gswin32c.exe" FileName="gswin32c.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\bin\gswin32c.exe" SelfReg="false" NextFile="acctest.ps_1" DigSign="true"/>
+    <ROW File="gswin64c.exe" Component_="gswin64c.exe" FileName="gswin64c.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\bin\gswin64c.exe" SelfReg="false" NextFile="acctest.ps" DigSign="true"/>
+    <ROW File="gu.pak" Component_="am.pak" FileName="gu.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\gu.pak" SelfReg="false" NextFile="he.pak"/>
+    <ROW File="he.pak" Component_="am.pak" FileName="he.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\he.pak" SelfReg="false" NextFile="hi.pak"/>
+    <ROW File="hi.pak" Component_="am.pak" FileName="hi.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\hi.pak" SelfReg="false" NextFile="hr.pak"/>
+    <ROW File="hr.pak" Component_="am.pak" FileName="hr.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\hr.pak" SelfReg="false" NextFile="hu.pak"/>
+    <ROW File="ht_ccsto.ps" Component_="acctest.ps" FileName="ht_ccsto.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ht_ccsto.ps" SelfReg="false" NextFile="imageqa.ps"/>
+    <ROW File="ht_ccsto.ps_1" Component_="acctest.ps_1" FileName="ht_ccsto.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ht_ccsto.ps" SelfReg="false" NextFile="imageqa.ps_1"/>
+    <ROW File="hu.pak" Component_="am.pak" FileName="hu.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\hu.pak" SelfReg="false" NextFile="id.pak"/>
+    <ROW File="icudtl.dat" Component_="cef.pak" FileName="icudtl.dat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\icudtl.dat" SelfReg="false" NextFile="libcef.dll"/>
+    <ROW File="id.pak" Component_="am.pak" FileName="id.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\id.pak" SelfReg="false" NextFile="it.pak"/>
+    <ROW File="imageqa.ps" Component_="acctest.ps" FileName="image-qa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\image-qa.ps" SelfReg="false" NextFile="impath.ps"/>
+    <ROW File="imageqa.ps_1" Component_="acctest.ps_1" FileName="image-qa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\image-qa.ps" SelfReg="false" NextFile="impath.ps_1"/>
+    <ROW File="impath.ps" Component_="acctest.ps" FileName="impath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\impath.ps" SelfReg="false" NextFile="Infomacos.plist"/>
+    <ROW File="impath.ps_1" Component_="acctest.ps_1" FileName="impath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\impath.ps" SelfReg="false" NextFile="Infomacos.plist_1"/>
+    <ROW File="it.pak" Component_="am.pak" FileName="it.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\it.pak" SelfReg="false" NextFile="ja.pak"/>
+    <ROW File="ja.pak" Component_="am.pak" FileName="ja.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ja.pak" SelfReg="false" NextFile="kn.pak"/>
+    <ROW File="jispaper.ps" Component_="acctest.ps" FileName="jispaper.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\jispaper.ps" SelfReg="false" NextFile="jobseparator.ps"/>
+    <ROW File="jispaper.ps_1" Component_="acctest.ps_1" FileName="jispaper.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\jispaper.ps" SelfReg="false" NextFile="jobseparator.ps_1"/>
+    <ROW File="jobseparator.ps" Component_="acctest.ps" FileName="JOBSEP~1.PS|jobseparator.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\jobseparator.ps" SelfReg="false" NextFile="landscap.ps"/>
+    <ROW File="jobseparator.ps_1" Component_="acctest.ps_1" FileName="JOBSEP~1.PS|jobseparator.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\jobseparator.ps" SelfReg="false" NextFile="landscap.ps_1"/>
+    <ROW File="kn.pak" Component_="am.pak" FileName="kn.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\kn.pak" SelfReg="false" NextFile="ko.pak"/>
+    <ROW File="ko.pak" Component_="am.pak" FileName="ko.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ko.pak" SelfReg="false" NextFile="lt.pak"/>
+    <ROW File="landscap.ps" Component_="acctest.ps" FileName="landscap.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\landscap.ps" SelfReg="false" NextFile="level1.ps"/>
+    <ROW File="landscap.ps_1" Component_="acctest.ps_1" FileName="landscap.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\landscap.ps" SelfReg="false" NextFile="level1.ps_1"/>
+    <ROW File="level1.ps" Component_="acctest.ps" FileName="level1.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\level1.ps" SelfReg="false" NextFile="lines.ps"/>
+    <ROW File="level1.ps_1" Component_="acctest.ps_1" FileName="level1.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\level1.ps" SelfReg="false" NextFile="lines.ps_1"/>
+    <ROW File="libEGL.dll" Component_="libEGL.dll" FileName="libEGL.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\libEGL.dll" SelfReg="false" NextFile="libGLESv2.dll"/>
+    <ROW File="libGLESv2.dll" Component_="libGLESv2.dll" FileName="LIBGLE~1.DLL|libGLESv2.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\libGLESv2.dll" SelfReg="false" NextFile="MHWVirtualPrinter.dll"/>
+    <ROW File="libcef.dll" Component_="libcef.dll" FileName="libcef.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\libcef.dll" SelfReg="false" NextFile="libEGL.dll"/>
+    <ROW File="lines.ps" Component_="acctest.ps" FileName="lines.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lines.ps" SelfReg="false" NextFile="lp386.bat"/>
+    <ROW File="lines.ps_1" Component_="acctest.ps_1" FileName="lines.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lines.ps" SelfReg="false" NextFile="lp386.bat_1"/>
+    <ROW File="lp386.bat" Component_="acctest.ps" FileName="lp386.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lp386.bat" SelfReg="false" NextFile="lp386r2.bat"/>
+    <ROW File="lp386.bat_1" Component_="acctest.ps_1" FileName="lp386.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lp386.bat" SelfReg="false" NextFile="lp386r2.bat_1"/>
+    <ROW File="lp386r2.bat" Component_="acctest.ps" FileName="lp386r2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lp386r2.bat" SelfReg="false" NextFile="lpgs.bat"/>
+    <ROW File="lp386r2.bat_1" Component_="acctest.ps_1" FileName="lp386r2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lp386r2.bat" SelfReg="false" NextFile="lpgs.bat_1"/>
+    <ROW File="lpgs.bat" Component_="acctest.ps" FileName="lpgs.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lpgs.bat" SelfReg="false" NextFile="lpr2.bat"/>
+    <ROW File="lpgs.bat_1" Component_="acctest.ps_1" FileName="lpgs.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lpgs.bat" SelfReg="false" NextFile="lpr2.bat_1"/>
+    <ROW File="lpr2.bat" Component_="acctest.ps" FileName="lpr2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lpr2.bat" SelfReg="false" NextFile="lprsetup.sh"/>
+    <ROW File="lpr2.bat_1" Component_="acctest.ps_1" FileName="lpr2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lpr2.bat" SelfReg="false" NextFile="lprsetup.sh_1"/>
+    <ROW File="lprsetup.sh" Component_="acctest.ps" FileName="lprsetup.sh" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\lprsetup.sh" SelfReg="false" NextFile="markhint.ps"/>
+    <ROW File="lprsetup.sh_1" Component_="acctest.ps_1" FileName="lprsetup.sh" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\lprsetup.sh" SelfReg="false" NextFile="markhint.ps_1"/>
+    <ROW File="lt.pak" Component_="am.pak" FileName="lt.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\lt.pak" SelfReg="false" NextFile="lv.pak"/>
+    <ROW File="lv.pak" Component_="am.pak" FileName="lv.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\lv.pak" SelfReg="false" NextFile="ml.pak"/>
+    <ROW File="markhint.ps" Component_="acctest.ps" FileName="markhint.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\markhint.ps" SelfReg="false" NextFile="markpath.ps"/>
+    <ROW File="markhint.ps_1" Component_="acctest.ps_1" FileName="markhint.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\markhint.ps" SelfReg="false" NextFile="markpath.ps_1"/>
+    <ROW File="markpath.ps" Component_="acctest.ps" FileName="markpath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\markpath.ps" SelfReg="false" NextFile="mkcidfm.ps"/>
+    <ROW File="markpath.ps_1" Component_="acctest.ps_1" FileName="markpath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\markpath.ps" SelfReg="false" NextFile="mkcidfm.ps_1"/>
+    <ROW File="mfilemon.dll" Component_="mfilemon.dll" FileName="mfilemon.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\PortMonitor\mfilemon.dll" SelfReg="false" NextFile="mfilemonUI.dll"/>
+    <ROW File="mfilemon.dll_1" Component_="mfilemon.dll_1" FileName="mfilemon.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\PortMonitor\mfilemon.dll" SelfReg="false" NextFile="mfilemonUI.dll_1"/>
+    <ROW File="mfilemonUI.dll" Component_="mfilemonUI.dll" FileName="MFILEM~1.DLL|mfilemonUI.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\PortMonitor\mfilemonUI.dll" SelfReg="false" NextFile="_mfilemonUI.dll"/>
+    <ROW File="mfilemonUI.dll_1" Component_="mfilemonUI.dll_1" FileName="MFILEM~1.DLL|mfilemonUI.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\PortMonitor\mfilemonUI.dll" SelfReg="false" NextFile="_mfilemonUI.dll_1"/>
+    <ROW File="mkcidfm.ps" Component_="acctest.ps" FileName="mkcidfm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\mkcidfm.ps" SelfReg="false" NextFile="necp2x.upp"/>
+    <ROW File="mkcidfm.ps_1" Component_="acctest.ps_1" FileName="mkcidfm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\mkcidfm.ps" SelfReg="false" NextFile="necp2x.upp_1"/>
+    <ROW File="ml.pak" Component_="am.pak" FileName="ml.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ml.pak" SelfReg="false" NextFile="mr.pak"/>
+    <ROW File="mr.pak" Component_="am.pak" FileName="mr.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\mr.pak" SelfReg="false" NextFile="ms.pak"/>
+    <ROW File="ms.pak" Component_="am.pak" FileName="ms.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ms.pak" SelfReg="false" NextFile="nb.pak"/>
+    <ROW File="myHEALTHwareDesktop.exe" Component_="myHEALTHwareDesktop.exe" FileName="MYHEAL~1.EXE|myHEALTHwareDesktop.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.exe" SelfReg="false" NextFile="myHEALTHwareDesktop.exe.config" DigSign="true"/>
+    <ROW File="myHEALTHwareDesktop.exe.config" Component_="cef.pak" FileName="MYHEAL~1.CON|myHEALTHwareDesktop.exe.config" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.exe.config" SelfReg="false" NextFile="myHEALTHwareDesktop.pdb"/>
+    <ROW File="myHEALTHwareDesktop.pdb" Component_="myHEALTHwareDesktop.exe" FileName="MYHEAL~1.PDB|myHEALTHwareDesktop.pdb" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.pdb" SelfReg="false" NextFile="myHEALTHwareDesktop.vshost.exe"/>
+    <ROW File="myHEALTHwareDesktop.vshost.exe" Component_="myHEALTHwareDesktop.vshost.exe" FileName="MYHEAL~2.EXE|myHEALTHwareDesktop.vshost.exe" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.vshost.exe" SelfReg="false" NextFile="myHEALTHwareDesktop.vshost.exe.config" DigSign="true"/>
+    <ROW File="myHEALTHwareDesktop.vshost.exe.config" Component_="cef.pak" FileName="MYHEAL~2.CON|myHEALTHwareDesktop.vshost.exe.config" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.vshost.exe.config" SelfReg="false" NextFile="myHEALTHwareDesktop.vshost.exe.manifest"/>
+    <ROW File="myHEALTHwareDesktop.vshost.exe.manifest" Component_="cef.pak" FileName="MYHEAL~1.MAN|myHEALTHwareDesktop.vshost.exe.manifest" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\myHEALTHwareDesktop.vshost.exe.manifest" SelfReg="false" NextFile="natives_blob.bin"/>
+    <ROW File="myHEALTHwarePS.PPD" Component_="myHEALTHwarePS.PPD" FileName="MYHEAL~1.PPD|myHEALTHwarePS.PPD" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\Driver\myHEALTHwarePS.PPD" SelfReg="false" NextFile="PS5UI.DLL"/>
+    <ROW File="myHEALTHwarePS.PPD_1" Component_="myHEALTHwarePS.PPD_1" FileName="MYHEAL~1.PPD|myHEALTHwarePS.PPD" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\Driver\myHEALTHwarePS.PPD" SelfReg="false" NextFile="PS5UI.DLL_1"/>
+    <ROW File="natives_blob.bin" Component_="cef.pak" FileName="NATIVE~1.BIN|natives_blob.bin" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\natives_blob.bin" SelfReg="false" NextFile="RabbitMQ.Client.dll"/>
+    <ROW File="nb.pak" Component_="am.pak" FileName="nb.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\nb.pak" SelfReg="false" NextFile="nl.pak"/>
+    <ROW File="necp2x.upp" Component_="acctest.ps" FileName="necp2x.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\necp2x.upp" SelfReg="false" NextFile="necp2x6.upp"/>
+    <ROW File="necp2x.upp_1" Component_="acctest.ps_1" FileName="necp2x.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\necp2x.upp" SelfReg="false" NextFile="necp2x6.upp_1"/>
+    <ROW File="necp2x6.upp" Component_="acctest.ps" FileName="necp2x6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\necp2x6.upp" SelfReg="false" NextFile="opdfread.ps"/>
+    <ROW File="necp2x6.upp_1" Component_="acctest.ps_1" FileName="necp2x6.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\necp2x6.upp" SelfReg="false" NextFile="opdfread.ps_1"/>
+    <ROW File="nl.pak" Component_="am.pak" FileName="nl.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\nl.pak" SelfReg="false" NextFile="pl.pak"/>
+    <ROW File="opdfread.ps" Component_="acctest.ps" FileName="opdfread.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\opdfread.ps" SelfReg="false" NextFile="packfile.ps"/>
+    <ROW File="opdfread.ps_1" Component_="acctest.ps_1" FileName="opdfread.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\opdfread.ps" SelfReg="false" NextFile="packfile.ps_1"/>
+    <ROW File="packfile.ps" Component_="acctest.ps" FileName="packfile.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\packfile.ps" SelfReg="false" NextFile="pcharstr.ps"/>
+    <ROW File="packfile.ps_1" Component_="acctest.ps_1" FileName="packfile.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\packfile.ps" SelfReg="false" NextFile="pcharstr.ps_1"/>
+    <ROW File="pcharstr.ps" Component_="acctest.ps" FileName="pcharstr.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pcharstr.ps" SelfReg="false" NextFile="pdf2dsc"/>
+    <ROW File="pcharstr.ps_1" Component_="acctest.ps_1" FileName="pcharstr.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pcharstr.ps" SelfReg="false" NextFile="pdf2dsc_1"/>
+    <ROW File="pdf2dsc" Component_="acctest.ps" FileName="pdf2dsc" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2dsc" SelfReg="false" NextFile="pdf2dsc.bat"/>
+    <ROW File="pdf2dsc.bat" Component_="acctest.ps" FileName="pdf2dsc.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2dsc.bat" SelfReg="false" NextFile="pdf2dsc.ps"/>
+    <ROW File="pdf2dsc.bat_1" Component_="acctest.ps_1" FileName="pdf2dsc.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2dsc.bat" SelfReg="false" NextFile="pdf2dsc.ps_1"/>
+    <ROW File="pdf2dsc.ps" Component_="acctest.ps" FileName="pdf2dsc.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2dsc.ps" SelfReg="false" NextFile="pdf2ps"/>
+    <ROW File="pdf2dsc.ps_1" Component_="acctest.ps_1" FileName="pdf2dsc.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2dsc.ps" SelfReg="false" NextFile="pdf2ps_1"/>
+    <ROW File="pdf2dsc_1" Component_="acctest.ps_1" FileName="pdf2dsc" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2dsc" SelfReg="false" NextFile="pdf2dsc.bat_1"/>
+    <ROW File="pdf2ps" Component_="acctest.ps" FileName="pdf2ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2ps" SelfReg="false" NextFile="pdf2ps.bat"/>
+    <ROW File="pdf2ps.bat" Component_="acctest.ps" FileName="pdf2ps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2ps.bat" SelfReg="false" NextFile="pdf2ps.cmd"/>
+    <ROW File="pdf2ps.bat_1" Component_="acctest.ps_1" FileName="pdf2ps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2ps.bat" SelfReg="false" NextFile="pdf2ps.cmd_1"/>
+    <ROW File="pdf2ps.cmd" Component_="acctest.ps" FileName="pdf2ps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdf2ps.cmd" SelfReg="false" NextFile="PDFA_def.ps"/>
+    <ROW File="pdf2ps.cmd_1" Component_="acctest.ps_1" FileName="pdf2ps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2ps.cmd" SelfReg="false" NextFile="PDFA_def.ps_1"/>
+    <ROW File="pdf2ps_1" Component_="acctest.ps_1" FileName="pdf2ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdf2ps" SelfReg="false" NextFile="pdf2ps.bat_1"/>
+    <ROW File="pdfwrite.ps" Component_="acctest.ps" FileName="pdfwrite.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pdfwrite.ps" SelfReg="false" NextFile="PDFX_def.ps"/>
+    <ROW File="pdfwrite.ps_1" Component_="acctest.ps_1" FileName="pdfwrite.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pdfwrite.ps" SelfReg="false" NextFile="PDFX_def.ps_1"/>
+    <ROW File="pf2afm" Component_="acctest.ps" FileName="pf2afm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pf2afm" SelfReg="false" NextFile="pf2afm.bat"/>
+    <ROW File="pf2afm.bat" Component_="acctest.ps" FileName="pf2afm.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pf2afm.bat" SelfReg="false" NextFile="pf2afm.cmd"/>
+    <ROW File="pf2afm.bat_1" Component_="acctest.ps_1" FileName="pf2afm.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pf2afm.bat" SelfReg="false" NextFile="pf2afm.cmd_1"/>
+    <ROW File="pf2afm.cmd" Component_="acctest.ps" FileName="pf2afm.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pf2afm.cmd" SelfReg="false" NextFile="pf2afm.ps"/>
+    <ROW File="pf2afm.cmd_1" Component_="acctest.ps_1" FileName="pf2afm.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pf2afm.cmd" SelfReg="false" NextFile="pf2afm.ps_1"/>
+    <ROW File="pf2afm.ps" Component_="acctest.ps" FileName="pf2afm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pf2afm.ps" SelfReg="false" NextFile="pfbtopfa"/>
+    <ROW File="pf2afm.ps_1" Component_="acctest.ps_1" FileName="pf2afm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pf2afm.ps" SelfReg="false" NextFile="pfbtopfa_1"/>
+    <ROW File="pf2afm_1" Component_="acctest.ps_1" FileName="pf2afm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pf2afm" SelfReg="false" NextFile="pf2afm.bat_1"/>
+    <ROW File="pfbtopfa" Component_="acctest.ps" FileName="pfbtopfa" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pfbtopfa" SelfReg="false" NextFile="pfbtopfa.bat"/>
+    <ROW File="pfbtopfa.bat" Component_="acctest.ps" FileName="pfbtopfa.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pfbtopfa.bat" SelfReg="false" NextFile="pfbtopfa.ps"/>
+    <ROW File="pfbtopfa.bat_1" Component_="acctest.ps_1" FileName="pfbtopfa.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pfbtopfa.bat" SelfReg="false" NextFile="pfbtopfa.ps_1"/>
+    <ROW File="pfbtopfa.ps" Component_="acctest.ps" FileName="pfbtopfa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pfbtopfa.ps" SelfReg="false" NextFile="pftogsf.bat"/>
+    <ROW File="pfbtopfa.ps_1" Component_="acctest.ps_1" FileName="pfbtopfa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pfbtopfa.ps" SelfReg="false" NextFile="pftogsf.bat_1"/>
+    <ROW File="pfbtopfa_1" Component_="acctest.ps_1" FileName="pfbtopfa" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pfbtopfa" SelfReg="false" NextFile="pfbtopfa.bat_1"/>
+    <ROW File="pftogsf.bat" Component_="acctest.ps" FileName="pftogsf.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pftogsf.bat" SelfReg="false" NextFile="ppath.ps"/>
+    <ROW File="pftogsf.bat_1" Component_="acctest.ps_1" FileName="pftogsf.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pftogsf.bat" SelfReg="false" NextFile="ppath.ps_1"/>
+    <ROW File="pl.pak" Component_="am.pak" FileName="pl.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\pl.pak" SelfReg="false" NextFile="ptBR.pak"/>
+    <ROW File="ppath.ps" Component_="acctest.ps" FileName="ppath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ppath.ps" SelfReg="false" NextFile="pphs"/>
+    <ROW File="ppath.ps_1" Component_="acctest.ps_1" FileName="ppath.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ppath.ps" SelfReg="false" NextFile="pphs_1"/>
+    <ROW File="pphs" Component_="acctest.ps" FileName="pphs" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pphs" SelfReg="false" NextFile="pphs.ps"/>
+    <ROW File="pphs.ps" Component_="acctest.ps" FileName="pphs.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\pphs.ps" SelfReg="false" NextFile="prfont.ps"/>
+    <ROW File="pphs.ps_1" Component_="acctest.ps_1" FileName="pphs.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pphs.ps" SelfReg="false" NextFile="prfont.ps_1"/>
+    <ROW File="pphs_1" Component_="acctest.ps_1" FileName="pphs" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\pphs" SelfReg="false" NextFile="pphs.ps_1"/>
+    <ROW File="prfont.ps" Component_="acctest.ps" FileName="prfont.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\prfont.ps" SelfReg="false" NextFile="printafm"/>
+    <ROW File="prfont.ps_1" Component_="acctest.ps_1" FileName="prfont.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\prfont.ps" SelfReg="false" NextFile="printafm_1"/>
+    <ROW File="printafm" Component_="acctest.ps" FileName="printafm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\printafm" SelfReg="false" NextFile="printafm.ps"/>
+    <ROW File="printafm.ps" Component_="acctest.ps" FileName="printafm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\printafm.ps" SelfReg="false" NextFile="ps2ai.ps"/>
+    <ROW File="printafm.ps_1" Component_="acctest.ps_1" FileName="printafm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\printafm.ps" SelfReg="false" NextFile="ps2ai.ps_1"/>
+    <ROW File="printafm_1" Component_="acctest.ps_1" FileName="printafm" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\printafm" SelfReg="false" NextFile="printafm.ps_1"/>
+    <ROW File="ps2ai.ps" Component_="acctest.ps" FileName="ps2ai.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ai.ps" SelfReg="false" NextFile="ps2ascii"/>
+    <ROW File="ps2ai.ps_1" Component_="acctest.ps_1" FileName="ps2ai.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ai.ps" SelfReg="false" NextFile="ps2ascii_1"/>
+    <ROW File="ps2ascii" Component_="acctest.ps" FileName="ps2ascii" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ascii" SelfReg="false" NextFile="ps2ascii.bat"/>
+    <ROW File="ps2ascii.bat" Component_="acctest.ps" FileName="ps2ascii.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ascii.bat" SelfReg="false" NextFile="ps2ascii.cmd"/>
+    <ROW File="ps2ascii.bat_1" Component_="acctest.ps_1" FileName="ps2ascii.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ascii.bat" SelfReg="false" NextFile="ps2ascii.cmd_1"/>
+    <ROW File="ps2ascii.cmd" Component_="acctest.ps" FileName="ps2ascii.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ascii.cmd" SelfReg="false" NextFile="ps2ascii.ps"/>
+    <ROW File="ps2ascii.cmd_1" Component_="acctest.ps_1" FileName="ps2ascii.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ascii.cmd" SelfReg="false" NextFile="ps2ascii.ps_1"/>
+    <ROW File="ps2ascii.ps" Component_="acctest.ps" FileName="ps2ascii.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ascii.ps" SelfReg="false" NextFile="ps2epsi"/>
+    <ROW File="ps2ascii.ps_1" Component_="acctest.ps_1" FileName="ps2ascii.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ascii.ps" SelfReg="false" NextFile="ps2epsi_1"/>
+    <ROW File="ps2ascii_1" Component_="acctest.ps_1" FileName="ps2ascii" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ascii" SelfReg="false" NextFile="ps2ascii.bat_1"/>
+    <ROW File="ps2epsi" Component_="acctest.ps" FileName="ps2epsi" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2epsi" SelfReg="false" NextFile="ps2epsi.bat"/>
+    <ROW File="ps2epsi.bat" Component_="acctest.ps" FileName="ps2epsi.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2epsi.bat" SelfReg="false" NextFile="ps2epsi.cmd"/>
+    <ROW File="ps2epsi.bat_1" Component_="acctest.ps_1" FileName="ps2epsi.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2epsi.bat" SelfReg="false" NextFile="ps2epsi.cmd_1"/>
+    <ROW File="ps2epsi.cmd" Component_="acctest.ps" FileName="ps2epsi.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2epsi.cmd" SelfReg="false" NextFile="ps2epsi.ps"/>
+    <ROW File="ps2epsi.cmd_1" Component_="acctest.ps_1" FileName="ps2epsi.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2epsi.cmd" SelfReg="false" NextFile="ps2epsi.ps_1"/>
+    <ROW File="ps2epsi.ps" Component_="acctest.ps" FileName="ps2epsi.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2epsi.ps" SelfReg="false" NextFile="ps2pdf"/>
+    <ROW File="ps2epsi.ps_1" Component_="acctest.ps_1" FileName="ps2epsi.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2epsi.ps" SelfReg="false" NextFile="ps2pdf_1"/>
+    <ROW File="ps2epsi_1" Component_="acctest.ps_1" FileName="ps2epsi" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2epsi" SelfReg="false" NextFile="ps2epsi.bat_1"/>
+    <ROW File="ps2pdf" Component_="acctest.ps" FileName="ps2pdf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf" SelfReg="false" NextFile="ps2pdf.bat"/>
+    <ROW File="ps2pdf.bat" Component_="acctest.ps" FileName="ps2pdf.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf.bat" SelfReg="false" NextFile="ps2pdf.cmd"/>
+    <ROW File="ps2pdf.bat_1" Component_="acctest.ps_1" FileName="ps2pdf.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf.bat" SelfReg="false" NextFile="ps2pdf.cmd_1"/>
+    <ROW File="ps2pdf.cmd" Component_="acctest.ps" FileName="ps2pdf.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf.cmd" SelfReg="false" NextFile="ps2pdf12"/>
+    <ROW File="ps2pdf.cmd_1" Component_="acctest.ps_1" FileName="ps2pdf.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf.cmd" SelfReg="false" NextFile="ps2pdf12_1"/>
+    <ROW File="ps2pdf12" Component_="acctest.ps" FileName="ps2pdf12" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf12" SelfReg="false" NextFile="ps2pdf12.bat"/>
+    <ROW File="ps2pdf12.bat" Component_="acctest.ps" FileName="ps2pdf12.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf12.bat" SelfReg="false" NextFile="ps2pdf12.cmd"/>
+    <ROW File="ps2pdf12.bat_1" Component_="acctest.ps_1" FileName="ps2pdf12.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf12.bat" SelfReg="false" NextFile="ps2pdf12.cmd_1"/>
+    <ROW File="ps2pdf12.cmd" Component_="acctest.ps" FileName="ps2pdf12.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf12.cmd" SelfReg="false" NextFile="ps2pdf13"/>
+    <ROW File="ps2pdf12.cmd_1" Component_="acctest.ps_1" FileName="ps2pdf12.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf12.cmd" SelfReg="false" NextFile="ps2pdf13_1"/>
+    <ROW File="ps2pdf12_1" Component_="acctest.ps_1" FileName="ps2pdf12" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf12" SelfReg="false" NextFile="ps2pdf12.bat_1"/>
+    <ROW File="ps2pdf13" Component_="acctest.ps" FileName="ps2pdf13" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf13" SelfReg="false" NextFile="ps2pdf13.bat"/>
+    <ROW File="ps2pdf13.bat" Component_="acctest.ps" FileName="ps2pdf13.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf13.bat" SelfReg="false" NextFile="ps2pdf13.cmd"/>
+    <ROW File="ps2pdf13.bat_1" Component_="acctest.ps_1" FileName="ps2pdf13.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf13.bat" SelfReg="false" NextFile="ps2pdf13.cmd_1"/>
+    <ROW File="ps2pdf13.cmd" Component_="acctest.ps" FileName="ps2pdf13.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf13.cmd" SelfReg="false" NextFile="ps2pdf14"/>
+    <ROW File="ps2pdf13.cmd_1" Component_="acctest.ps_1" FileName="ps2pdf13.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf13.cmd" SelfReg="false" NextFile="ps2pdf14_1"/>
+    <ROW File="ps2pdf13_1" Component_="acctest.ps_1" FileName="ps2pdf13" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf13" SelfReg="false" NextFile="ps2pdf13.bat_1"/>
+    <ROW File="ps2pdf14" Component_="acctest.ps" FileName="ps2pdf14" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf14" SelfReg="false" NextFile="ps2pdf14.bat"/>
+    <ROW File="ps2pdf14.bat" Component_="acctest.ps" FileName="ps2pdf14.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf14.bat" SelfReg="false" NextFile="ps2pdf14.cmd"/>
+    <ROW File="ps2pdf14.bat_1" Component_="acctest.ps_1" FileName="ps2pdf14.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf14.bat" SelfReg="false" NextFile="ps2pdf14.cmd_1"/>
+    <ROW File="ps2pdf14.cmd" Component_="acctest.ps" FileName="ps2pdf14.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdf14.cmd" SelfReg="false" NextFile="ps2pdfwr"/>
+    <ROW File="ps2pdf14.cmd_1" Component_="acctest.ps_1" FileName="ps2pdf14.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf14.cmd" SelfReg="false" NextFile="ps2pdfwr_1"/>
+    <ROW File="ps2pdf14_1" Component_="acctest.ps_1" FileName="ps2pdf14" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf14" SelfReg="false" NextFile="ps2pdf14.bat_1"/>
+    <ROW File="ps2pdf_1" Component_="acctest.ps_1" FileName="ps2pdf" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdf" SelfReg="false" NextFile="ps2pdf.bat_1"/>
+    <ROW File="ps2pdfwr" Component_="acctest.ps" FileName="ps2pdfwr" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdfwr" SelfReg="false" NextFile="ps2pdfxx.bat"/>
+    <ROW File="ps2pdfwr_1" Component_="acctest.ps_1" FileName="ps2pdfwr" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdfwr" SelfReg="false" NextFile="ps2pdfxx.bat_1"/>
+    <ROW File="ps2pdfxx.bat" Component_="acctest.ps" FileName="ps2pdfxx.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2pdfxx.bat" SelfReg="false" NextFile="ps2ps"/>
+    <ROW File="ps2pdfxx.bat_1" Component_="acctest.ps_1" FileName="ps2pdfxx.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2pdfxx.bat" SelfReg="false" NextFile="ps2ps_1"/>
+    <ROW File="ps2ps" Component_="acctest.ps" FileName="ps2ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps" SelfReg="false" NextFile="ps2ps.bat"/>
+    <ROW File="ps2ps.bat" Component_="acctest.ps" FileName="ps2ps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps.bat" SelfReg="false" NextFile="ps2ps.cmd"/>
+    <ROW File="ps2ps.bat_1" Component_="acctest.ps_1" FileName="ps2ps.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps.bat" SelfReg="false" NextFile="ps2ps.cmd_1"/>
+    <ROW File="ps2ps.cmd" Component_="acctest.ps" FileName="ps2ps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps.cmd" SelfReg="false" NextFile="ps2ps2"/>
+    <ROW File="ps2ps.cmd_1" Component_="acctest.ps_1" FileName="ps2ps.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps.cmd" SelfReg="false" NextFile="ps2ps2_1"/>
+    <ROW File="ps2ps2" Component_="acctest.ps" FileName="ps2ps2" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps2" SelfReg="false" NextFile="ps2ps2.bat"/>
+    <ROW File="ps2ps2.bat" Component_="acctest.ps" FileName="ps2ps2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps2.bat" SelfReg="false" NextFile="ps2ps2.cmd"/>
+    <ROW File="ps2ps2.bat_1" Component_="acctest.ps_1" FileName="ps2ps2.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps2.bat" SelfReg="false" NextFile="ps2ps2.cmd_1"/>
+    <ROW File="ps2ps2.cmd" Component_="acctest.ps" FileName="ps2ps2.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ps2ps2.cmd" SelfReg="false" NextFile="quit.ps"/>
+    <ROW File="ps2ps2.cmd_1" Component_="acctest.ps_1" FileName="ps2ps2.cmd" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps2.cmd" SelfReg="false" NextFile="quit.ps_1"/>
+    <ROW File="ps2ps2_1" Component_="acctest.ps_1" FileName="ps2ps2" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps2" SelfReg="false" NextFile="ps2ps2.bat_1"/>
+    <ROW File="ps2ps_1" Component_="acctest.ps_1" FileName="ps2ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ps2ps" SelfReg="false" NextFile="ps2ps.bat_1"/>
+    <ROW File="ptBR.pak" Component_="am.pak" FileName="pt-BR.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\pt-BR.pak" SelfReg="false" NextFile="ptPT.pak"/>
+    <ROW File="ptPT.pak" Component_="am.pak" FileName="pt-PT.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\pt-PT.pak" SelfReg="false" NextFile="ro.pak"/>
+    <ROW File="quit.ps" Component_="acctest.ps" FileName="quit.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\quit.ps" SelfReg="false" NextFile="ras1.upp"/>
+    <ROW File="quit.ps_1" Component_="acctest.ps_1" FileName="quit.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\quit.ps" SelfReg="false" NextFile="ras1.upp_1"/>
+    <ROW File="ras1.upp" Component_="acctest.ps" FileName="ras1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras1.upp" SelfReg="false" NextFile="ras24.upp"/>
+    <ROW File="ras1.upp_1" Component_="acctest.ps_1" FileName="ras1.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras1.upp" SelfReg="false" NextFile="ras24.upp_1"/>
+    <ROW File="ras24.upp" Component_="acctest.ps" FileName="ras24.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras24.upp" SelfReg="false" NextFile="ras3.upp"/>
+    <ROW File="ras24.upp_1" Component_="acctest.ps_1" FileName="ras24.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras24.upp" SelfReg="false" NextFile="ras3.upp_1"/>
+    <ROW File="ras3.upp" Component_="acctest.ps" FileName="ras3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras3.upp" SelfReg="false" NextFile="ras32.upp"/>
+    <ROW File="ras3.upp_1" Component_="acctest.ps_1" FileName="ras3.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras3.upp" SelfReg="false" NextFile="ras32.upp_1"/>
+    <ROW File="ras32.upp" Component_="acctest.ps" FileName="ras32.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras32.upp" SelfReg="false" NextFile="ras4.upp"/>
+    <ROW File="ras32.upp_1" Component_="acctest.ps_1" FileName="ras32.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras32.upp" SelfReg="false" NextFile="ras4.upp_1"/>
+    <ROW File="ras4.upp" Component_="acctest.ps" FileName="ras4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras4.upp" SelfReg="false" NextFile="ras8m.upp"/>
+    <ROW File="ras4.upp_1" Component_="acctest.ps_1" FileName="ras4.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras4.upp" SelfReg="false" NextFile="ras8m.upp_1"/>
+    <ROW File="ras8m.upp" Component_="acctest.ps" FileName="ras8m.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\ras8m.upp" SelfReg="false" NextFile="rinkj2200setup"/>
+    <ROW File="ras8m.upp_1" Component_="acctest.ps_1" FileName="ras8m.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\ras8m.upp" SelfReg="false" NextFile="rinkj2200setup_1"/>
+    <ROW File="rinkj2200setup" Component_="acctest.ps" FileName="RINKJ-~1|rinkj-2200-setup" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\rinkj-2200-setup" SelfReg="false" NextFile="rollconv.ps"/>
+    <ROW File="rinkj2200setup_1" Component_="acctest.ps_1" FileName="RINKJ-~1|rinkj-2200-setup" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\rinkj-2200-setup" SelfReg="false" NextFile="rollconv.ps_1"/>
+    <ROW File="ro.pak" Component_="am.pak" FileName="ro.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ro.pak" SelfReg="false" NextFile="ru.pak"/>
+    <ROW File="rollconv.ps" Component_="acctest.ps" FileName="rollconv.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\rollconv.ps" SelfReg="false" NextFile="showchar.ps"/>
+    <ROW File="rollconv.ps_1" Component_="acctest.ps_1" FileName="rollconv.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\rollconv.ps" SelfReg="false" NextFile="showchar.ps_1"/>
+    <ROW File="ru.pak" Component_="am.pak" FileName="ru.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ru.pak" SelfReg="false" NextFile="sk.pak"/>
+    <ROW File="showchar.ps" Component_="acctest.ps" FileName="showchar.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\showchar.ps" SelfReg="false" NextFile="showpage.ps"/>
+    <ROW File="showchar.ps_1" Component_="acctest.ps_1" FileName="showchar.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\showchar.ps" SelfReg="false" NextFile="showpage.ps_1"/>
+    <ROW File="showpage.ps" Component_="acctest.ps" FileName="showpage.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\showpage.ps" SelfReg="false" NextFile="st640ih.upp"/>
+    <ROW File="showpage.ps_1" Component_="acctest.ps_1" FileName="showpage.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\showpage.ps" SelfReg="false" NextFile="st640ih.upp_1"/>
+    <ROW File="sk.pak" Component_="am.pak" FileName="sk.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\sk.pak" SelfReg="false" NextFile="sl.pak"/>
+    <ROW File="sl.pak" Component_="am.pak" FileName="sl.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\sl.pak" SelfReg="false" NextFile="sr.pak"/>
+    <ROW File="snapshot_blob.bin" Component_="cef.pak" FileName="SNAPSH~1.BIN|snapshot_blob.bin" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\snapshot_blob.bin" SelfReg="false" NextFile="SOAPware.PortalApi.Model.dll"/>
+    <ROW File="sr.pak" Component_="am.pak" FileName="sr.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\sr.pak" SelfReg="false" NextFile="sv.pak"/>
+    <ROW File="st640ih.upp" Component_="acctest.ps" FileName="st640ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640ih.upp" SelfReg="false" NextFile="st640ihg.upp"/>
+    <ROW File="st640ih.upp_1" Component_="acctest.ps_1" FileName="st640ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640ih.upp" SelfReg="false" NextFile="st640ihg.upp_1"/>
+    <ROW File="st640ihg.upp" Component_="acctest.ps" FileName="st640ihg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640ihg.upp" SelfReg="false" NextFile="st640p.upp"/>
+    <ROW File="st640ihg.upp_1" Component_="acctest.ps_1" FileName="st640ihg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640ihg.upp" SelfReg="false" NextFile="st640p.upp_1"/>
+    <ROW File="st640p.upp" Component_="acctest.ps" FileName="st640p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640p.upp" SelfReg="false" NextFile="st640pg.upp"/>
+    <ROW File="st640p.upp_1" Component_="acctest.ps_1" FileName="st640p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640p.upp" SelfReg="false" NextFile="st640pg.upp_1"/>
+    <ROW File="st640pg.upp" Component_="acctest.ps" FileName="st640pg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640pg.upp" SelfReg="false" NextFile="st640pl.upp"/>
+    <ROW File="st640pg.upp_1" Component_="acctest.ps_1" FileName="st640pg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640pg.upp" SelfReg="false" NextFile="st640pl.upp_1"/>
+    <ROW File="st640pl.upp" Component_="acctest.ps" FileName="st640pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640pl.upp" SelfReg="false" NextFile="st640plg.upp"/>
+    <ROW File="st640pl.upp_1" Component_="acctest.ps_1" FileName="st640pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640pl.upp" SelfReg="false" NextFile="st640plg.upp_1"/>
+    <ROW File="st640plg.upp" Component_="acctest.ps" FileName="st640plg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\st640plg.upp" SelfReg="false" NextFile="stc.upp"/>
+    <ROW File="st640plg.upp_1" Component_="acctest.ps_1" FileName="st640plg.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\st640plg.upp" SelfReg="false" NextFile="stc.upp_1"/>
+    <ROW File="stc.upp" Component_="acctest.ps" FileName="stc.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc.upp" SelfReg="false" NextFile="stc1520h.upp"/>
+    <ROW File="stc.upp_1" Component_="acctest.ps_1" FileName="stc.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc.upp" SelfReg="false" NextFile="stc1520h.upp_1"/>
+    <ROW File="stc1520h.upp" Component_="acctest.ps" FileName="stc1520h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc1520h.upp" SelfReg="false" NextFile="stc2.upp"/>
+    <ROW File="stc1520h.upp_1" Component_="acctest.ps_1" FileName="stc1520h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc1520h.upp" SelfReg="false" NextFile="stc2.upp_1"/>
+    <ROW File="stc2.upp" Component_="acctest.ps" FileName="stc2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc2.upp" SelfReg="false" NextFile="stc200_h.upp"/>
+    <ROW File="stc2.upp_1" Component_="acctest.ps_1" FileName="stc2.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc2.upp" SelfReg="false" NextFile="stc200_h.upp_1"/>
+    <ROW File="stc200_h.upp" Component_="acctest.ps" FileName="stc200_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc200_h.upp" SelfReg="false" NextFile="stc2s_h.upp"/>
+    <ROW File="stc200_h.upp_1" Component_="acctest.ps_1" FileName="stc200_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc200_h.upp" SelfReg="false" NextFile="stc2s_h.upp_1"/>
+    <ROW File="stc2_h.upp" Component_="acctest.ps" FileName="stc2_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc2_h.upp" SelfReg="false" NextFile="stc300.upp"/>
+    <ROW File="stc2_h.upp_1" Component_="acctest.ps_1" FileName="stc2_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc2_h.upp" SelfReg="false" NextFile="stc300.upp_1"/>
+    <ROW File="stc2s_h.upp" Component_="acctest.ps" FileName="stc2s_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc2s_h.upp" SelfReg="false" NextFile="stc2_h.upp"/>
+    <ROW File="stc2s_h.upp_1" Component_="acctest.ps_1" FileName="stc2s_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc2s_h.upp" SelfReg="false" NextFile="stc2_h.upp_1"/>
+    <ROW File="stc300.upp" Component_="acctest.ps" FileName="stc300.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc300.upp" SelfReg="false" NextFile="stc300bl.upp"/>
+    <ROW File="stc300.upp_1" Component_="acctest.ps_1" FileName="stc300.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc300.upp" SelfReg="false" NextFile="stc300bl.upp_1"/>
+    <ROW File="stc300bl.upp" Component_="acctest.ps" FileName="stc300bl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc300bl.upp" SelfReg="false" NextFile="stc300bm.upp"/>
+    <ROW File="stc300bl.upp_1" Component_="acctest.ps_1" FileName="stc300bl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc300bl.upp" SelfReg="false" NextFile="stc300bm.upp_1"/>
+    <ROW File="stc300bm.upp" Component_="acctest.ps" FileName="stc300bm.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc300bm.upp" SelfReg="false" NextFile="stc500p.upp"/>
+    <ROW File="stc300bm.upp_1" Component_="acctest.ps_1" FileName="stc300bm.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc300bm.upp" SelfReg="false" NextFile="stc500p.upp_1"/>
+    <ROW File="stc500p.upp" Component_="acctest.ps" FileName="stc500p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc500p.upp" SelfReg="false" NextFile="stc500ph.upp"/>
+    <ROW File="stc500p.upp_1" Component_="acctest.ps_1" FileName="stc500p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc500p.upp" SelfReg="false" NextFile="stc500ph.upp_1"/>
+    <ROW File="stc500ph.upp" Component_="acctest.ps" FileName="stc500ph.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc500ph.upp" SelfReg="false" NextFile="stc600ih.upp"/>
+    <ROW File="stc500ph.upp_1" Component_="acctest.ps_1" FileName="stc500ph.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc500ph.upp" SelfReg="false" NextFile="stc600ih.upp_1"/>
+    <ROW File="stc600ih.upp" Component_="acctest.ps" FileName="stc600ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc600ih.upp" SelfReg="false" NextFile="stc600p.upp"/>
+    <ROW File="stc600ih.upp_1" Component_="acctest.ps_1" FileName="stc600ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc600ih.upp" SelfReg="false" NextFile="stc600p.upp_1"/>
+    <ROW File="stc600p.upp" Component_="acctest.ps" FileName="stc600p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc600p.upp" SelfReg="false" NextFile="stc600pl.upp"/>
+    <ROW File="stc600p.upp_1" Component_="acctest.ps_1" FileName="stc600p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc600p.upp" SelfReg="false" NextFile="stc600pl.upp_1"/>
+    <ROW File="stc600pl.upp" Component_="acctest.ps" FileName="stc600pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc600pl.upp" SelfReg="false" NextFile="stc640p.upp"/>
+    <ROW File="stc600pl.upp_1" Component_="acctest.ps_1" FileName="stc600pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc600pl.upp" SelfReg="false" NextFile="stc640p.upp_1"/>
+    <ROW File="stc640p.upp" Component_="acctest.ps" FileName="stc640p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc640p.upp" SelfReg="false" NextFile="stc800ih.upp"/>
+    <ROW File="stc640p.upp_1" Component_="acctest.ps_1" FileName="stc640p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc640p.upp" SelfReg="false" NextFile="stc800ih.upp_1"/>
+    <ROW File="stc800ih.upp" Component_="acctest.ps" FileName="stc800ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc800ih.upp" SelfReg="false" NextFile="stc800p.upp"/>
+    <ROW File="stc800ih.upp_1" Component_="acctest.ps_1" FileName="stc800ih.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc800ih.upp" SelfReg="false" NextFile="stc800p.upp_1"/>
+    <ROW File="stc800p.upp" Component_="acctest.ps" FileName="stc800p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc800p.upp" SelfReg="false" NextFile="stc800pl.upp"/>
+    <ROW File="stc800p.upp_1" Component_="acctest.ps_1" FileName="stc800p.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc800p.upp" SelfReg="false" NextFile="stc800pl.upp_1"/>
+    <ROW File="stc800pl.upp" Component_="acctest.ps" FileName="stc800pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc800pl.upp" SelfReg="false" NextFile="stcany.upp"/>
+    <ROW File="stc800pl.upp_1" Component_="acctest.ps_1" FileName="stc800pl.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc800pl.upp" SelfReg="false" NextFile="stcany.upp_1"/>
+    <ROW File="stc_h.upp" Component_="acctest.ps" FileName="stc_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc_h.upp" SelfReg="false" NextFile="stc_l.upp"/>
+    <ROW File="stc_h.upp_1" Component_="acctest.ps_1" FileName="stc_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc_h.upp" SelfReg="false" NextFile="stc_l.upp_1"/>
+    <ROW File="stc_l.upp" Component_="acctest.ps" FileName="stc_l.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stc_l.upp" SelfReg="false" NextFile="stocht.ps"/>
+    <ROW File="stc_l.upp_1" Component_="acctest.ps_1" FileName="stc_l.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stc_l.upp" SelfReg="false" NextFile="stocht.ps_1"/>
+    <ROW File="stcany.upp" Component_="acctest.ps" FileName="stcany.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stcany.upp" SelfReg="false" NextFile="stcany_h.upp"/>
+    <ROW File="stcany.upp_1" Component_="acctest.ps_1" FileName="stcany.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stcany.upp" SelfReg="false" NextFile="stcany_h.upp_1"/>
+    <ROW File="stcany_h.upp" Component_="acctest.ps" FileName="stcany_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stcany_h.upp" SelfReg="false" NextFile="stcinfo.ps"/>
+    <ROW File="stcany_h.upp_1" Component_="acctest.ps_1" FileName="stcany_h.upp" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stcany_h.upp" SelfReg="false" NextFile="stcinfo.ps_1"/>
+    <ROW File="stcinfo.ps" Component_="acctest.ps" FileName="stcinfo.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stcinfo.ps" SelfReg="false" NextFile="stcolor.ps"/>
+    <ROW File="stcinfo.ps_1" Component_="acctest.ps_1" FileName="stcinfo.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stcinfo.ps" SelfReg="false" NextFile="stcolor.ps_1"/>
+    <ROW File="stcolor.ps" Component_="acctest.ps" FileName="stcolor.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stcolor.ps" SelfReg="false" NextFile="stc_h.upp"/>
+    <ROW File="stcolor.ps_1" Component_="acctest.ps_1" FileName="stcolor.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stcolor.ps" SelfReg="false" NextFile="stc_h.upp_1"/>
+    <ROW File="stocht.ps" Component_="acctest.ps" FileName="stocht.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\stocht.ps" SelfReg="false" NextFile="traceimg.ps"/>
+    <ROW File="stocht.ps_1" Component_="acctest.ps_1" FileName="stocht.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\stocht.ps" SelfReg="false" NextFile="traceimg.ps_1"/>
+    <ROW File="sv.pak" Component_="am.pak" FileName="sv.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\sv.pak" SelfReg="false" NextFile="sw.pak"/>
+    <ROW File="sw.pak" Component_="am.pak" FileName="sw.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\sw.pak" SelfReg="false" NextFile="ta.pak"/>
+    <ROW File="ta.pak" Component_="am.pak" FileName="ta.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\ta.pak" SelfReg="false" NextFile="te.pak"/>
+    <ROW File="te.pak" Component_="am.pak" FileName="te.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\te.pak" SelfReg="false" NextFile="th.pak"/>
+    <ROW File="th.pak" Component_="am.pak" FileName="th.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\th.pak" SelfReg="false" NextFile="tr.pak"/>
+    <ROW File="tr.pak" Component_="am.pak" FileName="tr.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\tr.pak" SelfReg="false" NextFile="uk.pak"/>
+    <ROW File="traceimg.ps" Component_="acctest.ps" FileName="traceimg.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\traceimg.ps" SelfReg="false" NextFile="traceop.ps"/>
+    <ROW File="traceimg.ps_1" Component_="acctest.ps_1" FileName="traceimg.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\traceimg.ps" SelfReg="false" NextFile="traceop.ps_1"/>
+    <ROW File="traceop.ps" Component_="acctest.ps" FileName="traceop.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\traceop.ps" SelfReg="false" NextFile="type1enc.ps"/>
+    <ROW File="traceop.ps_1" Component_="acctest.ps_1" FileName="traceop.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\traceop.ps" SelfReg="false" NextFile="type1enc.ps_1"/>
+    <ROW File="type1enc.ps" Component_="acctest.ps" FileName="type1enc.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\type1enc.ps" SelfReg="false" NextFile="type1ops.ps"/>
+    <ROW File="type1enc.ps_1" Component_="acctest.ps_1" FileName="type1enc.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\type1enc.ps" SelfReg="false" NextFile="type1ops.ps_1"/>
+    <ROW File="type1ops.ps" Component_="acctest.ps" FileName="type1ops.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\type1ops.ps" SelfReg="false" NextFile="uninfo.ps"/>
+    <ROW File="type1ops.ps_1" Component_="acctest.ps_1" FileName="type1ops.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\type1ops.ps" SelfReg="false" NextFile="uninfo.ps_1"/>
+    <ROW File="uk.pak" Component_="am.pak" FileName="uk.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\uk.pak" SelfReg="false" NextFile="vi.pak"/>
+    <ROW File="uninfo.ps" Component_="acctest.ps" FileName="uninfo.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\uninfo.ps" SelfReg="false" NextFile="unixlpr.sh"/>
+    <ROW File="uninfo.ps_1" Component_="acctest.ps_1" FileName="uninfo.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\uninfo.ps" SelfReg="false" NextFile="unixlpr.sh_1"/>
+    <ROW File="unixlpr.sh" Component_="acctest.ps" FileName="unix-lpr.sh" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\unix-lpr.sh" SelfReg="false" NextFile="unprot.ps"/>
+    <ROW File="unixlpr.sh_1" Component_="acctest.ps_1" FileName="unix-lpr.sh" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\unix-lpr.sh" SelfReg="false" NextFile="unprot.ps_1"/>
+    <ROW File="unprot.ps" Component_="acctest.ps" FileName="unprot.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\unprot.ps" SelfReg="false" NextFile="viewcmyk.ps"/>
+    <ROW File="unprot.ps_1" Component_="acctest.ps_1" FileName="unprot.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\unprot.ps" SelfReg="false" NextFile="viewcmyk.ps_1"/>
+    <ROW File="vi.pak" Component_="am.pak" FileName="vi.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\vi.pak" SelfReg="false" NextFile="zhCN.pak"/>
+    <ROW File="viewcmyk.ps" Component_="acctest.ps" FileName="viewcmyk.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewcmyk.ps" SelfReg="false" NextFile="viewgif.ps"/>
+    <ROW File="viewcmyk.ps_1" Component_="acctest.ps_1" FileName="viewcmyk.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewcmyk.ps" SelfReg="false" NextFile="viewgif.ps_1"/>
+    <ROW File="viewgif.ps" Component_="acctest.ps" FileName="viewgif.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewgif.ps" SelfReg="false" NextFile="viewjpeg.ps"/>
+    <ROW File="viewgif.ps_1" Component_="acctest.ps_1" FileName="viewgif.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewgif.ps" SelfReg="false" NextFile="viewjpeg.ps_1"/>
+    <ROW File="viewjpeg.ps" Component_="acctest.ps" FileName="viewjpeg.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewjpeg.ps" SelfReg="false" NextFile="viewmiff.ps"/>
+    <ROW File="viewjpeg.ps_1" Component_="acctest.ps_1" FileName="viewjpeg.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewjpeg.ps" SelfReg="false" NextFile="viewmiff.ps_1"/>
+    <ROW File="viewmiff.ps" Component_="acctest.ps" FileName="viewmiff.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewmiff.ps" SelfReg="false" NextFile="viewpbm.ps"/>
+    <ROW File="viewmiff.ps_1" Component_="acctest.ps_1" FileName="viewmiff.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewmiff.ps" SelfReg="false" NextFile="viewpbm.ps_1"/>
+    <ROW File="viewpbm.ps" Component_="acctest.ps" FileName="viewpbm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewpbm.ps" SelfReg="false" NextFile="viewpcx.ps"/>
+    <ROW File="viewpbm.ps_1" Component_="acctest.ps_1" FileName="viewpbm.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewpbm.ps" SelfReg="false" NextFile="viewpcx.ps_1"/>
+    <ROW File="viewpcx.ps" Component_="acctest.ps" FileName="viewpcx.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewpcx.ps" SelfReg="false" NextFile="viewps2a.ps"/>
+    <ROW File="viewpcx.ps_1" Component_="acctest.ps_1" FileName="viewpcx.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewpcx.ps" SelfReg="false" NextFile="viewps2a.ps_1"/>
+    <ROW File="viewps2a.ps" Component_="acctest.ps" FileName="viewps2a.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewps2a.ps" SelfReg="false" NextFile="viewraw.ps"/>
+    <ROW File="viewps2a.ps_1" Component_="acctest.ps_1" FileName="viewps2a.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewps2a.ps" SelfReg="false" NextFile="viewraw.ps_1"/>
+    <ROW File="viewraw.ps" Component_="acctest.ps" FileName="viewraw.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewraw.ps" SelfReg="false" NextFile="viewrgb.ps"/>
+    <ROW File="viewraw.ps_1" Component_="acctest.ps_1" FileName="viewraw.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewraw.ps" SelfReg="false" NextFile="viewrgb.ps_1"/>
+    <ROW File="viewrgb.ps" Component_="acctest.ps" FileName="viewrgb.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\viewrgb.ps" SelfReg="false" NextFile="wftopfa"/>
+    <ROW File="viewrgb.ps_1" Component_="acctest.ps_1" FileName="viewrgb.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\viewrgb.ps" SelfReg="false" NextFile="wftopfa_1"/>
+    <ROW File="wftopfa" Component_="acctest.ps" FileName="wftopfa" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\wftopfa" SelfReg="false" NextFile="wftopfa.ps"/>
+    <ROW File="wftopfa.ps" Component_="acctest.ps" FileName="wftopfa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\wftopfa.ps" SelfReg="false" NextFile="winmaps.ps"/>
+    <ROW File="wftopfa.ps_1" Component_="acctest.ps_1" FileName="wftopfa.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\wftopfa.ps" SelfReg="false" NextFile="winmaps.ps_1"/>
+    <ROW File="wftopfa_1" Component_="acctest.ps_1" FileName="wftopfa" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\wftopfa" SelfReg="false" NextFile="wftopfa.ps_1"/>
+    <ROW File="widevinecdmadapter.dll" Component_="widevinecdmadapter.dll" FileName="WIDEVI~1.DLL|widevinecdmadapter.dll" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\widevinecdmadapter.dll" SelfReg="false" NextFile="myHEALTHwarePS.PPD"/>
+    <ROW File="winmaps.ps" Component_="acctest.ps" FileName="winmaps.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\winmaps.ps" SelfReg="false" NextFile="wmakebat.bat"/>
+    <ROW File="winmaps.ps_1" Component_="acctest.ps_1" FileName="winmaps.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\winmaps.ps" SelfReg="false" NextFile="wmakebat.bat_1"/>
+    <ROW File="wmakebat.bat" Component_="acctest.ps" FileName="wmakebat.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\wmakebat.bat" SelfReg="false" NextFile="wrfont.ps"/>
+    <ROW File="wmakebat.bat_1" Component_="acctest.ps_1" FileName="wmakebat.bat" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\wmakebat.bat" SelfReg="false" NextFile="wrfont.ps_1"/>
+    <ROW File="wrfont.ps" Component_="acctest.ps" FileName="wrfont.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\wrfont.ps" SelfReg="false" NextFile="zeroline.ps"/>
+    <ROW File="wrfont.ps_1" Component_="acctest.ps_1" FileName="wrfont.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\wrfont.ps" SelfReg="false" NextFile="zeroline.ps_1"/>
+    <ROW File="zeroline.ps" Component_="acctest.ps" FileName="zeroline.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x64\GhostScript\lib\zeroline.ps" SelfReg="false" NextFile="mfilemon.dll"/>
+    <ROW File="zeroline.ps_1" Component_="acctest.ps_1" FileName="zeroline.ps" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\x32\GhostScript\lib\zeroline.ps" SelfReg="false" NextFile="mfilemon.dll_1"/>
+    <ROW File="zhCN.pak" Component_="am.pak" FileName="zh-CN.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\zh-CN.pak" SelfReg="false" NextFile="zhTW.pak"/>
+    <ROW File="zhTW.pak" Component_="am.pak" FileName="zh-TW.pak" Attributes="0" SourcePath="..\myHEALTHwareDesktop\bin\x86\Release\locales\zh-TW.pak" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="myHEALTHwareDesktopInstall" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_FinishActions" Type="1" Source="aicustact.dll" Target="RunAllExitActions"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_LaunchApp" Type="1" Source="aicustact.dll" Target="[#Setup.exe]"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFilesFolder]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="myHEALTHware.exe" SourcePath="..\myHEALTHwareDesktop\Resources\myHEALTHware.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_FinishActions" Condition="AI_INSTALL AND AiSkipExitDlg" Sequence="1301"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT64 OR ((VersionNT &lt;&gt; 501) OR (ServicePackLevel = 3))) AND ((VersionNT &lt;&gt; 502) OR (ServicePackLevel = 2))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+</DOCUMENT>

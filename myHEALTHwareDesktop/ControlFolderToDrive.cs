@@ -10,9 +10,6 @@ namespace myHEALTHwareDesktop
 {
 	public partial class ControlFolderToDrive : UserControl
 	{
-		private MhwDesktopForm parentForm;
-		private MhwSdk sdk;
-		private string selectedMhwAccountId;
 		private DrivePicker drivePicker;
 		private FileSystemWatcher localPathWatcher;
 		private bool isWatcherRunning;
@@ -20,26 +17,32 @@ namespace myHEALTHwareDesktop
 		private bool isUploadPathSet;
 		private bool isDrivePickerSuccess;
 		private string uploadDriveItemId;
-		private bool isLoggedIn;
+		private readonly ActiveUserSession userSession;
 
 		public ControlFolderToDrive()
 		{
 			InitializeComponent();
+
+			userSession = ActiveUserSession.GetInstance();
+			userSession.ActingAsChanged += SelectedUserChanged;
 		}
 
-		public void LoadSettings( MhwDesktopForm parent, MhwSdk sdk, string selectedMhwAccountId )
+		private MhwSdk Sdk
 		{
-			parentForm = parent;
-			this.sdk = sdk;
-			this.selectedMhwAccountId = selectedMhwAccountId;
-			isLoggedIn = true;
+			get { return userSession.Sdk; }
+		}
 
+		public INotificationService NotificationService { get; set; }
+		public IUploadService UploadService { get; set; }
+
+		public void SelectedUserChanged(object sender, EventArgs e)
+		{
 			LoadSettingDeleteFileAfterUpload();
-			SetLocalPath( Settings.Default.FolderToDriveLocalPath );
-			LoadDriveLocation( Settings.Default.FolderToDriveDestinationId );
+			SetLocalPath( userSession.Settings.FolderToDriveLocalPath );
+			LoadDriveLocation( userSession.Settings.FolderToDriveDestinationId );
 
 			// If all set, start monitoring.
-			if( Settings.Default.FolderToDriveRunning && isLocalPathSet && isUploadPathSet )
+			if( userSession.Settings.FolderToDriveRunning && isLocalPathSet && isUploadPathSet )
 			{
 				StartMonitoring();
 			}
@@ -47,9 +50,9 @@ namespace myHEALTHwareDesktop
 
 		private void LoadSettingDeleteFileAfterUpload()
 		{
-			deleteFileAfterUploadCheckBox.Checked = Settings.Default.FolderToDriveDeleteFileAfterUpload;
+			deleteFileAfterUploadCheckBox.Checked = userSession.Settings.FolderToDriveDeleteFileAfterUpload;
 
-			deleteFileAfterUploadCheckBox.CheckState = Settings.Default.FolderToDriveDeleteFileAfterUpload
+			deleteFileAfterUploadCheckBox.CheckState = userSession.Settings.FolderToDriveDeleteFileAfterUpload
 				? CheckState.Checked
 				: CheckState.Unchecked;
 		}
@@ -61,8 +64,10 @@ namespace myHEALTHwareDesktop
 				: "Files will not be deleted after upload. You may want to periodically clean out your local upload folder.";
 
 			// Save the new value.
-			Settings.Default.FolderToDriveDeleteFileAfterUpload = deleteFileAfterUploadCheckBox.Checked;
-			parentForm.SaveSettings( message );
+			userSession.Settings.FolderToDriveDeleteFileAfterUpload = deleteFileAfterUploadCheckBox.Checked;
+			userSession.Settings.Save();
+
+			NotificationService.ShowBalloonInfo( message );
 		}
 
 		private void ButtonBrowseLocalPathClick( object sender, EventArgs e )
@@ -109,21 +114,21 @@ namespace myHEALTHwareDesktop
 				SetButtonState();
 
 				// Has the value actually changed since it was last valid?
-				if( path != Settings.Default.FolderToDriveLocalPath )
+				if( path != userSession.Settings.FolderToDriveLocalPath )
 				{
-					Settings.Default.FolderToDriveLocalPath = path;
-					parentForm.SaveSettings();
+					userSession.Settings.FolderToDriveLocalPath = path;
+					userSession.Settings.Save();
 				}
 			}
 		}
 
-		private string LoadDriveLocation( string folderId )
+		private void LoadDriveLocation( string folderId )
 		{
 			if( string.IsNullOrWhiteSpace( folderId ) )
 			{
 				errorProviderDriveFolder.SetError( textBoxMhwFolder, "Please select a Drive folder to upload files to." );
 				isUploadPathSet = false;
-				return null;
+				return;
 			}
 
 			ApiDriveItem item;
@@ -131,7 +136,7 @@ namespace myHEALTHwareDesktop
 			// Using SDK, retrieve Drive Item's full path
 			try
 			{
-				item = sdk.DriveItems.GetDriveItem( selectedMhwAccountId, folderId );
+				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId, folderId );
 			}
 			catch( Exception ex )
 			{
@@ -140,7 +145,7 @@ namespace myHEALTHwareDesktop
 				string message = string.Format( "Error setting Drive path: {0}", ex.Message.Substring( 0, 60 ) );
 				errorProviderDriveFolder.SetError( textBoxMhwFolder, message );
 				SetButtonState();
-				return null;
+				return;
 			}
 
 			// Valid. Clear any previous error.
@@ -150,7 +155,6 @@ namespace myHEALTHwareDesktop
 			SetUploadPathText( path );
 			uploadDriveItemId = folderId;
 			isUploadPathSet = true;
-			return path;
 		}
 
 		private delegate void SetTextCallback( string text );
@@ -176,8 +180,8 @@ namespace myHEALTHwareDesktop
 
 		private void BrowseUploadPath()
 		{
-			drivePicker = new DrivePicker( MhwDesktopForm.APP_ID, MhwDesktopForm.APP_SECRET );
-			drivePicker.InitBrowser( parentForm.ConnectionId, parentForm.AccessToken, selectedMhwAccountId );
+			drivePicker = new DrivePicker( userSession );
+			drivePicker.InitBrowser();
 
 			// Register a method to recieve click event callback.
 			drivePicker.Click += drivePicker_OnClick;
@@ -193,8 +197,8 @@ namespace myHEALTHwareDesktop
 				LoadDriveLocation( uploadDriveItemId );
 
 				// Save Drive item ID.
-				Settings.Default.FolderToDriveDestinationId = uploadDriveItemId;
-				parentForm.SaveSettings();
+				userSession.Settings.FolderToDriveDestinationId = uploadDriveItemId;
+				userSession.Settings.Save();
 			}
 
 			SetButtonState();
@@ -222,7 +226,7 @@ namespace myHEALTHwareDesktop
 			else
 			{
 				isDrivePickerSuccess = false;
-				parentForm.ShowBalloonError( "Drive picker error: {0}", args.Message.data.message );
+				NotificationService.ShowBalloonError( "Drive picker error: {0}", args.Message.data.message );
 			}
 
 			// Close the Drive picker form in a cross thread acceptable way.
@@ -265,14 +269,16 @@ namespace myHEALTHwareDesktop
 			if( isWatcherRunning )
 			{
 				StopMonitoring();
-				Settings.Default.FolderToDriveRunning = false;
-				parentForm.SaveSettings( "Stopped Folder to Drive monitor" );
+				userSession.Settings.FolderToDriveRunning = false;
+				userSession.Settings.Save();
+				NotificationService.ShowBalloonInfo( "Stopped Folder to Drive monitor" );
 			}
 			else
 			{
 				StartMonitoring();
-				Settings.Default.FolderToDriveRunning = true;
-				parentForm.SaveSettings( "Started Folder to Drive monitor" );
+				userSession.Settings.FolderToDriveRunning = true;
+				userSession.Settings.Save();
+				NotificationService.ShowBalloonInfo( "Started Folder to Drive monitor" );
 			}
 
 			SetButtonState();
@@ -298,7 +304,7 @@ namespace myHEALTHwareDesktop
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
 				isWatcherRunning = false;
-				parentForm.ShowBalloonError( "Start Folder to Drive monitor failed: {0}", ex.Message );
+				NotificationService.ShowBalloonError( "Start Folder to Drive monitor failed: {0}", ex.Message );
 				return;
 			}
 
@@ -319,7 +325,7 @@ namespace myHEALTHwareDesktop
 			}
 			catch( ArgumentException ex )
 			{
-				parentForm.ShowBalloonError( "Stop Folder to Drive monitor error: {0}", ex.Message );
+				NotificationService.ShowBalloonError( "Stop Folder to Drive monitor error: {0}", ex.Message );
 			}
 
 			isWatcherRunning = false;
@@ -333,25 +339,20 @@ namespace myHEALTHwareDesktop
 		// The Watcher calls this method when a new file shows up in the watched folder.
 		private void ProcessNewLocalFile( string fullPath, string name )
 		{
-			if( !isLoggedIn )
+			if( !userSession.IsLoggedIn )
 			{
 				StopMonitoring();
-				parentForm.ShowBalloonError( "Please log in and try again. Folder to Drive file deleted." );
+				NotificationService.ShowBalloonError( "Please log in and try again. Folder to Drive file deleted." );
 				File.Delete( fullPath );
 				return;
 			}
 
 			if(
-				parentForm.UploadFile( fullPath, name, uploadDriveItemId, Settings.Default.FolderToDriveDeleteFileAfterUpload ) ==
+				UploadService.UploadFile( fullPath, name, uploadDriveItemId, userSession.Settings.FolderToDriveDeleteFileAfterUpload ) ==
 				null )
 			{
-				parentForm.ShowBalloonError( "Folder to Drive upload failed: {0}", name );
+				NotificationService.ShowBalloonError( "Folder to Drive upload failed: {0}", name );
 			}
-		}
-
-		public void LogOut()
-		{
-			isLoggedIn = false;
 		}
 	}
 }
