@@ -20,9 +20,11 @@ namespace myHEALTHwareDesktop
 
 			this.userSession = userSession;
 			this.filename = filename;
+
+			InitBrowser();
 		}
 
-		public void InitBrowser()
+		private void InitBrowser()
 		{
 			if( Cef.IsInitialized == false )
 			{

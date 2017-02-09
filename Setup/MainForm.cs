@@ -15,7 +15,7 @@ namespace Setup
 	public partial class MainForm : Form
 	{
 		private Log log;
-		private readonly VirtualPrinter virtualPrinter;
+		private readonly VirtualPrinterManager virtualPrinterManager;
 		private readonly Options options;
 		private bool allowClose = true;
 		private readonly MhwPrinter printer;
@@ -28,7 +28,7 @@ namespace Setup
 
 			printer = options.PrintToFax ? MhwPrinter.PRINT_TO_FAX : MhwPrinter.PRINT_TO_DRIVE;
 
-			virtualPrinter = new VirtualPrinter();
+			virtualPrinterManager = new VirtualPrinterManager();
 			InitializeComponent();
 		}
 
@@ -50,7 +50,7 @@ namespace Setup
 
 			if( InvokeRequired )
 			{
-				Invoke( new MethodInvoker( () => { SetupDone(); } ) );
+				Invoke( new MethodInvoker( SetupDone ) );
 			}
 			else
 			{
@@ -97,7 +97,7 @@ namespace Setup
 					{
 						log.Error( "Error {0}: {1}", ex.NativeErrorCode, ex.Message );
 						ReturnCode = -1;
-						virtualPrinter.IsError = true;
+						virtualPrinterManager.IsError = true;
 					}
 				}
 			}
@@ -122,12 +122,12 @@ namespace Setup
 					{
 						log.Error( "Error {0}: {1}", ex.NativeErrorCode, ex.Message );
 						ReturnCode = -1;
-						virtualPrinter.IsError = true;
+						virtualPrinterManager.IsError = true;
 					}
 				}
 			}
 
-			if( virtualPrinter.IsError )
+			if( virtualPrinterManager.IsError )
 			{
 				log.Warning( "Finished with errors. See above." );
 			}
@@ -148,7 +148,7 @@ namespace Setup
 
 			log.Info( "OS is {0}.", Environment.OSVersion );
 
-			if( virtualPrinter.IsMonitorAlreadyInstalled( printer.MonitorName ) )
+			if( virtualPrinterManager.IsMonitorAlreadyInstalled( printer.MonitorName ) )
 			{
 				log.Warning( "Monitor {0} already installed.", printer.MonitorName );
 			}
@@ -158,7 +158,7 @@ namespace Setup
 
 				try
 				{
-					virtualPrinter.AddPrinterMonitor( currentDirectory, platform, printer.MonitorName );
+					virtualPrinterManager.AddPrinterMonitor( currentDirectory, platform, printer.MonitorName );
 					log.Success( "Monitor {0} successfully installed.", printer.MonitorName );
 				}
 				catch( Exception ex )
@@ -167,36 +167,36 @@ namespace Setup
 				}
 			}
 
-			if( virtualPrinter.IsPortAlreadyInstalled( printer.PortName ) )
+			if( virtualPrinterManager.IsPortAlreadyInstalled( printer.PortName ) )
 			{
 				log.Warning( "Port {0} already installed.", printer.PortName );
 			}
 			else
 			{
 				log.Info( "Installing port {0}.", printer.PortName );
-				virtualPrinter.AddPrinterPort( printer.PortName, printer.MonitorName );
+				virtualPrinterManager.AddPrinterPort( printer.PortName, printer.MonitorName );
 				log.Success( "Port {0} successfully installed.", printer.PortName );
 			}
 
-			if( virtualPrinter.IsDriverAlreadyInstalled( printer.DriverName ) )
+			if( virtualPrinterManager.IsDriverAlreadyInstalled( printer.DriverName ) )
 			{
 				log.Warning( "Driver {0} already installed.", printer.DriverName );
 			}
 			else
 			{
 				log.Info( "Installing driver {0}.", printer.DriverName );
-				virtualPrinter.AddPrinterDriver( currentDirectory, platform, printer.DriverName );
+				virtualPrinterManager.AddPrinterDriver( currentDirectory, platform, printer.DriverName );
 				log.Success( "Driver {0} successfully installed.", printer.DriverName );
 			}
 
-			if( virtualPrinter.IsPrinterAlreadyInstalled( printer.PrinterName ) )
+			if( virtualPrinterManager.IsPrinterAlreadyInstalled( printer.PrinterName ) )
 			{
 				log.Warning( "Printer {0} already installed.", printer.PrinterName );
 			}
 			else
 			{
 				log.Info( "Installing printer {0}.", printer.PrinterName );
-				virtualPrinter.AddPrinter( printer.PrinterName, printer.PortName, printer.DriverName );
+				virtualPrinterManager.AddPrinter( printer.PrinterName, printer.PortName, printer.DriverName );
 				log.Success( "Printer {0} successfully installed.", printer.PrinterName );
 			}
 
@@ -207,20 +207,20 @@ namespace Setup
 			log.Success( "PDF engine installed successfully." );
 
 			log.Info( "Configuring port." );
-			virtualPrinter.ConfigureVirtualPort( printer.MonitorName, printer.PortName, pdfEngine );
+			virtualPrinterManager.ConfigureVirtualPort( printer.MonitorName, printer.PortName, pdfEngine );
 			log.Success( "Port configured successfully." );
 
 			log.Info( "Restarting spool service. Please wait..." );
-			virtualPrinter.RestartSpoolService();
+			virtualPrinterManager.RestartSpoolService();
 			log.Success( "Restart spool service complete." );
 		}
 
 		private void Uninstall( string currentDirectory, string platform )
 		{
-			if( virtualPrinter.IsPrinterAlreadyInstalled( printer.PrinterName ) )
+			if( virtualPrinterManager.IsPrinterAlreadyInstalled( printer.PrinterName ) )
 			{
 				log.Info( "Removing printer {0}.", printer.PrinterName );
-				virtualPrinter.RemovePrinter( printer.PrinterName, printer.PortName, printer.MonitorName, printer.DriverName );
+				virtualPrinterManager.RemovePrinter( printer.PrinterName, printer.PortName, printer.MonitorName, printer.DriverName );
 				log.Success( "Removing printer {0} complete.", printer.PrinterName );
 			}
 			else
@@ -228,10 +228,10 @@ namespace Setup
 				log.Warning( "Printer {0} not installed.", printer.PrinterName );
 			}
 
-			if( virtualPrinter.IsPortAlreadyInstalled( printer.PortName ) )
+			if( virtualPrinterManager.IsPortAlreadyInstalled( printer.PortName ) )
 			{
 				log.Info( "Removing port {0}.", printer.PortName );
-				virtualPrinter.RemovePrinterPort( Handle, printer.PortName );
+				virtualPrinterManager.RemovePrinterPort( Handle, printer.PortName );
 				log.Success( "Removing port {0} complete.", printer.PortName );
 			}
 			else
@@ -239,7 +239,7 @@ namespace Setup
 				log.Warning( "Port {0} not installed.", printer.PortName );
 			}
 
-			if( virtualPrinter.IsDriverAlreadyInstalled( printer.DriverName ) )
+			if( virtualPrinterManager.IsDriverAlreadyInstalled( printer.DriverName ) )
 			{
 				// Check to see if another printer is still using this driver.
 				if( IsDriverBeingUsedByAnotherPrinter() )
@@ -249,7 +249,7 @@ namespace Setup
 				else
 				{
 					log.Info( "Removing driver {0}.", printer.DriverName );
-					virtualPrinter.RemovePrinterDriver( printer.DriverName );
+					virtualPrinterManager.RemovePrinterDriver( printer.DriverName );
 					log.Success( "Removing driver {0} complete.", printer.DriverName );
 				}
 			}
@@ -258,10 +258,10 @@ namespace Setup
 				log.Warning( "Driver {0} not installed.", printer.DriverName );
 			}
 
-			if( virtualPrinter.IsMonitorAlreadyInstalled( printer.MonitorName ) )
+			if( virtualPrinterManager.IsMonitorAlreadyInstalled( printer.MonitorName ) )
 			{
 				log.Info( "Removing monitor {0}.", printer.MonitorName );
-				virtualPrinter.RemovePrinterMonitor( currentDirectory, platform, printer.MonitorName );
+				virtualPrinterManager.RemovePrinterMonitor( currentDirectory, platform, printer.MonitorName );
 				log.Success( "Removing monitor {0} complete.", printer.MonitorName );
 			}
 			else
@@ -270,7 +270,7 @@ namespace Setup
 			}
 
 			log.Info( "Restarting spool service. Please wait..." );
-			virtualPrinter.RestartSpoolService();
+			virtualPrinterManager.RestartSpoolService();
 			log.Success( "Restart spool service complete." );
 		}
 
@@ -281,7 +281,7 @@ namespace Setup
 				: MhwPrinter.PRINT_TO_DRIVE.PrinterName;
 
 			// Look for other printer.
-			return virtualPrinter.IsPrinterAlreadyInstalled( otherPrinterName );
+			return virtualPrinterManager.IsPrinterAlreadyInstalled( otherPrinterName );
 		}
 
 		private void EnableRunAtSystemStartup()

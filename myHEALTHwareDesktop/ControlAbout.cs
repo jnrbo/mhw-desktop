@@ -6,7 +6,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class ControlAbout : UserControl
 	{
-		private const string URL_GPL = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html";
+		private const string URL_GPL = "https://www.gnu.org/licenses/agpl-3.0.en.html";
 		private const string URL_PORT_MONITOR = "https://sourceforge.net/projects/mfilemon/";
 		private const string URL_GHOSTSCRIPT = "http://www.ghostscript.com/";
 		private const string URL_COMMAND_LINE = "https://commandline.codeplex.com/";

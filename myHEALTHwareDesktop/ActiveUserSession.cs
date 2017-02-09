@@ -92,7 +92,7 @@ namespace myHEALTHwareDesktop
 
 			await GetMhwAccountsAsync();
 
-			var actingAs = accounts.FirstOrDefault( p => p.AccountId == Settings.SelectedAccountId ) ?? LoggedInAccount;
+			MhwAccount actingAs = accounts.FirstOrDefault( p => p.AccountId == Settings.SelectedAccountId ) ?? LoggedInAccount;
 			SetActingAsAccount( actingAs );
 		}
 
@@ -101,12 +101,12 @@ namespace myHEALTHwareDesktop
 			ApiAccount apiAccount = Sdk.Account.Get();
 
 			return new MhwAccount
-					{
-						Name = apiAccount.DisplayName,
-						AccountId = apiAccount.AccountId,
-						PictureFileId = apiAccount.PictureFileId,
-						IsPersonalAccount = true
-					};
+			{
+				Name = apiAccount.DisplayName,
+				AccountId = apiAccount.AccountId,
+				PictureFileId = apiAccount.PictureFileId,
+				IsPersonalAccount = true
+			};
 		}
 
 		public void Logout()
@@ -160,6 +160,11 @@ namespace myHEALTHwareDesktop
 			return accounts;
 		}
 
+		public void NotifyActingAccountRefresh()
+		{
+			OnActingAsChanged();
+		}
+
 		protected virtual void OnActingAsChanged()
 		{
 			EventHandler handler = ActingAsChanged;
@@ -168,15 +173,5 @@ namespace myHEALTHwareDesktop
 				handler( this, EventArgs.Empty );
 			}
 		}
-
-		////public class SelectedAccountChangedEventArgs : EventArgs
-		////{
-		////	public SelectedAccountChangedEventArgs( MhwAccount selectedAccount )
-		////	{
-		////		SelectedAccount = selectedAccount;
-		////	}
-
-		////	public MhwAccount SelectedAccount { get; private set; }
-		////}
 	}
 }

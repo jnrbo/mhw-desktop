@@ -55,10 +55,10 @@
 			this.linkLabelLicense.AutoSize = true;
 			this.linkLabelLicense.Location = new System.Drawing.Point(6, 106);
 			this.linkLabelLicense.Name = "linkLabelLicense";
-			this.linkLabelLicense.Size = new System.Drawing.Size(109, 13);
+			this.linkLabelLicense.Size = new System.Drawing.Size(75, 13);
 			this.linkLabelLicense.TabIndex = 10;
 			this.linkLabelLicense.TabStop = true;
-			this.linkLabelLicense.Text = "Licensed via GPL 2.0";
+			this.linkLabelLicense.Text = "AGPL License";
 			this.linkLabelLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutGnuLicenseLinkClicked);
 			// 
 			// groupBoxAboutAcknowledgements

@@ -35,7 +35,7 @@ namespace myHEALTHwareDesktop
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
 
-		public void SelectedUserChanged(object sender, EventArgs e)
+		public void SelectedUserChanged( object sender, EventArgs e )
 		{
 			LoadSettingDeleteFileAfterUpload();
 			SetLocalPath( userSession.Settings.FolderToDriveLocalPath );
@@ -181,7 +181,6 @@ namespace myHEALTHwareDesktop
 		private void BrowseUploadPath()
 		{
 			drivePicker = new DrivePicker( userSession );
-			drivePicker.InitBrowser();
 
 			// Register a method to recieve click event callback.
 			drivePicker.Click += drivePicker_OnClick;
@@ -347,11 +346,17 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			if(
-				UploadService.UploadFile( fullPath, name, uploadDriveItemId, userSession.Settings.FolderToDriveDeleteFileAfterUpload ) ==
-				null )
+			string fileId = UploadService.UploadFile( fullPath, name, uploadDriveItemId );
+			if( fileId == null )
 			{
 				NotificationService.ShowBalloonError( "Folder to Drive upload failed: {0}", name );
+				return;
+			}
+
+			// Only delete if file was successfully uploaded
+			if( userSession.Settings.FolderToDriveDeleteFileAfterUpload )
+			{
+				File.Delete( fullPath );
 			}
 		}
 	}

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
@@ -108,8 +107,8 @@ namespace myHEALTHwareDesktop
 			accountsComboBox.DataSource = accountsBindingSource;
 
 			// Try the previous credentials.
-			var connectionId = userSession.Settings.ConnectionId;
-			var accessToken = userSession.Settings.AccessToken;
+			string connectionId = userSession.Settings.ConnectionId;
+			string accessToken = userSession.Settings.AccessToken;
 
 			if( !string.IsNullOrEmpty( connectionId ) && !string.IsNullOrEmpty( accessToken ) )
 			{
@@ -189,6 +188,7 @@ namespace myHEALTHwareDesktop
 			if( userSession.IsLoggedIn )
 			{
 				await RefreshOnBehalfOfAccounts();
+				userSession.NotifyActingAccountRefresh();
 			}
 		}
 
@@ -386,7 +386,7 @@ namespace myHEALTHwareDesktop
 
 		public void InstallRunAtSystemStartup()
 		{
-			string setupArgs = "-s";
+			var setupArgs = "-s";
 
 			// Launch setup process with args to install.
 			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
@@ -397,7 +397,7 @@ namespace myHEALTHwareDesktop
 
 		public void UninstallRunAtSystemStartup()
 		{
-			string setupArgs = "-s -u";
+			var setupArgs = "-s -u";
 
 			// Launch setup process with args to uninstall.
 			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
@@ -451,7 +451,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		public string UploadFile( string fullPath, string name, string uploadFolderDriveItemId, bool isDeleteFileAfterUpload )
+		public string UploadFile( string fullPath, string name, string uploadFolderDriveItemId )
 		{
 			FileStream fileStream;
 
@@ -476,7 +476,7 @@ namespace myHEALTHwareDesktop
 			// Call MHW API to upload file.
 			try
 			{
-				var selected = GetSelectedAccount();
+				MhwAccount selected = GetSelectedAccount();
 				ApiFile driveItem = Sdk.Account.UploadFile( selected.AccountId, name, fileType, fileStream, uploadFolderDriveItemId );
 				fileId = driveItem.FileId;
 			}
@@ -490,11 +490,6 @@ namespace myHEALTHwareDesktop
 			{
 				// Change tray icon back to normal.
 				SetTrayIcon();
-
-				if( isDeleteFileAfterUpload )
-				{
-					File.Delete( fullPath );
-				}
 			}
 
 			return fileId;
@@ -504,11 +499,13 @@ namespace myHEALTHwareDesktop
 		// This method will loop waiting for it to close.
 		private FileStream OpenFile( string filepath )
 		{
-			int retries = 20;
+			var retries = 20;
 			const int DELAY = 100; // Max time spent here = retries*delay milliseconds
 
 			if( !File.Exists( filepath ) )
+			{
 				return null;
+			}
 
 			do
 			{
@@ -531,7 +528,7 @@ namespace myHEALTHwareDesktop
 			return null;
 		}
 
-		private async Task ExecuteLogin( string connectionId, string accessToken)
+		private async Task ExecuteLogin( string connectionId, string accessToken )
 		{
 			try
 			{
@@ -562,7 +559,7 @@ namespace myHEALTHwareDesktop
 
 		private async Task ChangeLogin()
 		{
-			bool loginSuccess = false;
+			var loginSuccess = false;
 			string connectionId = null;
 			string accessToken = null;
 
@@ -617,18 +614,18 @@ namespace myHEALTHwareDesktop
 		private async Task<IEnumerable<MhwAccount>> RefreshOnBehalfOfAccounts()
 		{
 			// Load the list of accounts that this account manages files for.
-			var accounts = await userSession.GetMhwAccountsAsync();
+			IEnumerable<MhwAccount> accounts = await userSession.GetMhwAccountsAsync();
 
 			var bindingList = (BindingList<MhwAccount>) accountsBindingSource.DataSource;
 			bindingList.Clear();
 
-			foreach( var item in accounts )
+			foreach( MhwAccount item in accounts )
 			{
 				bindingList.Add( item );
 			}
 
-			var account = accounts.FirstOrDefault( p => p.AccountId == userSession.Settings.SelectedAccountId ) ??
-			              accounts.FirstOrDefault( p => p.AccountId == userSession.LoggedInAccount.AccountId );
+			MhwAccount account = accounts.FirstOrDefault( p => p.AccountId == userSession.Settings.SelectedAccountId ) ??
+			                     accounts.FirstOrDefault( p => p.AccountId == userSession.LoggedInAccount.AccountId );
 
 			accountsComboBox.SelectedItem = account;
 

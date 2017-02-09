@@ -13,7 +13,7 @@ namespace myHEALTHwareDesktop
 	public partial class ControlPrintToFax : UserControl
 	{
 		private const string FAX_APP_ID = "FAC5FAC5-45E9-434A-AF34-C9E070729299";
-		private readonly VirtualPrinter virtualPrinter = new VirtualPrinter();
+		private readonly VirtualPrinterManager virtualPrinterManager = new VirtualPrinterManager();
 
 		private bool isPrinterInstalled;
 		private FileSystemWatcher localPathWatcher;
@@ -40,7 +40,7 @@ namespace myHEALTHwareDesktop
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
 
-		public void SelectedUserChanged(object sender, EventArgs e)
+		public void SelectedUserChanged( object sender, EventArgs e )
 		{
 			LoadPrintToFaxState();
 		}
@@ -71,7 +71,7 @@ namespace myHEALTHwareDesktop
 			}
 
 			labelFaxLink.Text = "Open myHEALTHware Fax";
-			isPrinterInstalled = virtualPrinter.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_FAX.PrinterName );
+			isPrinterInstalled = virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_FAX.PrinterName );
 
 			if( isPrinterInstalled )
 			{
@@ -138,7 +138,7 @@ namespace myHEALTHwareDesktop
 		public void Uninstall()
 		{
 			// Args for uninstall
-			string setupArgs = "-a -u -f";
+			var setupArgs = "-a -u -f";
 
 			// Launch setup process.
 			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
@@ -152,7 +152,7 @@ namespace myHEALTHwareDesktop
 
 		public void Install()
 		{
-			string setupArgs = "-a -f";
+			var setupArgs = "-a -f";
 
 			// Launch setup process.
 			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
@@ -205,7 +205,9 @@ namespace myHEALTHwareDesktop
 		private void StopMonitoring()
 		{
 			if( localPathWatcher == null )
+			{
 				return;
+			}
 
 			try
 			{
@@ -238,11 +240,13 @@ namespace myHEALTHwareDesktop
 			}
 
 			// Upload the printed PDF file.
-			string fileId = UploadService.UploadFile( fullPath, name, null, true );
+			string fileId = UploadService.UploadFile( fullPath, name, null );
+
+			File.Delete( fullPath );
 
 			if( fileId == null )
 			{
-				NotificationService.ShowBalloonError( "Print to Fax failed: Upload {0} failed", fullPath );
+				NotificationService.ShowBalloonError( "Print to Fax failed: Unable to upload {0}", fullPath );
 				return;
 			}
 
@@ -253,15 +257,21 @@ namespace myHEALTHwareDesktop
 			else
 			{
 				// Create draft fax.
-				ApiFax draftFax = new ApiFax { AccountId = userSession.ActingAsAccount.AccountId, FileId = fileId, To = new List<ApiFaxRecipient>() };
+				var draftFax = new ApiFax
+				{
+					AccountId = userSession.ActingAsAccount.AccountId,
+					FileId = fileId,
+					To = new List<ApiFaxRecipient>()
+				};
 
 				try
 				{
 					Sdk.Fax.Create( draftFax, true, false, null, null );
+					NotificationService.ShowBalloonInfo( "Print to Fax Draft succeeded: {0}", name );
 				}
 				catch( Exception ex )
 				{
-					NotificationService.ShowBalloonError( "Print to Fax create draft failed: {0}", ex.Message );
+					NotificationService.ShowBalloonError( "Print to Fax Draft failed: {0}", ex.Message );
 				}
 			}
 		}
@@ -269,7 +279,6 @@ namespace myHEALTHwareDesktop
 		private void LaunchSendFax( string fileId )
 		{
 			sendFax = new SendFax( userSession, fileId );
-			sendFax.InitBrowser();
 
 			// Register a method to recieve click event callback.
 			sendFax.Click += SendFaxOnClick;
@@ -289,12 +298,13 @@ namespace myHEALTHwareDesktop
 			if( args.Message.eventType == "mhw.fax.send.success" )
 			{
 				isSendFaxSuccess = true;
+				NotificationService.ShowBalloonInfo( "Print to Fax succeeded" );
 			}
 			else if( args.Message.eventType == "mhw.fax.send.cancelled" )
 			{
 				// Cancelled.
 				isSendFaxSuccess = false;
-				NotificationService.ShowBalloonWarning( "Print to Fax was cancelled." );
+				////NotificationService.ShowBalloonWarning( "Print to Fax was cancelled." );
 			}
 			else
 			{

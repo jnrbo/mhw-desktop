@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace MHWVirtualPrinter
 {
-	public class VirtualPrinter
+	public class VirtualPrinterManager
 	{
 		private const string MONITOR_DLL_NAME = "mfilemon.dll";
 		private const string MONITOR_UI_NAME = "mfilemonUI.dll";
@@ -17,7 +17,7 @@ namespace MHWVirtualPrinter
 
 		private readonly WinSpool winspool = new WinSpool();
 
-		public VirtualPrinter()
+		public VirtualPrinterManager()
 		{
 			IsError = false;
 		}
@@ -238,11 +238,10 @@ namespace MHWVirtualPrinter
 		// I believe these virtual port parameters are specific to printmon
 		public void ConfigureVirtualPort( string monitorName, string portName, PdfEngine pdfEngine )
 		{
-			//string outputPath = Path.Combine(currentDirectory, "Temp", monitorName);
 			string outputPath = Path.Combine( Path.GetTempPath(), monitorName );
 			Directory.CreateDirectory( outputPath );
 
-			var filePattern = "%r-%u-%Y%m%d-%i.pdf";
+			var filePattern = "%r-%u-%Y%m%d-%H%n%s.pdf";
 			string userCommand = string.Format( "{0} -dSAFER -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%f\" -",
 			                                    pdfEngine.PathExe );
 			var execPath = "";
@@ -251,7 +250,9 @@ namespace MHWVirtualPrinter
 			Registry.LocalMachine.CreateSubKey( keyName );
 			RegistryKey regKey = Registry.LocalMachine.OpenSubKey( keyName, true );
 
+			// ReSharper disable once PossibleNullReferenceException
 			regKey.SetValue( "OutputPath", outputPath, RegistryValueKind.String );
+
 			regKey.SetValue( "FilePattern", filePattern, RegistryValueKind.String );
 			regKey.SetValue( "Overwrite", 0, RegistryValueKind.DWord );
 			regKey.SetValue( "UserCommand", userCommand, RegistryValueKind.String );

@@ -31,13 +31,14 @@
 			this.loadingControl = new myHEALTHwareDesktop.LoadingControl();
 			this.SuspendLayout();
 			// 
-			// loadingControl1
+			// loadingControl
 			// 
 			this.loadingControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.loadingControl.Location = new System.Drawing.Point(0, 0);
 			this.loadingControl.Name = "loadingControl";
-			this.loadingControl.Size = new System.Drawing.Size(592, 542);
+			this.loadingControl.Size = new System.Drawing.Size(534, 531);
 			this.loadingControl.TabIndex = 0;
+			this.loadingControl.UseWaitCursor = true;
 			// 
 			// SendFax
 			// 
@@ -46,13 +47,11 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-			this.ClientSize = new System.Drawing.Size(592, 542);
+			this.ClientSize = new System.Drawing.Size(534, 531);
 			this.Controls.Add(this.loadingControl);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(608, 581);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(608, 581);
+			this.MinimumSize = new System.Drawing.Size(400, 500);
 			this.Name = "SendFax";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
@@ -60,6 +59,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "myHEALTHware Fax";
 			this.UseWaitCursor = true;
+			this.Shown += new System.EventHandler(this.SendFaxShown);
 			this.ResumeLayout(false);
 
 		}

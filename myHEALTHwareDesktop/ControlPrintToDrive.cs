@@ -11,7 +11,7 @@ namespace myHEALTHwareDesktop
 {
 	public partial class ControlPrintToDrive : UserControl
 	{
-		private readonly VirtualPrinter virtualPrinter = new VirtualPrinter();
+		private readonly VirtualPrinterManager virtualPrinterManager = new VirtualPrinterManager();
 		private DrivePicker drivePicker;
 		private string drivePickerFileName;
 		private string drivePickerResult;
@@ -52,7 +52,7 @@ namespace myHEALTHwareDesktop
 
 		private bool LoadPrinterInstalled()
 		{
-			isPrintToDriveInstalled = virtualPrinter.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_DRIVE.PrinterName );
+			isPrintToDriveInstalled = virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_DRIVE.PrinterName );
 
 			if( isPrintToDriveInstalled )
 			{
@@ -139,7 +139,8 @@ namespace myHEALTHwareDesktop
 			// Using SDK, retrieve Drive Item's full path
 			try
 			{
-				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId, userSession.Settings.PrintToDriveDefaultDestinationId );
+				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId,
+				                                    userSession.Settings.PrintToDriveDefaultDestinationId );
 			}
 			catch( Exception ex )
 			{
@@ -283,7 +284,6 @@ namespace myHEALTHwareDesktop
 		private void LaunchDrivePicker( string fileName = null )
 		{
 			drivePicker = new DrivePicker( userSession, fileName );
-			drivePicker.InitBrowser();
 
 			// Register a method to receive click event callback.
 			drivePicker.Click += DrivePickerOnClick;
@@ -387,6 +387,7 @@ namespace myHEALTHwareDesktop
 			{
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
+
 				isWatcherRunning = false;
 				NotificationService.ShowBalloonError( "Start Print to Drive monitor failed: {0}", ex.Message );
 				return;
@@ -396,7 +397,9 @@ namespace myHEALTHwareDesktop
 			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
 			localPathWatcher.SynchronizingObject = this;
 			localPathWatcher.Created += LocalPathWatcherCreated;
+
 			isWatcherRunning = true;
+
 			pictureStartedStopped.Image = Resources.started;
 			labelMonitorStatus.Text = "Print to Drive monitor is running.";
 		}
@@ -465,9 +468,17 @@ namespace myHEALTHwareDesktop
 
 			// NOTE: If the drive-select-dialog returns a null folder selection then that needs to be interpreted as the root drive folder.
 			// To upload to the root folder the account ID needs to be sent as the folder ID instead of null.
-			if( UploadService.UploadFile( fullPath, fileName, driveItemId ?? accountId, true ) == null )
+			string fileId = UploadService.UploadFile( fullPath, fileName, driveItemId ?? accountId );
+
+			File.Delete( fullPath );
+
+			if( fileId == null )
 			{
 				NotificationService.ShowBalloonError( "Print to Drive failed: {0}", name );
+			}
+			else
+			{
+				NotificationService.ShowBalloonInfo( "Print to Drive succeeded: {0}", name );
 			}
 		}
 
