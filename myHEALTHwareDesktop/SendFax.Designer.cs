@@ -36,7 +36,7 @@
 			this.loadingControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.loadingControl.Location = new System.Drawing.Point(0, 0);
 			this.loadingControl.Name = "loadingControl";
-			this.loadingControl.Size = new System.Drawing.Size(534, 531);
+			this.loadingControl.Size = new System.Drawing.Size(559, 561);
 			this.loadingControl.TabIndex = 0;
 			this.loadingControl.UseWaitCursor = true;
 			// 
@@ -47,7 +47,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-			this.ClientSize = new System.Drawing.Size(534, 531);
+			this.ClientSize = new System.Drawing.Size(559, 561);
 			this.Controls.Add(this.loadingControl);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;

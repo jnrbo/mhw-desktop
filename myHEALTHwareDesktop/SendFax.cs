@@ -36,14 +36,15 @@ namespace myHEALTHwareDesktop
 
 			string url =
 				string.Format(
-					"{0}/UI/Fax/Send?accountId={1}&fileId={2}&connection_id={3}&access_token={4}&app_key={5}&app_secret={6}",
+					"{0}/UI/Fax/Send?accountId={1}&fileId={2}&connection_id={3}&access_token={4}&app_key={5}&app_secret={6}&responsive={7}",
 					userSession.Settings.myHEALTHwareDomain,
 					account.AccountId,
 					fileId,
 					creds.ConnectionId,
 					creds.AccessToken,
 					creds.AppId,
-					creds.AppSecret );
+					creds.AppSecret,
+					true );
 
 			chromiumBrowser = new ChromiumBrowserUserControl( url, ResponseHandler );
 			chromiumBrowser.PostMessageListener += ResultMessageHandler;
