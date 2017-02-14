@@ -307,11 +307,11 @@ namespace Setup
 
 			try
 			{
-				string appLocation = Directory.GetCurrentDirectory();
+				string appPath = string.Format( "{0}\\{1}.exe", Directory.GetCurrentDirectory(), MhwPrinter.APP_NAME );
 
 				//string regValue = string.Format("{0} -silent", appLocation);
 
-				regKey.SetValue( MhwPrinter.APP_NAME, appLocation, RegistryValueKind.String );
+				regKey.SetValue( MhwPrinter.APP_NAME, appPath, RegistryValueKind.String );
 			}
 			catch( Exception ex )
 			{

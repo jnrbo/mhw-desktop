@@ -15,10 +15,7 @@ namespace myHEALTHwareDesktop
 		private DrivePicker drivePicker;
 		private string drivePickerFileName;
 		private string drivePickerResult;
-		private bool isDefaultUploadPathSet;
 		private bool isDrivePickerSuccess;
-		//private bool isLoggedIn;
-		private bool isPrintToDriveInstalled;
 		private bool isWatcherRunning;
 		private FileSystemWatcher localPathWatcher;
 		private readonly ActiveUserSession userSession;
@@ -39,6 +36,16 @@ namespace myHEALTHwareDesktop
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
 
+		private bool IsUploadPathSet
+		{
+			get { return !string.IsNullOrWhiteSpace( userSession.Settings.PrintToDriveDefaultDestinationId ); }
+		}
+
+		private bool IsPrintToDriveInstalled
+		{
+			get { return virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_DRIVE.PrinterName ); }
+		}
+
 		private void SelectedUserChanged( object sender, EventArgs e )
 		{
 			if( !LoadPrinterInstalled() )
@@ -52,9 +59,7 @@ namespace myHEALTHwareDesktop
 
 		private bool LoadPrinterInstalled()
 		{
-			isPrintToDriveInstalled = virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_DRIVE.PrinterName );
-
-			if( isPrintToDriveInstalled )
+			if( IsPrintToDriveInstalled )
 			{
 				buttonPrintToDriveInstall.Text = "Uninstall Printer";
 			}
@@ -64,21 +69,21 @@ namespace myHEALTHwareDesktop
 				labelMonitorStatus.Text = "Print to Drive printer is not installed.";
 
 				// Clear any errors.
-				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
+				ClearDriveFolderMessage();
 			}
 
-			radioButtonPrompt.Enabled = isPrintToDriveInstalled;
-			radioButtonUseDefault.Enabled = isPrintToDriveInstalled;
-			textBoxPrintToDriveFolder.Enabled = isPrintToDriveInstalled;
-			buttonBrowsePrintToDrivePath.Enabled = isPrintToDriveInstalled;
+			radioButtonPrompt.Enabled = IsPrintToDriveInstalled;
+			radioButtonUseDefault.Enabled = IsPrintToDriveInstalled;
+			textBoxPrintToDriveFolder.Enabled = IsPrintToDriveInstalled;
+			buttonBrowsePrintToDrivePath.Enabled = IsPrintToDriveInstalled;
 
-			return isPrintToDriveInstalled;
+			return IsPrintToDriveInstalled;
 		}
 
 		private void InitRadioButtons()
 		{
 			// Set the initial state of the radio buttons.
-			if( isDefaultUploadPathSet )
+			if( IsUploadPathSet )
 			{
 				radioButtonPrompt.Checked = userSession.Settings.PrintToDrivePrompt;
 				radioButtonUseDefault.Checked = !userSession.Settings.PrintToDrivePrompt;
@@ -100,7 +105,7 @@ namespace myHEALTHwareDesktop
 				buttonBrowsePrintToDrivePath.Enabled = false;
 
 				// Clear any errors.
-				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
+				ClearDriveFolderMessage();
 
 				StartMonitoring();
 			}
@@ -113,7 +118,7 @@ namespace myHEALTHwareDesktop
 				// Make sure current value is valid.
 				LoadDefaultDriveLocation();
 
-				if( isDefaultUploadPathSet )
+				if( IsUploadPathSet )
 				{
 					StartMonitoring();
 				}
@@ -126,36 +131,39 @@ namespace myHEALTHwareDesktop
 
 		private void LoadDefaultDriveLocation()
 		{
-			if( string.IsNullOrWhiteSpace( userSession.Settings.PrintToDriveDefaultDestinationId ) )
+			if( !IsUploadPathSet )
 			{
-				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "Please select a Drive folder to upload files to." );
-
-				isDefaultUploadPathSet = false;
+				ResetDriveFolderState();
 				return;
 			}
 
-			ApiDriveItem item;
-
-			// Using SDK, retrieve Drive Item's full path
 			try
 			{
-				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId,
-				                                    userSession.Settings.PrintToDriveDefaultDestinationId );
+				LoadDriveLocation( userSession.Settings.PrintToDriveDefaultDestinationId );
 			}
-			catch( Exception ex )
+			catch( Exception )
 			{
-				isDefaultUploadPathSet = false;
-				userSession.Settings.PrintToDriveDefaultDestinationId = "";
+				userSession.Settings.PrintToDriveDefaultDestinationId = null;
+				userSession.Settings.Save();
 
-				string message = string.Format( "Error setting Drive path: {0}", ex.Message.Substring( 0, 60 ) );
-				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, message );
-
-				return;
+				ResetDriveFolderState();
 			}
+		}
+
+		private void ResetDriveFolderState()
+		{
+			errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "Please select a Drive folder to upload files to." );
+			SetUploadPathText( "" );
+		}
+
+		private void LoadDriveLocation( string folderId )
+		{
+			// Using SDK, retrieve Drive Item's full path
+			ApiDriveItem item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId,
+			                                                 TranslateDriveItemId( folderId ) );
 
 			string path = string.Format( "{0}/{1}", item.Path, item.Name );
 			SetUploadPathText( path );
-			isDefaultUploadPathSet = true;
 		}
 
 		private void RadioButtonsCheckedChanged( object sender, EventArgs e )
@@ -190,7 +198,7 @@ namespace myHEALTHwareDesktop
 		{
 			buttonPrintToDriveInstall.Enabled = false;
 
-			if( isPrintToDriveInstalled )
+			if( IsPrintToDriveInstalled )
 			{
 				Uninstall();
 			}
@@ -210,11 +218,7 @@ namespace myHEALTHwareDesktop
 			StopMonitoring();
 
 			// Reset previous settings.
-			isDefaultUploadPathSet = false;
-			userSession.Settings.PrintToDriveDefaultDestinationId = "";
-			SetUploadPathText( "" );
-			userSession.Settings.PrintToDrivePrompt = true;
-			userSession.Settings.Save();
+			ResetSettings();
 
 			// Launch setup process with args to uninstall.
 			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
@@ -240,11 +244,7 @@ namespace myHEALTHwareDesktop
 			process.WaitForExit();
 
 			// Reset previous settings.
-			isDefaultUploadPathSet = false;
-			userSession.Settings.PrintToDriveDefaultDestinationId = "";
-			SetUploadPathText( "" );
-			userSession.Settings.PrintToDrivePrompt = true;
-			userSession.Settings.Save();
+			ResetSettings();
 
 			// Verify the printer is now installed and set state.
 			if( LoadPrinterInstalled() )
@@ -252,6 +252,14 @@ namespace myHEALTHwareDesktop
 				InitRadioButtons();
 				SetPromptOrDefaultState();
 			}
+		}
+
+		private void ResetSettings()
+		{
+			userSession.Settings.PrintToDriveDefaultDestinationId = null;
+			SetUploadPathText( "" );
+			userSession.Settings.PrintToDrivePrompt = true;
+			userSession.Settings.Save();
 		}
 
 		// This method handles calling from cross thread or directly.
@@ -265,20 +273,20 @@ namespace myHEALTHwareDesktop
 			else
 			{
 				textBoxPrintToDriveFolder.Text = text;
-
-				// Valid. Clear any previous error.
-				errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
 			}
 		}
 
 		private void ButtonBrowsePrintToDrivePathClick( object sender, EventArgs e )
 		{
 			LaunchDrivePicker();
-
-			if( isDrivePickerSuccess )
+			if( !isDrivePickerSuccess )
 			{
-				userSession.Settings.PrintToDriveDefaultDestinationId = drivePickerResult;
+				return;
 			}
+
+			// Save Drive item ID.
+			userSession.Settings.PrintToDriveDefaultDestinationId = drivePickerResult;
+			userSession.Settings.Save();
 		}
 
 		private void LaunchDrivePicker( string fileName = null )
@@ -295,35 +303,30 @@ namespace myHEALTHwareDesktop
 			}
 
 			// Valid. Clear any previous error.
-			errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
+			ClearDriveFolderMessage();
 
-			// Display folder in dialog box.
-			SetUploadPath( drivePickerResult );
-
-			// Save Drive item ID.
-			userSession.Settings.Save();
+			try
+			{
+				// Display folder in dialog box.
+				LoadDriveLocation( drivePickerResult );
+			}
+			catch( Exception ex )
+			{
+				NotificationService.ShowBalloonError( "Could not retrieve upload Drive folder" );
+				return;
+			}
 
 			StartMonitoring();
 		}
 
-		private void SetUploadPath( string folderId )
+		private void ClearDriveFolderMessage()
 		{
-			ApiDriveItem item;
+			errorProviderDriveFolder.SetError( textBoxPrintToDriveFolder, "" );
+		}
 
-			// Using SDK, retrieve Drive Item's full path
-			try
-			{
-				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId, folderId );
-			}
-			catch( Exception ex )
-			{
-				NotificationService.ShowBalloonError( "Could not retrieve upload Drive folder: {0}", ex.Message );
-				return;
-			}
-
-			string path = string.Format( "{0}/{1}", item.Path, item.Name );
-			SetUploadPathText( path );
-			isDefaultUploadPathSet = true;
+		private string TranslateDriveItemId( string folderId )
+		{
+			return folderId != userSession.ActingAsAccount.AccountId ? folderId : null;
 		}
 
 		private void DrivePickerOnClick( object sender, EventArgs e )
@@ -337,7 +340,9 @@ namespace myHEALTHwareDesktop
 		{
 			if( args.Message.eventType == "mhw.drive.select.success" )
 			{
-				drivePickerResult = args.Message.data.driveItemId;
+				// NOTE: If the drive-select-dialog returns a null folder selection then that needs to be interpreted as the root drive folder.
+				// To upload to the root folder the account ID needs to be sent as the folder ID instead of null.
+				drivePickerResult = args.Message.data.driveItemId ?? userSession.ActingAsAccount.AccountId;
 				drivePickerFileName = args.Message.data.itemName;
 				isDrivePickerSuccess = true;
 			}
@@ -364,13 +369,13 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			if( !isPrintToDriveInstalled )
+			if( !IsPrintToDriveInstalled )
 			{
 				// Printer not installed.
 				return;
 			}
 
-			if( !userSession.Settings.PrintToDrivePrompt && !isDefaultUploadPathSet )
+			if( !userSession.Settings.PrintToDrivePrompt && !IsUploadPathSet )
 			{
 				// Configured to upload to a default Drive path but it is not set.
 				return;
@@ -442,7 +447,6 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			string accountId = userSession.ActingAsAccount.AccountId;
 			string driveItemId = userSession.Settings.PrintToDriveDefaultDestinationId;
 			string fileName = name;
 			string extension = Path.GetExtension( fileName );
@@ -453,7 +457,7 @@ namespace myHEALTHwareDesktop
 
 				if( isDrivePickerSuccess )
 				{
-					driveItemId = drivePickerResult ?? accountId;
+					driveItemId = drivePickerResult;
 					fileName = drivePickerFileName;
 				}
 				else
@@ -466,19 +470,17 @@ namespace myHEALTHwareDesktop
 			// Make sure the extension didn't get removed
 			fileName = Path.ChangeExtension( fileName, extension );
 
-			// NOTE: If the drive-select-dialog returns a null folder selection then that needs to be interpreted as the root drive folder.
-			// To upload to the root folder the account ID needs to be sent as the folder ID instead of null.
-			string fileId = UploadService.UploadFile( fullPath, fileName, driveItemId ?? accountId );
+			string fileId = UploadService.UploadFile( fullPath, fileName, driveItemId );
 
 			File.Delete( fullPath );
 
 			if( fileId == null )
 			{
-				NotificationService.ShowBalloonError( "Print to Drive failed: {0}", name );
+				NotificationService.ShowBalloonError( "Print to Drive failed: {0}", fileName ?? name );
 			}
 			else
 			{
-				NotificationService.ShowBalloonInfo( "Print to Drive succeeded: {0}", name );
+				NotificationService.ShowBalloonInfo( "Print to Drive succeeded: {0}", fileName );
 			}
 		}
 

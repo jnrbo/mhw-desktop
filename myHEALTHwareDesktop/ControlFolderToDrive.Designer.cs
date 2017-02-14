@@ -47,12 +47,12 @@
 			((System.ComponentModel.ISupportInitialize)(this.errorProviderDriveFolder)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// label_MonitorStatus
+			// labelMonitorStatus
 			// 
-			this.labelMonitorStatus.Location = new System.Drawing.Point(198, 114);
+			this.labelMonitorStatus.Location = new System.Drawing.Point(102, 114);
 			this.labelMonitorStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.labelMonitorStatus.Name = "labelMonitorStatus";
-			this.labelMonitorStatus.Size = new System.Drawing.Size(147, 13);
+			this.labelMonitorStatus.Size = new System.Drawing.Size(243, 13);
 			this.labelMonitorStatus.TabIndex = 33;
 			this.labelMonitorStatus.Text = "Uploader is currently stopped.";
 			this.labelMonitorStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -103,7 +103,7 @@
 			this.label4.TabIndex = 29;
 			this.label4.Text = "Upload to myHEALTHware Drive:";
 			// 
-			// textBoxMHWFolder
+			// textBoxMhwFolder
 			// 
 			this.textBoxMhwFolder.Location = new System.Drawing.Point(174, 38);
 			this.textBoxMhwFolder.Name = "textBoxMhwFolder";

@@ -272,7 +272,7 @@ namespace myHEALTHwareDesktop
 				// Must limit message to less than 64 chars.
 				if( message.Length > 63 )
 				{
-					message = message.Substring( 0, 60 ) + "...";
+					message = message.TrimWithEllipsis( 60 );
 				}
 
 				trayIcon.Text = message;

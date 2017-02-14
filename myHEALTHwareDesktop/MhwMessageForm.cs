@@ -26,7 +26,14 @@ namespace myHEALTHwareDesktop
 
 		private void MhwMessageFormShown( object sender, EventArgs e )
 		{
-			Activate();
+			if( Owner != null )
+			{
+				Owner.Activate();
+			}
+			else
+			{
+				Activate();
+			}
 		}
 	}
 }

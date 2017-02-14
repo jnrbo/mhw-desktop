@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Net;
+using System.Web;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using SOAPware.PortalApi.Model.Drive;
@@ -13,8 +15,6 @@ namespace myHEALTHwareDesktop
 		private DrivePicker drivePicker;
 		private FileSystemWatcher localPathWatcher;
 		private bool isWatcherRunning;
-		private bool isLocalPathSet;
-		private bool isUploadPathSet;
 		private bool isDrivePickerSuccess;
 		private string uploadDriveItemId;
 		private readonly ActiveUserSession userSession;
@@ -35,16 +35,48 @@ namespace myHEALTHwareDesktop
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
 
+		private bool IsUploadPathSet
+		{
+			get { return !string.IsNullOrWhiteSpace( userSession.Settings.FolderToDriveDestinationId ); }
+		}
+
+		private bool IsLocalPathSet
+		{
+			get { return !string.IsNullOrWhiteSpace( userSession.Settings.FolderToDriveLocalPath ); }
+		}
+
 		public void SelectedUserChanged( object sender, EventArgs e )
 		{
 			LoadSettingDeleteFileAfterUpload();
 			SetLocalPath( userSession.Settings.FolderToDriveLocalPath );
-			LoadDriveLocation( userSession.Settings.FolderToDriveDestinationId );
+
+			LoadDefaultDriveLocation();
 
 			// If all set, start monitoring.
-			if( userSession.Settings.FolderToDriveRunning && isLocalPathSet && isUploadPathSet )
+			if( userSession.Settings.FolderToDriveRunning && IsLocalPathSet && IsUploadPathSet )
 			{
 				StartMonitoring();
+			}
+		}
+
+		private void LoadDefaultDriveLocation()
+		{
+			if( !IsUploadPathSet )
+			{
+				ClearDriveFolderMessage();
+				return;
+			}
+
+			try
+			{
+				LoadDriveLocation( userSession.Settings.FolderToDriveDestinationId );
+			}
+			catch( Exception )
+			{
+				userSession.Settings.FolderToDriveDestinationId = null;
+				userSession.Settings.Save();
+
+				ClearDriveFolderMessage();
 			}
 		}
 
@@ -94,14 +126,12 @@ namespace myHEALTHwareDesktop
 			if( string.IsNullOrWhiteSpace( path ) )
 			{
 				errorProviderLocalFolder.SetError( textBoxLocalPath, "Please select a local folder to monitor for files to upload." );
-				isLocalPathSet = false;
 				SetButtonState();
 			}
 			else if( !Directory.Exists( path ) )
 			{
 				textBoxLocalPath.Text = path;
-				errorProviderLocalFolder.SetError( textBoxLocalPath, "The selected folder does not exist.  Please select a new one." );
-				isLocalPathSet = false;
+				errorProviderLocalFolder.SetError( textBoxLocalPath, "The selected folder does not exist. Please select a new one." );
 				SetButtonState();
 			}
 			else
@@ -110,15 +140,10 @@ namespace myHEALTHwareDesktop
 				errorProviderLocalFolder.SetError( textBoxLocalPath, "" );
 
 				textBoxLocalPath.Text = path;
-				isLocalPathSet = true;
 				SetButtonState();
 
-				// Has the value actually changed since it was last valid?
-				if( path != userSession.Settings.FolderToDriveLocalPath )
-				{
-					userSession.Settings.FolderToDriveLocalPath = path;
-					userSession.Settings.Save();
-				}
+				userSession.Settings.FolderToDriveLocalPath = path;
+				userSession.Settings.Save();
 			}
 		}
 
@@ -126,8 +151,7 @@ namespace myHEALTHwareDesktop
 		{
 			if( string.IsNullOrWhiteSpace( folderId ) )
 			{
-				errorProviderDriveFolder.SetError( textBoxMhwFolder, "Please select a Drive folder to upload files to." );
-				isUploadPathSet = false;
+				ResetDriveFolderState();
 				return;
 			}
 
@@ -136,25 +160,34 @@ namespace myHEALTHwareDesktop
 			// Using SDK, retrieve Drive Item's full path
 			try
 			{
-				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId, folderId );
+				item = Sdk.DriveItems.GetDriveItem( userSession.ActingAsAccount.AccountId, TranslateDriveItemId( folderId ) );
 			}
 			catch( Exception ex )
 			{
-				isUploadPathSet = false;
+				var httpEx = ex as HttpException;
+				if( httpEx == null || httpEx.GetHttpCode() != (int) HttpStatusCode.NotFound )
+				{
+					string message = string.Format( "Error setting Drive path: {0}", ex.Message.TrimWithEllipsis( 60 ) );
+					errorProviderDriveFolder.SetError( textBoxMhwFolder, message );
+				}
 
-				string message = string.Format( "Error setting Drive path: {0}", ex.Message.Substring( 0, 60 ) );
-				errorProviderDriveFolder.SetError( textBoxMhwFolder, message );
+				userSession.Settings.FolderToDriveDestinationId = null;
+
 				SetButtonState();
 				return;
 			}
 
 			// Valid. Clear any previous error.
-			errorProviderDriveFolder.SetError( textBoxMhwFolder, "" );
+			ClearDriveFolderMessage();
 
 			string path = string.Format( "{0}/{1}", item.Path, item.Name );
 			SetUploadPathText( path );
 			uploadDriveItemId = folderId;
-			isUploadPathSet = true;
+		}
+
+		private string TranslateDriveItemId( string folderId )
+		{
+			return folderId != userSession.ActingAsAccount.AccountId ? folderId : null;
 		}
 
 		private delegate void SetTextCallback( string text );
@@ -183,14 +216,14 @@ namespace myHEALTHwareDesktop
 			drivePicker = new DrivePicker( userSession );
 
 			// Register a method to recieve click event callback.
-			drivePicker.Click += drivePicker_OnClick;
+			drivePicker.Click += DrivePickerOnClick;
 
 			drivePicker.ShowDialog( this );
 
 			if( isDrivePickerSuccess )
 			{
 				// Valid. Clear any previous error.
-				errorProviderDriveFolder.SetError( textBoxMhwFolder, "" );
+				ClearDriveFolderMessage();
 
 				// Display folder in dialog box.
 				LoadDriveLocation( uploadDriveItemId );
@@ -203,7 +236,12 @@ namespace myHEALTHwareDesktop
 			SetButtonState();
 		}
 
-		private void drivePicker_OnClick( object sender, EventArgs e )
+		private void ClearDriveFolderMessage()
+		{
+			errorProviderDriveFolder.SetError( textBoxMhwFolder, "" );
+		}
+
+		private void DrivePickerOnClick( object sender, EventArgs e )
 		{
 			GetDrivePickerResults( (PostMessageListenerEventArgs) e );
 		}
@@ -214,7 +252,9 @@ namespace myHEALTHwareDesktop
 		{
 			if( args.Message.eventType == "mhw.drive.select.success" )
 			{
-				uploadDriveItemId = args.Message.data.driveItemId;
+				// NOTE: If the drive-select-dialog returns a null folder selection then that needs to be interpreted as the root drive folder.
+				// To upload to the root folder the account ID needs to be sent as the folder ID instead of null.
+				uploadDriveItemId = args.Message.data.driveItemId ?? userSession.ActingAsAccount.AccountId;
 				isDrivePickerSuccess = true;
 			}
 			else if( args.Message.eventType == "mhw.drive.select.cancelled" )
@@ -254,7 +294,7 @@ namespace myHEALTHwareDesktop
 				textBoxMhwFolder.Enabled = true;
 				buttonBrowseLocalPath.Enabled = true;
 				buttonBrowseUploadPath.Enabled = true;
-				buttonStartStopWatcher.Enabled = isLocalPathSet && isUploadPathSet;
+				buttonStartStopWatcher.Enabled = IsLocalPathSet && IsUploadPathSet;
 			}
 		}
 
@@ -285,7 +325,7 @@ namespace myHEALTHwareDesktop
 
 		private void StartMonitoring()
 		{
-			if( !isLocalPathSet || !isUploadPathSet )
+			if( !IsLocalPathSet || !IsUploadPathSet )
 			{
 				MessageBox.Show( "Please set local and Drive folders first.", "Error" );
 				return;
@@ -358,6 +398,12 @@ namespace myHEALTHwareDesktop
 			{
 				File.Delete( fullPath );
 			}
+		}
+
+		private void ResetDriveFolderState()
+		{
+			errorProviderDriveFolder.SetError( textBoxMhwFolder, "Please select a Drive folder to upload files to." );
+			SetUploadPathText( "" );
 		}
 	}
 }

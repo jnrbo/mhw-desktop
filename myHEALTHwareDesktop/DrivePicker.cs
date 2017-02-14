@@ -8,7 +8,7 @@ namespace myHEALTHwareDesktop
 	public partial class DrivePicker : Form
 	{
 		private const string UNAUTHORIZED_ERROR_TEMPLATE =
-			"You aren't allowed to print to {0}'s Drive folder. Please contact an administrator to get this corrected.";
+			"You aren't permitted to print to {0}'s myHEALTHware Drive folder. Please contact an administrator to get this corrected.";
 
 		private ChromiumBrowserUserControl chromiumBrowser;
 		private readonly ActiveUserSession userSession;
@@ -70,12 +70,12 @@ namespace myHEALTHwareDesktop
 				? string.Format( UNAUTHORIZED_ERROR_TEMPLATE, userSession.ActingAsAccount.Name )
 				: "We were unable to load the Print to Drive folder selector.";
 
-			Dispose();
-
 			var messageDialog = new MhwMessageForm( "Print to Drive", message, true );
-			messageDialog.ShowDialog();
+			messageDialog.ShowDialog( this );
 
 			chromiumBrowser.OnResponseHandler = null;
+
+			Dispose();
 		}
 
 		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )
@@ -86,7 +86,14 @@ namespace myHEALTHwareDesktop
 
 		private void DrivePickerShown( object sender, EventArgs e )
 		{
-			Activate();
+			if( Owner != null )
+			{
+				Owner.Activate();
+			}
+			else
+			{
+				Activate();
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@
 	// type-safe-enum pattern
 	public sealed class MhwPrinter
 	{
-		public const string APP_NAME = @"myHEALTHwareDesktop";
+		public const string APP_NAME = "myHEALTHwareDesktop";
 
 		private readonly int value;
 		public readonly string PrinterName;
