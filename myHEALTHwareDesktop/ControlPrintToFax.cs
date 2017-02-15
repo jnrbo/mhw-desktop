@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
+using Setup;
 using SOAPware.PortalApi.Model.Faxes;
 using SOAPware.PortalSdk;
 
@@ -140,11 +141,7 @@ namespace myHEALTHwareDesktop
 			// Args for uninstall
 			var setupArgs = "-a -u -f";
 
-			// Launch setup process.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 
 			// See if the printer is now uninstalled.
 			LoadPrintToFaxState();
@@ -152,13 +149,10 @@ namespace myHEALTHwareDesktop
 
 		public void Install()
 		{
+			// Args for install
 			var setupArgs = "-a -f";
 
-			// Launch setup process.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 
 			// See if the printer is now installed.
 			LoadPrintToFaxState();

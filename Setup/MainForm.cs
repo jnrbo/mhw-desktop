@@ -71,7 +71,7 @@ namespace Setup
 				options.RunAtSystemStartup = true;
 			}
 
-			string currentDirectory = Directory.GetCurrentDirectory();
+			string currentDirectory = GetApplicationDirectory();
 
 			// Determine platform we're running on.
 			string platform = Environment.Is64BitOperatingSystem ? "x64" : "x86";
@@ -140,6 +140,11 @@ namespace Setup
 					log.Info( "Click OK to start myHEALTHware Desktop" );
 				}
 			}
+		}
+
+		private static string GetApplicationDirectory()
+		{
+			return Application.StartupPath;
 		}
 
 		private void Install( string currentDirectory, string platform )
@@ -307,7 +312,7 @@ namespace Setup
 
 			try
 			{
-				string appPath = string.Format( "{0}\\{1}.exe", Directory.GetCurrentDirectory(), MhwPrinter.APP_NAME );
+				string appPath = string.Format( "{0}\\{1}.exe", GetApplicationDirectory(), MhwPrinter.APP_NAME );
 
 				//string regValue = string.Format("{0} -silent", appLocation);
 
@@ -382,7 +387,7 @@ namespace Setup
 			var shortcut = (IWshShortcut) shell.CreateShortcut( shortcutAddress );
 			shortcut.Description = "A shortcut to myHEALTHware Desktop application";
 			//shortcut.Hotkey = "Ctrl+Shift+M";
-			shortcut.TargetPath = string.Format( "{0}\\{1}.exe", Directory.GetCurrentDirectory(), MhwPrinter.APP_NAME );
+			shortcut.TargetPath = string.Format( "{0}\\{1}.exe", GetApplicationDirectory(), MhwPrinter.APP_NAME );
 			shortcut.Save();
 		}
 
@@ -430,7 +435,7 @@ namespace Setup
 		{
 			if( allowClose && !options.RanFromApp && !options.Uninstall )
 			{
-				string currentDirectory = Directory.GetCurrentDirectory();
+				string currentDirectory = GetApplicationDirectory();
 
 				// Start the main app.
 				try

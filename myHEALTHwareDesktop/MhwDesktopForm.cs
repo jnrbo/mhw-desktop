@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
 using Microsoft.Win32;
+using Setup;
 using SOAPware.PortalApi.Models;
 using SOAPware.PortalSdk;
 
@@ -389,10 +390,7 @@ namespace myHEALTHwareDesktop
 			var setupArgs = "-s";
 
 			// Launch setup process with args to install.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 		}
 
 		public void UninstallRunAtSystemStartup()
@@ -400,10 +398,7 @@ namespace myHEALTHwareDesktop
 			var setupArgs = "-s -u";
 
 			// Launch setup process with args to uninstall.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 		}
 
 		private void TabsSelectedIndexChanged( object sender, EventArgs e )

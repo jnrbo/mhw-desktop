@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
+using Setup;
 using SOAPware.PortalApi.Model.Drive;
 using SOAPware.PortalSdk;
 
@@ -221,10 +222,7 @@ namespace myHEALTHwareDesktop
 			ResetSettings();
 
 			// Launch setup process with args to uninstall.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 
 			// Verify the printer is now uninstalled and set state.
 			if( LoadPrinterInstalled() )
@@ -238,10 +236,7 @@ namespace myHEALTHwareDesktop
 			var setupArgs = "-a -d";
 
 			// Launch setup process with args to install.
-			var process = new Process { StartInfo = new ProcessStartInfo { FileName = "Setup.exe", Arguments = setupArgs } };
-
-			process.Start();
-			process.WaitForExit();
+			MhwSetup.LaunchAndWaitForExit( setupArgs );
 
 			// Reset previous settings.
 			ResetSettings();
