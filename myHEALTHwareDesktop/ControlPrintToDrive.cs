@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
@@ -17,7 +16,6 @@ namespace myHEALTHwareDesktop
 		private string drivePickerFileName;
 		private string drivePickerResult;
 		private bool isDrivePickerSuccess;
-		private bool isWatcherRunning;
 		private FileSystemWatcher localPathWatcher;
 		private readonly ActiveUserSession userSession;
 
@@ -45,6 +43,11 @@ namespace myHEALTHwareDesktop
 		private bool IsPrintToDriveInstalled
 		{
 			get { return virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_DRIVE.PrinterName ); }
+		}
+
+		private bool IsWatcherRunning
+		{
+			get { return localPathWatcher != null && localPathWatcher.EnableRaisingEvents; }
 		}
 
 		private void SelectedUserChanged( object sender, EventArgs e )
@@ -279,24 +282,6 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			// Save Drive item ID.
-			userSession.Settings.PrintToDriveDefaultDestinationId = drivePickerResult;
-			userSession.Settings.Save();
-		}
-
-		private void LaunchDrivePicker( string fileName = null )
-		{
-			drivePicker = new DrivePicker( userSession, fileName );
-
-			// Register a method to receive click event callback.
-			drivePicker.Click += DrivePickerOnClick;
-
-			drivePicker.ShowDialog( this );
-			if( !isDrivePickerSuccess )
-			{
-				return;
-			}
-
 			// Valid. Clear any previous error.
 			ClearDriveFolderMessage();
 
@@ -311,7 +296,28 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
+			// Save Drive item ID.
+			userSession.Settings.PrintToDriveDefaultDestinationId = drivePickerResult;
+			userSession.Settings.Save();
+
 			StartMonitoring();
+		}
+
+		private void LaunchDrivePicker( string fileName = null )
+		{
+			drivePicker = new DrivePicker( userSession, fileName );
+
+			// Register a method to receive click event callback.
+			drivePicker.Click += DrivePickerOnClick;
+
+			try
+			{
+				drivePicker.ShowDialog( this );
+			}
+			finally
+			{
+				drivePicker.Dispose();
+			}
 		}
 
 		private void ClearDriveFolderMessage()
@@ -358,7 +364,7 @@ namespace myHEALTHwareDesktop
 
 		private void StartMonitoring()
 		{
-			if( isWatcherRunning )
+			if( IsWatcherRunning )
 			{
 				// Already running.
 				return;
@@ -388,7 +394,6 @@ namespace myHEALTHwareDesktop
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
 
-				isWatcherRunning = false;
 				NotificationService.ShowBalloonError( "Start Print to Drive monitor failed: {0}", ex.Message );
 				return;
 			}
@@ -397,8 +402,6 @@ namespace myHEALTHwareDesktop
 			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
 			localPathWatcher.SynchronizingObject = this;
 			localPathWatcher.Created += LocalPathWatcherCreated;
-
-			isWatcherRunning = true;
 
 			pictureStartedStopped.Image = Resources.started;
 			labelMonitorStatus.Text = "Print to Drive monitor is running.";
@@ -421,7 +424,6 @@ namespace myHEALTHwareDesktop
 				NotificationService.ShowBalloonError( "Stop Print to Drive monitor error: {0}", ex.Message );
 			}
 
-			isWatcherRunning = false;
 			pictureStartedStopped.Image = Resources.stopped;
 			labelMonitorStatus.Text = "Print to Drive monitor is stopped.";
 		}

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Web;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
@@ -18,9 +20,7 @@ namespace myHEALTHwareDesktop
 
 		private bool isPrinterInstalled;
 		private FileSystemWatcher localPathWatcher;
-		private bool isWatcherRunning;
 		private SendFax sendFax;
-		private bool isSendFaxSuccess;
 		private readonly ActiveUserSession userSession;
 
 		public ControlPrintToFax()
@@ -40,6 +40,11 @@ namespace myHEALTHwareDesktop
 
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
+
+		private bool IsWatcherRunning
+		{
+			get { return localPathWatcher != null && localPathWatcher.EnableRaisingEvents; }
+		}
 
 		public void SelectedUserChanged( object sender, EventArgs e )
 		{
@@ -160,7 +165,7 @@ namespace myHEALTHwareDesktop
 
 		private void StartMonitoring()
 		{
-			if( isWatcherRunning )
+			if( IsWatcherRunning )
 			{
 				// Already running.
 				return;
@@ -183,7 +188,6 @@ namespace myHEALTHwareDesktop
 			{
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
-				isWatcherRunning = false;
 				NotificationService.ShowBalloonError( "Start Print to Fax monitor failed: {0}", ex.Message );
 				return;
 			}
@@ -192,7 +196,7 @@ namespace myHEALTHwareDesktop
 			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
 			localPathWatcher.SynchronizingObject = this;
 			localPathWatcher.Created += LocalPathWatcherCreated;
-			isWatcherRunning = true;
+
 			pictureStartedStopped.Image = Resources.started;
 		}
 
@@ -213,7 +217,6 @@ namespace myHEALTHwareDesktop
 				NotificationService.ShowBalloonError( "Stop Print to Fax monitor error: {0}", ex.Message );
 			}
 
-			isWatcherRunning = false;
 			pictureStartedStopped.Image = Resources.stopped;
 		}
 
@@ -265,7 +268,15 @@ namespace myHEALTHwareDesktop
 				}
 				catch( Exception ex )
 				{
-					NotificationService.ShowBalloonError( "Print to Fax Draft failed: {0}", ex.Message );
+					string details = name;
+
+					var httpEx = ex as HttpException;
+					if( httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.Forbidden )
+					{
+						details = "missing fax permission";
+					}
+
+					NotificationService.ShowBalloonError( "Print to Fax Draft failed: {0}", details );
 				}
 			}
 		}
@@ -277,7 +288,14 @@ namespace myHEALTHwareDesktop
 			// Register a method to recieve click event callback.
 			sendFax.Click += SendFaxOnClick;
 
-			sendFax.ShowDialog( this );
+			try
+			{
+				sendFax.ShowDialog( this );
+			}
+			finally
+			{
+				sendFax.Dispose();
+			}
 		}
 
 		private void SendFaxOnClick( object sender, EventArgs e )
@@ -291,18 +309,15 @@ namespace myHEALTHwareDesktop
 		{
 			if( args.Message.eventType == "mhw.fax.send.success" )
 			{
-				isSendFaxSuccess = true;
 				NotificationService.ShowBalloonInfo( "Print to Fax succeeded" );
 			}
 			else if( args.Message.eventType == "mhw.fax.send.cancelled" )
 			{
 				// Cancelled.
-				isSendFaxSuccess = false;
 				////NotificationService.ShowBalloonWarning( "Print to Fax was cancelled." );
 			}
 			else
 			{
-				isSendFaxSuccess = false;
 				NotificationService.ShowBalloonInfo( "Send Fax Error: {0}", args.Message.data.message );
 			}
 

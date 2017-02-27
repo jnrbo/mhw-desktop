@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using myHEALTHwareDesktop.Properties;
 using SOAPware.PortalApi.Models;
 using SOAPware.PortalSdk;
@@ -31,7 +32,12 @@ namespace myHEALTHwareDesktop
 
 		internal Settings Settings
 		{
-			get { return Settings.Default; }
+			get { return GetSettings(); }
+		}
+
+		internal static Settings GetSettings()
+		{
+			return Settings.Default;
 		}
 
 		private ActiveUserSession()
@@ -58,7 +64,7 @@ namespace myHEALTHwareDesktop
 			OnActingAsChanged();
 		}
 
-		public async void Login( string connectionId, string accessToken )
+		public async Task Login( string connectionId, string accessToken )
 		{
 			if( connectionId == null )
 			{
@@ -73,17 +79,9 @@ namespace myHEALTHwareDesktop
 			Logout();
 
 			// SDK expects "/api" to already be on the end of the domain.
-			string domainApi = string.Format( "{0}/api", Settings.myHEALTHwareDomain );
 
 			// If credentials we have are invalid, change login.
-			Sdk = new MhwSdk( false,
-			                  // SDK logging has an issue. Keep off.
-			                  Settings.sdkTimeOutSeconds * 1000,
-			                  domainApi,
-			                  Credentials.APP_ID,
-			                  Credentials.APP_SECRET,
-			                  connectionId,
-			                  accessToken );
+			Sdk = GetMhwSdk( connectionId, accessToken );
 
 			LoggedInAccount = AuthenticateAccount();
 
@@ -94,6 +92,36 @@ namespace myHEALTHwareDesktop
 
 			MhwAccount actingAs = accounts.FirstOrDefault( p => p.AccountId == Settings.SelectedAccountId ) ?? LoggedInAccount;
 			SetActingAsAccount( actingAs );
+		}
+
+		public static MhwSdk GetMhwSdk( string connectionId = null, string accessToken = null )
+		{
+			string domain = string.Format( "{0}/api", Settings.Default.myHEALTHwareDomain );
+			return new MhwSdk( false,
+			                   // SDK logging has an issue. Keep off.
+			                   Settings.Default.sdkTimeOutSeconds * 1000,
+			                   domain,
+			                   Credentials.APP_ID,
+			                   Credentials.APP_SECRET,
+			                   connectionId,
+			                   accessToken );
+		}
+
+		public static bool PingApi()
+		{
+			MhwSdk sdk = GetMhwSdk();
+
+			bool success;
+			try
+			{
+				var result = sdk.Info.Get();
+				success = result != null && result.Id == "42";
+			}
+			catch( Exception ex )
+			{
+				success = false;
+			}
+			return success;
 		}
 
 		private MhwAccount AuthenticateAccount()

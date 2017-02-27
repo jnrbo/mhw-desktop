@@ -136,34 +136,6 @@ namespace myHEALTHwareDesktop
 		}
 	}
 
-	//internal class LifeSpanHandler : ILifeSpanHandler
-	//{
-	//	public bool OnBeforePopup(IWebBrowser browser, string url, ref int x, ref int y, ref int width, ref int height)
-	//	{
-	//		if (!string.IsNullOrEmpty(url) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute))
-	//		{
-	//			//Process.Start(url);
-	//			browser.Load(url);
-	//			return true;
-	//		}
-
-	//		return false;
-	//	}
-
-	//	public void OnBeforeClose(IWebBrowser browser)
-	//	{
-
-	//	}
-	//}
-
-	//internal class MenuHandler : IMenuHandler
-	//{
-	//	public bool OnBeforeContextMenu(IWebBrowser browser)
-	//	{
-	//		return false;
-	//	}
-	//}
-
 	internal class RequestHandler : IRequestHandler
 	{
 		private readonly Func<Action<int>> responseHandlerProvider;
@@ -315,7 +287,6 @@ namespace myHEALTHwareDesktop
 	public class PostMessageListener
 	{
 		private MhwPostMessage message;
-		//private string origin;
 
 		public event EventHandler<PostMessageListenerEventArgs> PostMessage;
 

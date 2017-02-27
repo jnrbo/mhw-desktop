@@ -107,6 +107,18 @@ namespace myHEALTHwareDesktop
 			pictureBoxActingAs.DataBindings.Add( "Image", accountsBindingSource, "ProfilePic", true );
 			accountsComboBox.DataSource = accountsBindingSource;
 
+			bool pinged = ActiveUserSession.PingApi();
+			if( !pinged )
+			{
+				var domain = ActiveUserSession.GetSettings().myHEALTHwareDomain;
+				MhwMessageForm messageDialog = new MhwMessageForm( "myHEALTHware",
+				                                                   string.Format( "We're unable to reach {0} at this time.", domain ),
+				                                                   true );
+				messageDialog.ShowDialog( this );
+				Application.Exit();
+				return;
+			}
+
 			// Try the previous credentials.
 			string connectionId = userSession.Settings.ConnectionId;
 			string accessToken = userSession.Settings.AccessToken;
@@ -271,10 +283,7 @@ namespace myHEALTHwareDesktop
 			else
 			{
 				// Must limit message to less than 64 chars.
-				if( message.Length > 63 )
-				{
-					message = message.TrimWithEllipsis( 60 );
-				}
+				message = message.TrimWithEllipsis( 60 );
 
 				trayIcon.Text = message;
 			}
@@ -308,6 +317,11 @@ namespace myHEALTHwareDesktop
 		public void ShowBalloonInfo( string format, params object[] list )
 		{
 			trayIcon.ShowBalloonTip( 500, "myHEALTHware", FormatMessage( format, list ), ToolTipIcon.Info );
+		}
+
+		public void ShowBalloonInfo(int timeout, string format, params object[] list)
+		{
+			trayIcon.ShowBalloonTip( timeout, "myHEALTHware", FormatMessage( format, list ), ToolTipIcon.Info );
 		}
 
 		public void SaveSettings( string message = null )
@@ -455,7 +469,7 @@ namespace myHEALTHwareDesktop
 			{
 				fileStream = OpenFile( fullPath );
 			}
-			catch( IOException ex )
+			catch( Exception ex )
 			{
 				ShowBalloonError( ex.Message );
 				return null;
@@ -464,7 +478,9 @@ namespace myHEALTHwareDesktop
 			string fileType = Path.GetExtension( name );
 
 			// Show user we're uploading.
-			SetTrayIcon( Resources.Uploading, string.Format( "Uploading {0}", name ) );
+			string uploadingMessage = string.Format( "Uploading {0}...", name );
+			ShowBalloonInfo( uploadingMessage );
+			SetTrayIcon( Resources.Uploading, uploadingMessage );
 
 			string fileId;
 
@@ -494,44 +510,62 @@ namespace myHEALTHwareDesktop
 		// This method will loop waiting for it to close.
 		private FileStream OpenFile( string filepath )
 		{
-			var retries = 20;
-			const int DELAY = 100; // Max time spent here = retries*delay milliseconds
-
+			const int RETRY_COUNT = 10*60;
+			const int DELAY = 1000; // Max time spent here = retries*delay milliseconds
+			
 			if( !File.Exists( filepath ) )
 			{
 				return null;
 			}
 
+			int retries = RETRY_COUNT;
+			long messageDelayOffset = 0;
+
+			var fi = new FileInfo( filepath );
+			var lastWriteTime = DateTime.UtcNow;
+
+			TimeSpan elapsedWriteTime;
+			var stopwatch = Stopwatch.StartNew();
+
 			do
 			{
 				try
 				{
+					lastWriteTime = fi.LastWriteTimeUtc;
+
 					// Attempts to open then close the file in RW mode, denying other users to place any locks.
-					FileStream fs = File.Open( filepath, FileMode.Open, FileAccess.ReadWrite, FileShare.None );
-					return fs;
+					return fi.Open( FileMode.Open, FileAccess.ReadWrite, FileShare.None );
 				}
 				catch( IOException )
 				{
 				}
 
-				retries--;
 				Thread.Sleep( DELAY );
-			}
-			while( retries > 0 );
 
-			ShowBalloonError( "Could not open file {0}", filepath );
-			return null;
+				elapsedWriteTime = fi.LastWriteTimeUtc - lastWriteTime;
+				retries = elapsedWriteTime > TimeSpan.Zero ? RETRY_COUNT : retries - 1;
+
+				var elapsed = stopwatch.ElapsedMilliseconds;
+				if( elapsed - messageDelayOffset > 15000)
+				{
+					ShowBalloonInfo( 10000, "Waiting for file processing to complete..." );
+					messageDelayOffset += elapsed;
+				}
+			}
+			while( elapsedWriteTime.TotalMilliseconds > 0 || retries > 0 );
+
+			throw new Exception( string.Format( "Could not open file {0}", filepath ) );
 		}
 
 		private async Task ExecuteLogin( string connectionId, string accessToken )
 		{
 			try
 			{
-				userSession.Login( connectionId, accessToken );
+				await userSession.Login( connectionId, accessToken );
 			}
 			catch( Exception ex )
 			{
-				ShowBalloonError( "Log in attempt failed: {0}", ex.Message );
+				ShowBalloonError( "Login attempt failed." );
 				return;
 			}
 

@@ -72,10 +72,11 @@ namespace myHEALTHwareDesktop
 
 			var messageDialog = new MhwMessageForm( "Print to Fax", message, true );
 			messageDialog.ShowDialog( this );
+			messageDialog.Dispose();
 
 			chromiumBrowser.OnResponseHandler = null;
 
-			Dispose();
+			Close();
 		}
 
 		public void ResultMessageHandler( object sender, PostMessageListenerEventArgs args )
@@ -86,14 +87,7 @@ namespace myHEALTHwareDesktop
 
 		private void SendFaxShown( object sender, EventArgs e )
 		{
-			if( Owner != null )
-			{
-				Owner.Activate();
-			}
-			else
-			{
-				Activate();
-			}
+			this.BringWindowToFront();
 		}
 	}
 }

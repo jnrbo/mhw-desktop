@@ -14,7 +14,6 @@ namespace myHEALTHwareDesktop
 	{
 		private DrivePicker drivePicker;
 		private FileSystemWatcher localPathWatcher;
-		private bool isWatcherRunning;
 		private bool isDrivePickerSuccess;
 		private string uploadDriveItemId;
 		private readonly ActiveUserSession userSession;
@@ -43,6 +42,11 @@ namespace myHEALTHwareDesktop
 		private bool IsLocalPathSet
 		{
 			get { return !string.IsNullOrWhiteSpace( userSession.Settings.FolderToDriveLocalPath ); }
+		}
+
+		private bool IsWatcherRunning
+		{
+			get { return localPathWatcher != null && localPathWatcher.EnableRaisingEvents; }
 		}
 
 		public void SelectedUserChanged( object sender, EventArgs e )
@@ -274,7 +278,7 @@ namespace myHEALTHwareDesktop
 
 		private void SetButtonState()
 		{
-			if( isWatcherRunning )
+			if( IsWatcherRunning )
 			{
 				pictureStartedStopped.Image = Resources.started;
 				labelMonitorStatus.Text = "Folder to Drive monitor is running.";
@@ -305,7 +309,7 @@ namespace myHEALTHwareDesktop
 
 		private void StartOrStopMonitor()
 		{
-			if( isWatcherRunning )
+			if( IsWatcherRunning )
 			{
 				StopMonitoring();
 				userSession.Settings.FolderToDriveRunning = false;
@@ -325,6 +329,11 @@ namespace myHEALTHwareDesktop
 
 		private void StartMonitoring()
 		{
+			if( IsWatcherRunning )
+			{
+				return;
+			}
+
 			if( !IsLocalPathSet || !IsUploadPathSet )
 			{
 				MessageBox.Show( "Please set local and Drive folders first.", "Error" );
@@ -342,7 +351,6 @@ namespace myHEALTHwareDesktop
 			{
 				localPathWatcher.Dispose();
 				localPathWatcher = null;
-				isWatcherRunning = false;
 				NotificationService.ShowBalloonError( "Start Folder to Drive monitor failed: {0}", ex.Message );
 				return;
 			}
@@ -351,12 +359,15 @@ namespace myHEALTHwareDesktop
 			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
 			localPathWatcher.SynchronizingObject = this;
 			localPathWatcher.Created += LocalPathWatcherCreated;
-
-			isWatcherRunning = true;
 		}
 
 		private void StopMonitoring()
 		{
+			if( localPathWatcher == null )
+			{
+				return;
+			}
+
 			try
 			{
 				localPathWatcher.Dispose();
@@ -366,8 +377,6 @@ namespace myHEALTHwareDesktop
 			{
 				NotificationService.ShowBalloonError( "Stop Folder to Drive monitor error: {0}", ex.Message );
 			}
-
-			isWatcherRunning = false;
 		}
 
 		private void LocalPathWatcherCreated( object sender, FileSystemEventArgs e )

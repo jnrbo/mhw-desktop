@@ -1,11 +1,18 @@
 using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace myHEALTHwareDesktop
 {
 	public static class Extensions
 	{
+		[DllImport( "user32.dll" )]
+		private static extern bool SetForegroundWindow( IntPtr hWnd );
+
+		[DllImport( "user32.dll" )]
+		private static extern IntPtr GetForegroundWindow();
+
 		/// <summary>Executes the Action asynchronously on the UI thread, does not block execution on the calling thread.</summary>
 		/// <param name="control">the control for which the update is required</param>
 		/// <param name="action">action to be performed on the control</param>
@@ -42,6 +49,17 @@ namespace myHEALTHwareDesktop
 			}
 
 			return result;
+		}
+
+		public static void BringWindowToFront( this Form form )
+		{
+			if( form == null )
+			{
+				throw new ArgumentNullException( "form" );
+			}
+			Contract.EndContractBlock();
+
+			SetForegroundWindow( ( form.Owner ?? form ).Handle );
 		}
 	}
 }
