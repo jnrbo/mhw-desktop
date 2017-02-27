@@ -12,6 +12,7 @@ namespace myHEALTHwareDesktop
 		private const string URL_COMMAND_LINE = "https://commandline.codeplex.com/";
 		private const string URL_CEF_SHARP = "https://cefsharp.github.io/";
 		private const string URL_REST_SHARP = "http://restsharp.org/";
+		private const string URL_GITHUB_REPO = "https://github.com/swaredev/mhw-desktop";
 
 		public ControlAbout()
 		{
@@ -20,7 +21,7 @@ namespace myHEALTHwareDesktop
 
 		private void ControlAboutLoad( object sender, EventArgs e )
 		{
-			toolTipPortMonitor.SetToolTip( linkLabelLicense, URL_GPL );
+			toolTipPortMonitor.SetToolTip( licenseLinkLabel, URL_GPL );
 			toolTipPortMonitor.SetToolTip( linkLabelMfilemon, URL_PORT_MONITOR );
 			toolTipPortMonitor.SetToolTip( linkLLabelGhostScript, URL_GHOSTSCRIPT );
 			toolTipPortMonitor.SetToolTip( linkLabelCommandLine, URL_COMMAND_LINE );
@@ -56,6 +57,11 @@ namespace myHEALTHwareDesktop
 		private void AboutRestSharpLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
 			Process.Start( URL_REST_SHARP );
+		}
+
+		private void SourceCodeLinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+		{
+			Process.Start( URL_GITHUB_REPO );
 		}
 	}
 }

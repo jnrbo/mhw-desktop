@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.linkLabelLicense = new System.Windows.Forms.LinkLabel();
+			this.licenseLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.groupBoxAboutAcknowledgements = new System.Windows.Forms.GroupBox();
 			this.linkLabelRestSharp = new System.Windows.Forms.LinkLabel();
 			this.linkLabelCefSharp = new System.Windows.Forms.LinkLabel();
@@ -46,20 +46,21 @@
 			this.toolTipCEFSharp = new System.Windows.Forms.ToolTip(this.components);
 			this.toolTipRestSharp = new System.Windows.Forms.ToolTip(this.components);
 			this.toolTipGPL = new System.Windows.Forms.ToolTip(this.components);
+			this.repoLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.groupBoxAboutAcknowledgements.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// linkLabelLicense
+			// licenseLinkLabel
 			// 
-			this.linkLabelLicense.AutoSize = true;
-			this.linkLabelLicense.Location = new System.Drawing.Point(6, 106);
-			this.linkLabelLicense.Name = "linkLabelLicense";
-			this.linkLabelLicense.Size = new System.Drawing.Size(75, 13);
-			this.linkLabelLicense.TabIndex = 10;
-			this.linkLabelLicense.TabStop = true;
-			this.linkLabelLicense.Text = "AGPL License";
-			this.linkLabelLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutGnuLicenseLinkClicked);
+			this.licenseLinkLabel.AutoSize = true;
+			this.licenseLinkLabel.Location = new System.Drawing.Point(6, 106);
+			this.licenseLinkLabel.Name = "licenseLinkLabel";
+			this.licenseLinkLabel.Size = new System.Drawing.Size(75, 13);
+			this.licenseLinkLabel.TabIndex = 10;
+			this.licenseLinkLabel.TabStop = true;
+			this.licenseLinkLabel.Text = "AGPL License";
+			this.licenseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutGnuLicenseLinkClicked);
 			// 
 			// groupBoxAboutAcknowledgements
 			// 
@@ -195,12 +196,24 @@
 			// 
 			this.toolTipGPL.ShowAlways = true;
 			// 
+			// repoLinkLabel
+			// 
+			this.repoLinkLabel.AutoSize = true;
+			this.repoLinkLabel.Location = new System.Drawing.Point(6, 124);
+			this.repoLinkLabel.Name = "repoLinkLabel";
+			this.repoLinkLabel.Size = new System.Drawing.Size(69, 13);
+			this.repoLinkLabel.TabIndex = 12;
+			this.repoLinkLabel.TabStop = true;
+			this.repoLinkLabel.Text = "Source Code";
+			this.repoLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SourceCodeLinkClicked);
+			// 
 			// ControlAbout
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.repoLinkLabel);
 			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.linkLabelLicense);
+			this.Controls.Add(this.licenseLinkLabel);
 			this.Controls.Add(this.labelAboutCopyright);
 			this.Controls.Add(this.labelAboutVersion);
 			this.Controls.Add(this.labelAboutProductName);
@@ -218,7 +231,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.LinkLabel linkLabelLicense;
+		private System.Windows.Forms.LinkLabel licenseLinkLabel;
 		private System.Windows.Forms.GroupBox groupBoxAboutAcknowledgements;
 		private System.Windows.Forms.LinkLabel linkLLabelGhostScript;
 		private System.Windows.Forms.LinkLabel linkLabelMfilemon;
@@ -235,5 +248,6 @@
 		private System.Windows.Forms.ToolTip toolTipCEFSharp;
 		private System.Windows.Forms.ToolTip toolTipRestSharp;
 		private System.Windows.Forms.ToolTip toolTipGPL;
+		private System.Windows.Forms.LinkLabel repoLinkLabel;
 	}
 }

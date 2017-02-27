@@ -124,15 +124,15 @@
     <value>174, 17</value>
   </metadata>
   <metadata name="toolTipComandLine.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>271, 17</value>
+    <value>327, 17</value>
   </metadata>
   <metadata name="toolTipCEFSharp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>368, 17</value>
+    <value>485, 17</value>
   </metadata>
   <metadata name="toolTipRestSharp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>465, 17</value>
+    <value>626, 17</value>
   </metadata>
   <metadata name="toolTipGPL.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>562, 17</value>
+    <value>771, 17</value>
   </metadata>
 </root>
