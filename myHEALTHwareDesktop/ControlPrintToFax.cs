@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
@@ -18,8 +19,7 @@ namespace myHEALTHwareDesktop
 		private const string FAX_APP_ID = "FAC5FAC5-45E9-434A-AF34-C9E070729299";
 		private readonly VirtualPrinterManager virtualPrinterManager = new VirtualPrinterManager();
 
-		private bool isPrinterInstalled;
-		private FileSystemWatcher localPathWatcher;
+		private JobMonitor printJobMonitor;
 		private SendFax sendFax;
 		private readonly ActiveUserSession userSession;
 
@@ -38,12 +38,17 @@ namespace myHEALTHwareDesktop
 
 		public bool IsMhwFaxInstalled { get; set; }
 
+		public bool IsPrinterInstalled
+		{
+			get { return virtualPrinterManager.IsPrinterAlreadyInstalled(MhwPrinter.PRINT_TO_FAX.PrinterName); }
+		}
+
 		public INotificationService NotificationService { get; set; }
 		public IUploadService UploadService { get; set; }
 
 		private bool IsWatcherRunning
 		{
-			get { return localPathWatcher != null && localPathWatcher.EnableRaisingEvents; }
+			get { return printJobMonitor != null; }
 		}
 
 		public void SelectedUserChanged( object sender, EventArgs e )
@@ -77,9 +82,8 @@ namespace myHEALTHwareDesktop
 			}
 
 			labelFaxLink.Text = "Open myHEALTHware Fax";
-			isPrinterInstalled = virtualPrinterManager.IsPrinterAlreadyInstalled( MhwPrinter.PRINT_TO_FAX.PrinterName );
 
-			if( isPrinterInstalled )
+			if( IsPrinterInstalled )
 			{
 				StartMonitoring();
 				buttonPrintToFaxInstall.Text = "Uninstall Printer";
@@ -96,8 +100,8 @@ namespace myHEALTHwareDesktop
 			radioButtonPrompt.Checked = userSession.Settings.PrintToFaxPrompt;
 			radioButtonSaveDraft.Checked = !userSession.Settings.PrintToFaxPrompt;
 
-			radioButtonPrompt.Enabled = isPrinterInstalled;
-			radioButtonSaveDraft.Enabled = isPrinterInstalled;
+			radioButtonPrompt.Enabled = IsPrinterInstalled;
+			radioButtonSaveDraft.Enabled = IsPrinterInstalled;
 		}
 
 		private void RadioButtonsCheckedChanged( object sender, EventArgs e )
@@ -129,7 +133,7 @@ namespace myHEALTHwareDesktop
 		{
 			buttonPrintToFaxInstall.Enabled = false;
 
-			if( isPrinterInstalled )
+			if( IsPrinterInstalled )
 			{
 				Uninstall();
 			}
@@ -171,46 +175,31 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			if( !isPrinterInstalled || !IsMhwFaxInstalled )
+			if( !IsPrinterInstalled || !IsMhwFaxInstalled )
 			{
 				// Printer or app not installed.
 				return;
 			}
 
 			// Create the folder watcher.
-			localPathWatcher = new FileSystemWatcher();
+			printJobMonitor = new PrintToFaxMonitor();
 
-			try
-			{
-				localPathWatcher.Path = Path.Combine( Path.GetTempPath(), MhwPrinter.PRINT_TO_FAX.MonitorName );
-			}
-			catch( ArgumentException ex )
-			{
-				localPathWatcher.Dispose();
-				localPathWatcher = null;
-				NotificationService.ShowBalloonError( "Start Print to Fax monitor failed: {0}", ex.Message );
-				return;
-			}
-
-			localPathWatcher.EnableRaisingEvents = true;
-			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
-			localPathWatcher.SynchronizingObject = this;
-			localPathWatcher.Created += LocalPathWatcherCreated;
+			printJobMonitor.Start( p => ProcessNewPrintJob( p ), SynchronizationContext.Current );
 
 			pictureStartedStopped.Image = Resources.started;
 		}
 
 		private void StopMonitoring()
 		{
-			if( localPathWatcher == null )
+			if( !IsWatcherRunning )
 			{
 				return;
 			}
 
 			try
 			{
-				localPathWatcher.Dispose();
-				localPathWatcher = null;
+				printJobMonitor.Stop();
+				printJobMonitor = null;
 			}
 			catch( ArgumentException ex )
 			{
@@ -220,30 +209,22 @@ namespace myHEALTHwareDesktop
 			pictureStartedStopped.Image = Resources.stopped;
 		}
 
-		private void LocalPathWatcherCreated( object sender, FileSystemEventArgs e )
-		{
-			ProcessNewPrintFile( e.FullPath, e.Name );
-		}
-
 		// The Watcher calls this method when a new file shows up in the watched folder.
-		private void ProcessNewPrintFile( string fullPath, string name )
+		private async Task ProcessNewPrintJob( MhwFile mhwFile )
 		{
 			if( !userSession.IsLoggedIn )
 			{
 				StopMonitoring();
 				NotificationService.ShowBalloonError( "Please log in and try again. Print job deleted." );
-				File.Delete( fullPath );
 				return;
 			}
 
 			// Upload the printed PDF file.
-			string fileId = UploadService.UploadFile( fullPath, name, null );
-
-			File.Delete( fullPath );
+			string fileId = await UploadService.Upload( mhwFile.Content, mhwFile.Name, null );
 
 			if( fileId == null )
 			{
-				NotificationService.ShowBalloonError( "Print to Fax failed: Unable to upload {0}", fullPath );
+				NotificationService.ShowBalloonError( "Print to Fax failed: Unable to upload {0}", mhwFile.Name );
 				return;
 			}
 
@@ -264,11 +245,11 @@ namespace myHEALTHwareDesktop
 				try
 				{
 					Sdk.Fax.Create( draftFax, true, false, null, null );
-					NotificationService.ShowBalloonInfo( "Print to Fax Draft succeeded: {0}", name );
+					NotificationService.ShowBalloonInfo( "Print to Fax Draft succeeded: {0}", mhwFile.Name );
 				}
 				catch( Exception ex )
 				{
-					string details = name;
+					string details = mhwFile.Name;
 
 					var httpEx = ex as HttpException;
 					if( httpEx != null && httpEx.GetHttpCode() == (int) HttpStatusCode.Forbidden )

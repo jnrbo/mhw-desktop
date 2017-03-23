@@ -460,7 +460,7 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		public string UploadFile( string fullPath, string name, string uploadFolderDriveItemId )
+		public async Task<string> UploadFile( string fullPath, string name, string uploadFolderDriveItemId )
 		{
 			FileStream fileStream;
 
@@ -475,6 +475,11 @@ namespace myHEALTHwareDesktop
 				return null;
 			}
 
+			return await Upload( fileStream, name, uploadFolderDriveItemId );
+		}
+
+		public async Task<string> Upload( Stream stream, string name, string uploadFolderDriveItemId )
+		{
 			string fileType = Path.GetExtension( name );
 
 			// Show user we're uploading.
@@ -488,7 +493,8 @@ namespace myHEALTHwareDesktop
 			try
 			{
 				MhwAccount selected = GetSelectedAccount();
-				ApiFile driveItem = Sdk.Account.UploadFile( selected.AccountId, name, fileType, fileStream, uploadFolderDriveItemId );
+				ApiFile driveItem =
+					await Task.Run( () => Sdk.Account.UploadFile( selected.AccountId, name, fileType, stream, uploadFolderDriveItemId ) );
 				fileId = driveItem.FileId;
 			}
 			catch( Exception ex )

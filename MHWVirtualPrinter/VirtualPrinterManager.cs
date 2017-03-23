@@ -12,7 +12,7 @@ namespace MHWVirtualPrinter
 	{
 		private const string MONITOR_DLL_NAME = "mfilemon.dll";
 		private const string MONITOR_UI_NAME = "mfilemonUI.dll";
-		private const string MONITOR_UI_NAME2 = "_mfilemonUI.dll";
+		////private const string MONITOR_UI_NAME2 = "_mfilemonUI.dll";
 		private const string COMMENT = "A virtual printer that uploads print jobs to myHEALTHware Drive";
 
 		private readonly WinSpool winspool = new WinSpool();
@@ -61,7 +61,7 @@ namespace MHWVirtualPrinter
 				string sourceDirectory = Path.Combine( currentDirectory, platform, "PortMonitor" );
 				string sourceDllName = Path.Combine( sourceDirectory, MONITOR_DLL_NAME );
 				string sourceUIName = Path.Combine( sourceDirectory, MONITOR_UI_NAME );
-				string sourceUIName2 = Path.Combine( sourceDirectory, MONITOR_UI_NAME2 );
+				////string sourceUIName2 = Path.Combine( sourceDirectory, MONITOR_UI_NAME2 );
 
 				//string targetDirectory = Environment.SystemDirectory;
 				//if (platform == "x64")
@@ -101,18 +101,18 @@ namespace MHWVirtualPrinter
 					File.Copy( sourceUIName, targetUIName, true );
 				}
 
-				string targetUIName2 = Path.Combine( targetDirectory, MONITOR_UI_NAME2 );
+				////string targetUIName2 = Path.Combine( targetDirectory, MONITOR_UI_NAME2 );
 
-				if( File.Exists( targetUIName2 ) && isUninstall )
-				{
-					exceptionMessage = string.Format( "Delete {0}", targetUIName2 );
-					File.Delete( targetUIName2 );
-				}
-				else if( !File.Exists( targetUIName2 ) && !isUninstall )
-				{
-					exceptionMessage = string.Format( "Copying {0} to {1}", sourceUIName2, targetUIName2 );
-					File.Copy( sourceUIName2, targetUIName2, true );
-				}
+				////if( File.Exists( targetUIName2 ) && isUninstall )
+				////{
+				////	exceptionMessage = string.Format( "Delete {0}", targetUIName2 );
+				////	File.Delete( targetUIName2 );
+				////}
+				////else if( !File.Exists( targetUIName2 ) && !isUninstall )
+				////{
+				////	exceptionMessage = string.Format( "Copying {0} to {1}", sourceUIName2, targetUIName2 );
+				////	File.Copy( sourceUIName2, targetUIName2, true );
+				////}
 			}
 			catch( UnauthorizedAccessException )
 			{
@@ -225,38 +225,44 @@ namespace MHWVirtualPrinter
 			return printers.Any( p => p.Name == printerName );
 		}
 
-		public void AddPrinter( string printerName, string portName, string driverName )
+		public void AddPrinter( MhwPrinter mhwPrinter )
 		{
-			winspool.AddPrinter( printerName, portName, driverName, COMMENT );
+			winspool.AddPrinter( mhwPrinter.PrinterName, mhwPrinter.PortName, mhwPrinter.DriverName, COMMENT );
 		}
 
-		public void RemovePrinter( string printerName, string portName, string monitorName, string driverName )
+		public void RemovePrinter( MhwPrinter mhwPrinter )
 		{
-			winspool.DeletePrinter( printerName, portName, monitorName, driverName, COMMENT );
+			winspool.DeletePrinter( mhwPrinter.PrinterName,
+			                        mhwPrinter.PortName,
+			                        mhwPrinter.MonitorName,
+			                        mhwPrinter.DriverName,
+			                        COMMENT );
 		}
 
 		// I believe these virtual port parameters are specific to printmon
-		public void ConfigureVirtualPort( string monitorName, string portName, PdfEngine pdfEngine )
+		public void ConfigureVirtualPort( MhwPrinter mhwPrinter, PdfEngine pdfEngine )
 		{
-			string outputPath = Path.Combine( Path.GetTempPath(), monitorName );
-			Directory.CreateDirectory( outputPath );
+			////string outputPath = Path.Combine( Path.GetTempPath(), monitorName );
+			////Directory.CreateDirectory( outputPath );
 
 			var filePattern = "%r-%u-%Y%m%d-%H%n%s.pdf";
-			string userCommand = string.Format( "{0} -dSAFER -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%f\" -",
-			                                    pdfEngine.PathExe );
-			var execPath = "";
+			string userCommand =
+				string.Format(
+					@"{0} -dSAFER -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=""\\.\pipe\{1}\%u"" -c ""[ /MhwFilename (%f) /DOCINFO pdfmark"" -f -",
+					pdfEngine.PathExe,
+					mhwPrinter.PipeRoot );
 
-			string keyName = string.Format( @"SYSTEM\CurrentControlSet\Control\Print\Monitors\{0}\{1}", monitorName, portName );
+			string keyName = string.Format( @"SYSTEM\CurrentControlSet\Control\Print\Monitors\{0}\{1}", mhwPrinter.MonitorName, mhwPrinter.PortName );
 			Registry.LocalMachine.CreateSubKey( keyName );
 			RegistryKey regKey = Registry.LocalMachine.OpenSubKey( keyName, true );
 
 			// ReSharper disable once PossibleNullReferenceException
-			regKey.SetValue( "OutputPath", outputPath, RegistryValueKind.String );
+			regKey.SetValue( "OutputPath", string.Empty, RegistryValueKind.String );
 
 			regKey.SetValue( "FilePattern", filePattern, RegistryValueKind.String );
 			regKey.SetValue( "Overwrite", 0, RegistryValueKind.DWord );
 			regKey.SetValue( "UserCommand", userCommand, RegistryValueKind.String );
-			regKey.SetValue( "ExecPath", execPath, RegistryValueKind.String );
+			regKey.SetValue( "ExecPath", string.Empty, RegistryValueKind.String );
 			regKey.SetValue( "PipeData", 0x1, RegistryValueKind.DWord );
 			regKey.SetValue( "WaitTermination", 0, RegistryValueKind.DWord );
 			regKey.Close();

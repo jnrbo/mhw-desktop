@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
@@ -379,13 +380,13 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void LocalPathWatcherCreated( object sender, FileSystemEventArgs e )
+		private async void LocalPathWatcherCreated( object sender, FileSystemEventArgs e )
 		{
-			ProcessNewLocalFile( e.FullPath, e.Name );
+			await ProcessNewLocalFile( e.FullPath, e.Name );
 		}
 
 		// The Watcher calls this method when a new file shows up in the watched folder.
-		private void ProcessNewLocalFile( string fullPath, string name )
+		private async Task ProcessNewLocalFile( string fullPath, string name )
 		{
 			if( !userSession.IsLoggedIn )
 			{
@@ -395,7 +396,7 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
-			string fileId = UploadService.UploadFile( fullPath, name, uploadDriveItemId );
+			string fileId = await UploadService.UploadFile( fullPath, name, uploadDriveItemId );
 			if( fileId == null )
 			{
 				NotificationService.ShowBalloonError( "Folder to Drive upload failed: {0}", name );

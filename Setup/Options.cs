@@ -11,7 +11,7 @@ namespace Setup
 
 		[Option( 'u', "Uninstall", DefaultValue = false,
 			HelpText =
-				"Perform uninstall of selected flags.  Defaults to false which is perform install. Requires other flags to be specified."
+				"Perform uninstall of selected flags. Defaults to false which is perform install. Requires other flags to be specified."
 		)]
 		public bool Uninstall { get; set; }
 
@@ -24,7 +24,7 @@ namespace Setup
 		public bool PrintToDrive { get; set; }
 
 		[Option( 'f', "Print to Fax", DefaultValue = false,
-			HelpText = "Install or uninstall the print to Fax print driver.  Will be ingnored if -d specified." )]
+			HelpText = "Install or uninstall the print to Fax print driver. Will be ingnored if -d specified." )]
 		public bool PrintToFax { get; set; }
 
 		[ParserState]

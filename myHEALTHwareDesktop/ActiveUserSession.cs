@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using myHEALTHwareDesktop.Properties;
 using SOAPware.PortalApi.Models;
 using SOAPware.PortalSdk;

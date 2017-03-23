@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
 using MHWVirtualPrinter;
@@ -16,7 +18,7 @@ namespace myHEALTHwareDesktop
 		private string drivePickerFileName;
 		private string drivePickerResult;
 		private bool isDrivePickerSuccess;
-		private FileSystemWatcher localPathWatcher;
+		private JobMonitor printJobMonitor;
 		private readonly ActiveUserSession userSession;
 
 		public ControlPrintToDrive()
@@ -47,7 +49,7 @@ namespace myHEALTHwareDesktop
 
 		private bool IsWatcherRunning
 		{
-			get { return localPathWatcher != null && localPathWatcher.EnableRaisingEvents; }
+			get { return printJobMonitor != null; }
 		}
 
 		private void SelectedUserChanged( object sender, EventArgs e )
@@ -66,6 +68,7 @@ namespace myHEALTHwareDesktop
 			if( IsPrintToDriveInstalled )
 			{
 				buttonPrintToDriveInstall.Text = "Uninstall Printer";
+
 			}
 			else
 			{
@@ -383,25 +386,27 @@ namespace myHEALTHwareDesktop
 			}
 
 			// Create the folder watcher.
-			localPathWatcher = new FileSystemWatcher();
+			printJobMonitor = new PrintToDriveMonitor();
 
-			try
-			{
-				localPathWatcher.Path = Path.Combine( Path.GetTempPath(), MhwPrinter.PRINT_TO_DRIVE.MonitorName );
-			}
-			catch( ArgumentException ex )
-			{
-				localPathWatcher.Dispose();
-				localPathWatcher = null;
+			printJobMonitor.Start( p => ProcessNewPrintJob( p ), SynchronizationContext.Current );
 
-				NotificationService.ShowBalloonError( "Start Print to Drive monitor failed: {0}", ex.Message );
-				return;
-			}
+			////try
+			////{
+			////	localPathWatcher.Path = Path.Combine( Path.GetTempPath(), MhwPrinter.PRINT_TO_DRIVE.MonitorName );
+			////}
+			////catch( ArgumentException ex )
+			////{
+			////	localPathWatcher.Dispose();
+			////	localPathWatcher = null;
 
-			localPathWatcher.EnableRaisingEvents = true;
-			localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
-			localPathWatcher.SynchronizingObject = this;
-			localPathWatcher.Created += LocalPathWatcherCreated;
+			////	NotificationService.ShowBalloonError( "Start Print to Drive monitor failed: {0}", ex.Message );
+			////	return;
+			////}
+
+			////localPathWatcher.EnableRaisingEvents = true;
+			////localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
+			////localPathWatcher.SynchronizingObject = this;
+			////localPathWatcher.Created += LocalPathWatcherCreated;
 
 			pictureStartedStopped.Image = Resources.started;
 			labelMonitorStatus.Text = "Print to Drive monitor is running.";
@@ -409,15 +414,15 @@ namespace myHEALTHwareDesktop
 
 		private void StopMonitoring()
 		{
-			if( localPathWatcher == null )
+			if( !IsWatcherRunning )
 			{
 				return;
 			}
 
 			try
 			{
-				localPathWatcher.Dispose();
-				localPathWatcher = null;
+				printJobMonitor.Stop();
+				printJobMonitor = null;
 			}
 			catch( ArgumentException ex )
 			{
@@ -428,29 +433,23 @@ namespace myHEALTHwareDesktop
 			labelMonitorStatus.Text = "Print to Drive monitor is stopped.";
 		}
 
-		private void LocalPathWatcherCreated( object sender, FileSystemEventArgs e )
-		{
-			ProcessNewPrintFile( e.FullPath, e.Name );
-		}
-
 		// The Watcher calls this method when a new file shows up in the watched folder.
-		private void ProcessNewPrintFile( string fullPath, string name )
+		private async Task ProcessNewPrintJob( MhwFile mhwFile )
 		{
 			if( userSession.IsLoggedIn == false )
 			{
 				StopMonitoring();
-				NotificationService.ShowBalloonError( "Please log in and try again. Print job deleted." );
-				File.Delete( fullPath );
+				NotificationService.ShowBalloonError( "Please log in and try again." );
 				return;
 			}
 
 			string driveItemId = userSession.Settings.PrintToDriveDefaultDestinationId;
-			string fileName = name;
-			string extension = Path.GetExtension( fileName );
+			string fileName = mhwFile.Name ?? "";
+			string extension = Path.GetExtension( fileName ).ToLower();
 
 			if( userSession.Settings.PrintToDrivePrompt )
 			{
-				LaunchDrivePicker( name );
+				LaunchDrivePicker( mhwFile.Name );
 
 				if( isDrivePickerSuccess )
 				{
@@ -459,7 +458,6 @@ namespace myHEALTHwareDesktop
 				}
 				else
 				{
-					File.Delete( fullPath );
 					return;
 				}
 			}
@@ -467,13 +465,11 @@ namespace myHEALTHwareDesktop
 			// Make sure the extension didn't get removed
 			fileName = Path.ChangeExtension( fileName, extension );
 
-			string fileId = UploadService.UploadFile( fullPath, fileName, driveItemId );
-
-			File.Delete( fullPath );
+			string fileId = await UploadService.Upload( mhwFile.Content, fileName, driveItemId );
 
 			if( fileId == null )
 			{
-				NotificationService.ShowBalloonError( "Print to Drive failed: {0}", fileName ?? name );
+				NotificationService.ShowBalloonError( "Print to Drive failed: {0}", fileName ?? mhwFile.Name );
 			}
 			else
 			{

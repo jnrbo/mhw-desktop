@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -201,7 +200,7 @@ namespace Setup
 			else
 			{
 				log.Info( "Installing printer {0}.", printer.PrinterName );
-				virtualPrinterManager.AddPrinter( printer.PrinterName, printer.PortName, printer.DriverName );
+				virtualPrinterManager.AddPrinter( printer );
 				log.Success( "Printer {0} successfully installed.", printer.PrinterName );
 			}
 
@@ -212,7 +211,7 @@ namespace Setup
 			log.Success( "PDF engine installed successfully." );
 
 			log.Info( "Configuring port." );
-			virtualPrinterManager.ConfigureVirtualPort( printer.MonitorName, printer.PortName, pdfEngine );
+			virtualPrinterManager.ConfigureVirtualPort( printer, pdfEngine );
 			log.Success( "Port configured successfully." );
 
 			log.Info( "Restarting spool service. Please wait..." );
@@ -225,7 +224,7 @@ namespace Setup
 			if( virtualPrinterManager.IsPrinterAlreadyInstalled( printer.PrinterName ) )
 			{
 				log.Info( "Removing printer {0}.", printer.PrinterName );
-				virtualPrinterManager.RemovePrinter( printer.PrinterName, printer.PortName, printer.MonitorName, printer.DriverName );
+				virtualPrinterManager.RemovePrinter( printer );
 				log.Success( "Removing printer {0} complete.", printer.PrinterName );
 			}
 			else
