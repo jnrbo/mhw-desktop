@@ -2,6 +2,8 @@
 using System.IO;
 using System.IO.Pipes;
 using System.Reactive.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using PdfSharp.Pdf;
@@ -51,70 +53,27 @@ namespace MHWVirtualPrinter
 		{
 			var subscribed = true;
 			NamedPipeServerStream server;
-			var source = new CancellationTokenSource();
+			var cancellationSource = new CancellationTokenSource();
 
 			Task.Factory.StartNew( () =>
 			                       {
 				                       while( subscribed )
 				                       {
-					                       server = new NamedPipeServerStream( PipeName,
-					                                                           PipeDirection.InOut,
-					                                                           2,
-					                                                           PipeTransmissionMode.Byte,
-					                                                           PipeOptions.Asynchronous,
-					                                                           0,
-					                                                           0,
-					                                                           null,
-					                                                           HandleInheritability.None,
-					                                                           0 );
+					                       server = CreateNewPipeServer();
+					                       IAsyncResult asyncResult = server.BeginWaitForConnection( null, null );
 
-					                       ////			var accessControl = server.GetAccessControl();
-					                       ////			var ruleCollection = accessControl.GetAccessRules(true, true, typeof(NTAccount));
-					                       ////			accessControl.
+					                       CancellationToken cancellationToken = GetCancellationToken( cancellationSource, server, asyncResult );
 
-					                       NamedPipeServerStream local = server;
-					                       IAsyncResult result = server.BeginWaitForConnection( null, null );
-
-					                       CancellationToken cancellationToken = source.Token;
-					                       cancellationToken.Register( () =>
-					                       {
-						                       try
-						                       {
-							                       local.Dispose();
-							                       local.EndWaitForConnection( result );
-						                       }
-						                       catch
-						                       {
-							                       // ignored
-						                       }
-					                       } );
-
-					                       Task connectionTask = Task.Factory.FromAsync( result, server.EndWaitForConnection );
-					                       connectionTask.ContinueWith( _ =>
-					                                                    {
-						                                                    MhwFile file;
-						                                                    try
-						                                                    {
-							                                                    var stream = new MemoryStream();
-							                                                    local.CopyTo( stream );
-
-							                                                    PdfDocument pdf = PdfReader.Open( stream, PdfDocumentOpenMode.InformationOnly );
-							                                                    stream.Seek( 0, SeekOrigin.Begin );
-							                                                    file = new MhwFile( pdf.Info.Elements.GetString( MHW_FILENAME ), stream );
-						                                                    }
-						                                                    finally
-						                                                    {
-							                                                    local.Dispose();
-						                                                    }
-						                                                    observer.OnNext( file );
-					                                                    },
+					                       NamedPipeServerStream localServerRef = server;
+					                       Task connectionTask = Task.Factory.FromAsync( asyncResult, server.EndWaitForConnection );
+					                       connectionTask.ContinueWith( _ => HandleIncomingFile( localServerRef, observer ),
 					                                                    cancellationToken,
 					                                                    TaskContinuationOptions.OnlyOnRanToCompletion,
 					                                                    TaskScheduler.Current );
 
 					                       connectionTask.Wait( cancellationToken );
 
-					                       source = new CancellationTokenSource();
+					                       cancellationSource = new CancellationTokenSource();
 				                       }
 			                       },
 			                       TaskCreationOptions.LongRunning );
@@ -122,8 +81,82 @@ namespace MHWVirtualPrinter
 			return () =>
 			{
 				subscribed = false;
-				source.Cancel();
+				cancellationSource.Cancel();
 			};
+		}
+
+		private static CancellationToken GetCancellationToken( CancellationTokenSource source,
+		                                                       NamedPipeServerStream localServerRef,
+		                                                       IAsyncResult result )
+		{
+			CancellationToken cancellationToken = source.Token;
+			cancellationToken.Register( () =>
+			{
+				try
+				{
+					localServerRef.Dispose();
+					localServerRef.EndWaitForConnection( result );
+				}
+				catch
+				{
+					// ignored
+				}
+			} );
+			return cancellationToken;
+		}
+
+		private NamedPipeServerStream CreateNewPipeServer()
+		{
+			var server = new NamedPipeServerStream( PipeName,
+			                                        PipeDirection.InOut,
+			                                        2,
+			                                        PipeTransmissionMode.Byte,
+			                                        PipeOptions.Asynchronous,
+			                                        0,
+			                                        0,
+			                                        null,
+			                                        HandleInheritability.None,
+			                                        0 );
+
+			PipeSecurity accessControl = server.GetAccessControl();
+
+			// Prevent 'Everyone' account from accessing pipe
+			var securityIdentifier = new SecurityIdentifier( WellKnownSidType.WorldSid, null );
+			var rule = new PipeAccessRule( securityIdentifier, PipeAccessRights.Read, AccessControlType.Allow );
+			accessControl.RemoveAccessRule( rule );
+
+			// Prevent 'Anonymous' account from accessing pipe
+			securityIdentifier = new SecurityIdentifier( WellKnownSidType.AnonymousSid, null );
+			rule = new PipeAccessRule( securityIdentifier, PipeAccessRights.Read, AccessControlType.Allow );
+			accessControl.RemoveAccessRule( rule );
+
+			return server;
+		}
+
+		private static void HandleIncomingFile( Stream pipeStream, IObserver<MhwFile> observer )
+		{
+			MhwFile file;
+			try
+			{
+				var seekable = new MemoryStream();
+				pipeStream.CopyTo( seekable );
+				PdfDocument pdf = PdfReader.Open( seekable );
+
+				// Remove title/file-name metadata
+				string mhwFilename = pdf.Info.Elements.GetString( MHW_FILENAME );
+				pdf.Info.Title = null;
+				pdf.Info.Elements.Remove( MHW_FILENAME );
+
+				// Save changes
+				var stream = new MemoryStream();
+				pdf.Save( stream, false );
+				file = new MhwFile( mhwFilename, stream );
+			}
+			finally
+			{
+				pipeStream.Dispose();
+			}
+			observer.OnNext( file );
 		}
 	}
 }

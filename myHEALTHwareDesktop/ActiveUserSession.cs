@@ -77,9 +77,6 @@ namespace myHEALTHwareDesktop
 
 			Logout();
 
-			// SDK expects "/api" to already be on the end of the domain.
-
-			// If credentials we have are invalid, change login.
 			Sdk = GetMhwSdk( connectionId, accessToken );
 
 			LoggedInAccount = AuthenticateAccount();
