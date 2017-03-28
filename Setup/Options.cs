@@ -15,10 +15,6 @@ namespace Setup
 		)]
 		public bool Uninstall { get; set; }
 
-		[Option( 's', "Run at System Startup", DefaultValue = false,
-			HelpText = "Install or uninstall 'run at system startup' flag." )]
-		public bool RunAtSystemStartup { get; set; }
-
 		[Option( 'd', "Print to Drive", DefaultValue = true,
 			HelpText = "Install or uninstall the print to Drive print driver." )]
 		public bool PrintToDrive { get; set; }

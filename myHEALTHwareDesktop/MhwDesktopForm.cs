@@ -10,9 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using myHEALTHwareDesktop.Properties;
-using MHWVirtualPrinter;
-using Microsoft.Win32;
-using Setup;
 using SOAPware.PortalApi.Models;
 using SOAPware.PortalSdk;
 
@@ -25,6 +22,7 @@ namespace myHEALTHwareDesktop
 		public const string APP_NAME = "myHEALTHware Desktop";
 
 		private readonly ActiveUserSession userSession;
+		private readonly Options options;
 
 		private LoginForm loginForm;
 		private int faxTabIndex;
@@ -39,16 +37,13 @@ namespace myHEALTHwareDesktop
 			get { return userSession.Sdk; }
 		}
 
-		public MhwDesktopForm()
+		public MhwDesktopForm( Options options )
 		{
 			// Run windows generated form code.
 			InitializeComponent();
 
 			// Create our "FormClosing" event handler.
 			FormClosing += MhwCloseRequested;
-
-			// Load persisted settings values.
-			LoadRunAtStartup();
 
 			accountsBindingSource = new BindingSource();
 			userSession = ActiveUserSession.GetInstance();
@@ -61,10 +56,22 @@ namespace myHEALTHwareDesktop
 
 			controlPrintToFax.NotificationService = this;
 			controlPrintToFax.UploadService = this;
+
+			this.options = options;
 		}
 
 		private async void MhwFormInitialize( object sender, EventArgs e )
 		{
+			bool runAtStartup = ActiveUserSession.GetSettings().RunAtStartup;
+			if( options.AutoStarted && !runAtStartup )
+			{
+				Application.Exit();
+				return;
+			}
+
+			// Load persisted settings values.
+			LoadRunAtStartup( runAtStartup );
+
 			// Make sure that standard and standard double clicks are enabled,
 			// if they are not enabled, enable them. This really is OverKill but better to be
 			// safe than sorry.
@@ -110,10 +117,10 @@ namespace myHEALTHwareDesktop
 			bool pinged = ActiveUserSession.PingApi();
 			if( !pinged )
 			{
-				var domain = ActiveUserSession.GetSettings().myHEALTHwareDomain;
-				MhwMessageForm messageDialog = new MhwMessageForm( "myHEALTHware",
-				                                                   string.Format( "We're unable to reach {0} at this time.", domain ),
-				                                                   true );
+				string domain = ActiveUserSession.GetSettings().myHEALTHwareDomain;
+				var messageDialog = new MhwMessageForm( "myHEALTHware",
+				                                        string.Format( "We're unable to reach {0} at this time.", domain ),
+				                                        true );
 				messageDialog.ShowDialog( this );
 				Application.Exit();
 				return;
@@ -319,7 +326,7 @@ namespace myHEALTHwareDesktop
 			trayIcon.ShowBalloonTip( 500, "myHEALTHware", FormatMessage( format, list ), ToolTipIcon.Info );
 		}
 
-		public void ShowBalloonInfo(int timeout, string format, params object[] list)
+		public void ShowBalloonInfo( int timeout, string format, params object[] list )
 		{
 			trayIcon.ShowBalloonTip( timeout, "myHEALTHware", FormatMessage( format, list ), ToolTipIcon.Info );
 		}
@@ -334,51 +341,15 @@ namespace myHEALTHwareDesktop
 			}
 		}
 
-		private void LoadRunAtStartup()
+		private void LoadRunAtStartup( bool runAtStartup )
 		{
 			// Don't fire event.
 			runAtSystemStartupCheckBox.CheckedChanged -= RunAtSystemStartupCheckBoxCheckedChanged;
 
-			runAtSystemStartupCheckBox.Checked = IsRunAtSystemStartupSet();
+			runAtSystemStartupCheckBox.Checked = runAtStartup;
 
 			// Fire events from now on.
 			runAtSystemStartupCheckBox.CheckedChanged += RunAtSystemStartupCheckBoxCheckedChanged;
-		}
-
-		private bool IsRunAtSystemStartupSet()
-		{
-			const string KEY_NAME = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
-			RegistryKey regKey = null;
-
-			// Open the registry key.
-			try
-			{
-				regKey = Registry.LocalMachine.OpenSubKey( KEY_NAME );
-
-				if( regKey != null )
-				{
-					object value = regKey.GetValue( MhwPrinter.APP_NAME );
-
-					if( value != null )
-					{
-						return true;
-					}
-				}
-			}
-			catch( Exception ex )
-			{
-				ShowBalloonError( "Error reading Run at System Startup setting: {0}", ex.Message );
-				return false;
-			}
-			finally
-			{
-				if( regKey != null )
-				{
-					regKey.Close();
-				}
-			}
-
-			return false;
 		}
 
 		private void RunAtSystemStartupCheckBoxCheckedChanged( object sender, EventArgs e )
@@ -387,32 +358,14 @@ namespace myHEALTHwareDesktop
 
 			if( isChecked )
 			{
-				InstallRunAtSystemStartup();
 				userSession.Settings.RunAtStartup = true;
 				SaveSettings( "myHEALTHware for Windows will automatically start with system (recommended)." );
 			}
 			else
 			{
-				UninstallRunAtSystemStartup();
 				userSession.Settings.RunAtStartup = false;
 				SaveSettings( "myHEALTHware for Windows will not automatically start with system (not recommended)." );
 			}
-		}
-
-		public void InstallRunAtSystemStartup()
-		{
-			var setupArgs = "-s";
-
-			// Launch setup process with args to install.
-			MhwSetup.LaunchAndWaitForExit( setupArgs );
-		}
-
-		public void UninstallRunAtSystemStartup()
-		{
-			var setupArgs = "-s -u";
-
-			// Launch setup process with args to uninstall.
-			MhwSetup.LaunchAndWaitForExit( setupArgs );
 		}
 
 		private void TabsSelectedIndexChanged( object sender, EventArgs e )
@@ -516,9 +469,9 @@ namespace myHEALTHwareDesktop
 		// This method will loop waiting for it to close.
 		private FileStream OpenFile( string filepath )
 		{
-			const int RETRY_COUNT = 10*60;
+			const int RETRY_COUNT = 10 * 60;
 			const int DELAY = 1000; // Max time spent here = retries*delay milliseconds
-			
+
 			if( !File.Exists( filepath ) )
 			{
 				return null;
@@ -528,10 +481,10 @@ namespace myHEALTHwareDesktop
 			long messageDelayOffset = 0;
 
 			var fi = new FileInfo( filepath );
-			var lastWriteTime = DateTime.UtcNow;
+			DateTime lastWriteTime = DateTime.UtcNow;
 
 			TimeSpan elapsedWriteTime;
-			var stopwatch = Stopwatch.StartNew();
+			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			do
 			{
@@ -551,8 +504,8 @@ namespace myHEALTHwareDesktop
 				elapsedWriteTime = fi.LastWriteTimeUtc - lastWriteTime;
 				retries = elapsedWriteTime > TimeSpan.Zero ? RETRY_COUNT : retries - 1;
 
-				var elapsed = stopwatch.ElapsedMilliseconds;
-				if( elapsed - messageDelayOffset > 15000)
+				long elapsed = stopwatch.ElapsedMilliseconds;
+				if( elapsed - messageDelayOffset > 15000 )
 				{
 					ShowBalloonInfo( 10000, "Waiting for file processing to complete..." );
 					messageDelayOffset += elapsed;

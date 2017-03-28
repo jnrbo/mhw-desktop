@@ -4,10 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using IWshRuntimeLibrary;
 using MHWVirtualPrinter;
-using Microsoft.Win32;
-using File = System.IO.File;
 
 namespace Setup
 {
@@ -64,12 +61,6 @@ namespace Setup
 		{
 			log = new Log( listViewLog, columnHeaderMessage );
 
-			if( options.RanFromApp == false )
-			{
-				// Ran by user from command line so enable system startup.
-				options.RunAtSystemStartup = true;
-			}
-
 			string currentDirectory = GetApplicationDirectory();
 
 			// Determine platform we're running on.
@@ -77,13 +68,6 @@ namespace Setup
 
 			if( options.Uninstall )
 			{
-				if( options.RunAtSystemStartup )
-				{
-					log.Info( "Turning off option to run at system startup" );
-					DisableRunAtSystemStartup();
-					log.Success( "Turned off option to run at system startup" );
-				}
-
 				if( options.PrintToDrive || options.PrintToFax )
 				{
 					log.Info( "Beginning uninstall" );
@@ -102,13 +86,6 @@ namespace Setup
 			}
 			else
 			{
-				if( options.RunAtSystemStartup )
-				{
-					log.Info( "Turning on option to run at system startup" );
-					EnableRunAtSystemStartup();
-					log.Success( "Turned on option to run at system startup" );
-				}
-
 				if( options.PrintToDrive || options.PrintToFax )
 				{
 					log.Info( "Beginning install" );
@@ -286,108 +263,6 @@ namespace Setup
 
 			// Look for other printer.
 			return virtualPrinterManager.IsPrinterAlreadyInstalled( otherPrinterName );
-		}
-
-		private void EnableRunAtSystemStartup()
-		{
-			RegistryKey regKey = null;
-
-			// Get the registry key with write access.
-			try
-			{
-				regKey = Registry.LocalMachine.OpenSubKey( "Software\\Microsoft\\Windows\\CurrentVersion\\Run", true );
-			}
-			catch( Exception ex )
-			{
-				log.Warning( "Could not enable Run at System Startup option: {0}", ex.Message );
-
-				if( regKey != null )
-				{
-					regKey.Close();
-				}
-
-				return;
-			}
-
-			try
-			{
-				string appPath = string.Format( "{0}\\{1}.exe", GetApplicationDirectory(), MhwPrinter.APP_NAME );
-
-				//string regValue = string.Format("{0} -silent", appLocation);
-
-				regKey.SetValue( MhwPrinter.APP_NAME, appPath, RegistryValueKind.String );
-			}
-			catch( Exception ex )
-			{
-				log.Warning( "Could not enable Run at System Startup option: {0}", ex.Message );
-			}
-			finally
-			{
-				if( regKey != null )
-				{
-					regKey.Close();
-				}
-			}
-		}
-
-		private void DisableRunAtSystemStartup()
-		{
-			CreateDesktopShortcut();
-
-			RegistryKey regKey = null;
-
-			// Get the registry key with write access.
-			try
-			{
-				regKey = Registry.LocalMachine.OpenSubKey( "Software\\Microsoft\\Windows\\CurrentVersion\\Run", true );
-			}
-			catch( Exception ex )
-			{
-				log.Warning( "Could not disable Run at System Startup option: {0}", ex.Message );
-
-				if( regKey != null )
-				{
-					regKey.Close();
-				}
-
-				return;
-			}
-
-			try
-			{
-				regKey.DeleteValue( MhwPrinter.APP_NAME );
-			}
-			catch( Exception )
-			{
-				// Likely because key doesn't exist. Ignore.
-			}
-			finally
-			{
-				if( regKey != null )
-				{
-					regKey.Close();
-				}
-			}
-		}
-
-		private static void CreateDesktopShortcut()
-		{
-			object shDesktop = "Desktop";
-			var shell = new WshShell();
-			string shortcutAddress = string.Format( "{0}\\{1}.lnk",
-			                                        (string) shell.SpecialFolders.Item( ref shDesktop ),
-			                                        MhwPrinter.APP_NAME );
-
-			if( File.Exists( shortcutAddress ) )
-			{
-				return;
-			}
-
-			var shortcut = (IWshShortcut) shell.CreateShortcut( shortcutAddress );
-			shortcut.Description = "A shortcut to myHEALTHware Desktop application";
-			//shortcut.Hotkey = "Ctrl+Shift+M";
-			shortcut.TargetPath = string.Format( "{0}\\{1}.exe", GetApplicationDirectory(), MhwPrinter.APP_NAME );
-			shortcut.Save();
 		}
 
 		private void KeyDownHandler( object sender, KeyEventArgs e )

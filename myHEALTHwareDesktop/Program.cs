@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using CommandLine;
 
 namespace myHEALTHwareDesktop
 {
@@ -13,7 +14,7 @@ namespace myHEALTHwareDesktop
 		///     The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		private static void Main()
+		private static void Main( string[] args )
 		{
 			////// Make sure we are the only instance of this program running.
 			////Process instance = GetRunningInstance();
@@ -21,9 +22,15 @@ namespace myHEALTHwareDesktop
 			////// If we are the only running instance of this program then continue.
 			////if( instance == null )
 			////{
-				Application.EnableVisualStyles();
-				Application.SetCompatibleTextRenderingDefault( false );
-				Application.Run( new MhwDesktopForm() );
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault( false );
+
+			var options = new Options();
+
+			// Parse the command line args.
+			Parser.Default.ParseArguments(args, options);
+			Application.Run( new MhwDesktopForm( options ) );
+
 			////}
 			////else
 			////{
