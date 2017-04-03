@@ -396,6 +396,13 @@ namespace myHEALTHwareDesktop
 				return;
 			}
 
+			if( !File.Exists( fullPath ) )
+			{
+				// Apparently there are times when more than one file-created event fires and the initial one happens
+				// before the file is available; we're silently ignoring that situation
+				return;
+			}
+
 			string fileId = await UploadService.UploadFile( fullPath, name, uploadDriveItemId );
 			if( fileId == null )
 			{
