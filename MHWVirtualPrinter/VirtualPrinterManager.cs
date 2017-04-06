@@ -12,7 +12,6 @@ namespace MHWVirtualPrinter
 	{
 		private const string MONITOR_DLL_NAME = "mfilemon.dll";
 		private const string MONITOR_UI_NAME = "mfilemonUI.dll";
-		////private const string MONITOR_UI_NAME2 = "_mfilemonUI.dll";
 		private const string COMMENT = "A virtual printer that uploads print jobs to myHEALTHware Drive";
 
 		private readonly WinSpool winspool = new WinSpool();
@@ -100,19 +99,6 @@ namespace MHWVirtualPrinter
 					exceptionMessage = string.Format( "Copying {0} to {1}", sourceUIName, targetUIName );
 					File.Copy( sourceUIName, targetUIName, true );
 				}
-
-				////string targetUIName2 = Path.Combine( targetDirectory, MONITOR_UI_NAME2 );
-
-				////if( File.Exists( targetUIName2 ) && isUninstall )
-				////{
-				////	exceptionMessage = string.Format( "Delete {0}", targetUIName2 );
-				////	File.Delete( targetUIName2 );
-				////}
-				////else if( !File.Exists( targetUIName2 ) && !isUninstall )
-				////{
-				////	exceptionMessage = string.Format( "Copying {0} to {1}", sourceUIName2, targetUIName2 );
-				////	File.Copy( sourceUIName2, targetUIName2, true );
-				////}
 			}
 			catch( UnauthorizedAccessException )
 			{
@@ -242,9 +228,6 @@ namespace MHWVirtualPrinter
 		// I believe these virtual port parameters are specific to printmon
 		public void ConfigureVirtualPort( MhwPrinter mhwPrinter, PdfEngine pdfEngine )
 		{
-			////string outputPath = Path.Combine( Path.GetTempPath(), monitorName );
-			////Directory.CreateDirectory( outputPath );
-
 			var filePattern = "%r-%u-%Y%m%d-%H%n%s.pdf";
 			string userCommand =
 				string.Format(

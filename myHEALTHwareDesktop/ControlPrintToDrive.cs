@@ -388,25 +388,9 @@ namespace myHEALTHwareDesktop
 			// Create the folder watcher.
 			printJobMonitor = new PrintToDriveMonitor();
 
+#pragma warning disable 4014
 			printJobMonitor.Start( p => ProcessNewPrintJob( p ), SynchronizationContext.Current );
-
-			////try
-			////{
-			////	localPathWatcher.Path = Path.Combine( Path.GetTempPath(), MhwPrinter.PRINT_TO_DRIVE.MonitorName );
-			////}
-			////catch( ArgumentException ex )
-			////{
-			////	localPathWatcher.Dispose();
-			////	localPathWatcher = null;
-
-			////	NotificationService.ShowBalloonError( "Start Print to Drive monitor failed: {0}", ex.Message );
-			////	return;
-			////}
-
-			////localPathWatcher.EnableRaisingEvents = true;
-			////localPathWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.LastAccess;
-			////localPathWatcher.SynchronizingObject = this;
-			////localPathWatcher.Created += LocalPathWatcherCreated;
+#pragma warning restore 4014
 
 			pictureStartedStopped.Image = Resources.started;
 			labelMonitorStatus.Text = "Print to Drive monitor is running.";
@@ -434,6 +418,7 @@ namespace myHEALTHwareDesktop
 		}
 
 		// The Watcher calls this method when a new file shows up in the watched folder.
+		// ReSharper disable once UnusedMethodReturnValue.Local
 		private async Task ProcessNewPrintJob( MhwFile mhwFile )
 		{
 			if( userSession.IsLoggedIn == false )

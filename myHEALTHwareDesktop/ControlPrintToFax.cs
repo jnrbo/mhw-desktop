@@ -184,7 +184,9 @@ namespace myHEALTHwareDesktop
 			// Create the folder watcher.
 			printJobMonitor = new PrintToFaxMonitor();
 
+#pragma warning disable 4014
 			printJobMonitor.Start( p => ProcessNewPrintJob( p ), SynchronizationContext.Current );
+#pragma warning restore 4014
 
 			pictureStartedStopped.Image = Resources.started;
 		}
@@ -210,6 +212,7 @@ namespace myHEALTHwareDesktop
 		}
 
 		// The Watcher calls this method when a new file shows up in the watched folder.
+		// ReSharper disable once UnusedMethodReturnValue.Local
 		private async Task ProcessNewPrintJob( MhwFile mhwFile )
 		{
 			if( !userSession.IsLoggedIn )
