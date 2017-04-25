@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using CommandLine;
 
@@ -11,6 +12,8 @@ namespace myHEALTHwareDesktop
 {
 	internal static class Program
 	{
+        private static Mutex _machineLocalAppInstanceMutex;
+
 		/// <summary>
 		///     The main entry point for the application.
 		/// </summary>
@@ -26,7 +29,7 @@ namespace myHEALTHwareDesktop
             Environment.UserName);
 		    bool mutexIsNew;
 
-            var _machineLocalAppInstanceMutex = new System.Threading.Mutex(true, globalMutexName, out mutexIsNew);
+            _machineLocalAppInstanceMutex = new System.Threading.Mutex(true, globalMutexName, out mutexIsNew);
 
             if (!mutexIsNew)
             {
