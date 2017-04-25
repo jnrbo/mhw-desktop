@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -16,12 +17,23 @@ namespace myHEALTHwareDesktop
 		[STAThread]
 		private static void Main( string[] args )
 		{
-			////// Make sure we are the only instance of this program running.
-			////Process instance = GetRunningInstance();
 
-			////// If we are the only running instance of this program then continue.
-			////if( instance == null )
-			////{
+            //allow one instance per user.  
+            string globalMutexName = string.Format(
+            CultureInfo.InvariantCulture,
+            "Global\\mhw-desktop~{0}~{1}~369198B1-4CDE-41F1-8E4C-F24336F0DD58",
+            Environment.UserDomainName,
+            Environment.UserName);
+		    bool mutexIsNew;
+
+            var _machineLocalAppInstanceMutex = new System.Threading.Mutex(true, globalMutexName, out mutexIsNew);
+
+            if (!mutexIsNew)
+            {
+                return;
+            }
+
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault( false );
 
@@ -31,35 +43,8 @@ namespace myHEALTHwareDesktop
 			Parser.Default.ParseArguments(args, options);
 			Application.Run( new MhwDesktopForm( options ) );
 
-			////}
-			////else
-			////{
-			////	// We are not the only running instance of this program so
-			////	// Bring to focus the current running process with our name
-			////	// and we will go away without doing anything more.
-			////	ShowWindowAsync( instance.MainWindowHandle, WS_SHOWNORMAL );
-			////	SetForegroundWindow( instance.MainWindowHandle );
-			////}
+
 		}
 
-		////// Look at all currently running processes and see if there is already one of
-		////// us running with the name of myHEALTHwareDesktop.exe
-		////public static Process GetRunningInstance()
-		////{
-		////	Process current = Process.GetCurrentProcess();
-		////	Process[] processes = Process.GetProcessesByName( current.ProcessName );
-
-		////	return
-		////		processes.FirstOrDefault(
-		////			p => p.Id != current.Id && Assembly.GetExecutingAssembly().Location.Replace( "/", "\\" ) == p.MainModule.FileName );
-		////}
-
-		////[DllImport( "User32.dll" )]
-		////private static extern bool ShowWindowAsync( IntPtr hWnd, int cmdShow );
-
-		////[DllImport( "User32.dll" )]
-		////private static extern bool SetForegroundWindow( IntPtr hWnd );
-
-		////private const int WS_SHOWNORMAL = 1;
 	}
 }
